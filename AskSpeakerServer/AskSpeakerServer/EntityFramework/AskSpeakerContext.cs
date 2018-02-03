@@ -9,6 +9,26 @@ namespace AskSpeakerServer.EntityFramework {
 			set;
 		}
 
+		public DbSet<Users> Users { 
+			get;
+			set;
+		}
+
+		public DbSet<Events> Events {
+			get;
+			set;
+		}
+
+		public DbSet<Questions> Questions {
+			get;
+			set;
+		}
+
+		public DbSet<Votes> Votes {
+			get;
+			set;
+		}
+
 		public AskSpeakerContext () : base("name=AskSpeakerContext") {
 			
 		}
