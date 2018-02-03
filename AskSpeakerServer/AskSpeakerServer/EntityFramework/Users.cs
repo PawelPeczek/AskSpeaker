@@ -16,18 +16,21 @@ namespace AskSpeakerServer {
 			set;
 		}
 
+		[Required]
 		[MaxLength(50)]
 		public string UserName {
 			get;
 			set;
 		}
 
+		[Required]
 		[MaxLength(32)]
 		public byte[] Password {
 			get;
 			set;
 		}
 
+		[Required]
 		[ForeignKey("UserRoles")]
 		public int UserRoleID {
 			get;

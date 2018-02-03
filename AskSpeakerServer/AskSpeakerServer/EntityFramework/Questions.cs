@@ -16,17 +16,20 @@ namespace AskSpeakerServer {
 			set;
 		}
 
+		[Required]
 		[MaxLength(350)]
 		public string QuestionContent {
 			get;
 			set;
 		}
 
+		[Required]
 		public bool Anulled { 
 			get; 
 			set; 
 		}
 
+		[Required]
 		[ForeignKey("Events")]
 		public int EventID {
 			get;

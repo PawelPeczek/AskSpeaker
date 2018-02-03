@@ -13,6 +13,7 @@ namespace AskSpeakerServer {
 			set;
 		}
 
+		[Required]
 		public short Value { 
 			get {
 				return ValueStored;
@@ -26,6 +27,7 @@ namespace AskSpeakerServer {
 			}
 		}
 
+		[Required]
 		[ForeignKey("Questions")]
 		public int QuestionID {
 			get;

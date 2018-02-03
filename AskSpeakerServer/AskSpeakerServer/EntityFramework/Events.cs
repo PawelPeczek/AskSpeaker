@@ -18,12 +18,14 @@ namespace AskSpeakerServer {
 			set;
 		}
 
+		[Required]
 		[StringLength(6)]
 		public string EventHash {
 			get;
 			set;
 		}
 
+		[Required]
 		[MaxLength(120)]
 		public string EventName {
 			get;
@@ -31,28 +33,30 @@ namespace AskSpeakerServer {
 		}
 
 		[MaxLength(350)]
-		public string? EventDesc {
+		public string EventDesc {
 			get;
 			set;
 		}
 
 		[MaxLength(45)]
-		public string? SpeakerName {
+		public string SpeakerName {
 			get;
 			set;
 		}
 
 		[MaxLength(45)]
-		public string? SpeakerSurname {
+		public string SpeakerSurname {
 			get;
 			set;
 		}
 
+		[Required]
 		public bool Closed {
 			get;
 			set;
 		}
 
+		[Required]
 		[ForeignKey("Users")]
 		public int UserID {
 			get;

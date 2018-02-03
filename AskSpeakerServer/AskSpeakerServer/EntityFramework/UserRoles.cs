@@ -15,6 +15,7 @@ namespace AskSpeakerServer {
 			set;
 		}
 
+		[Required]
 		[MaxLength(50)]
 		public string RoleName {
 			get;
