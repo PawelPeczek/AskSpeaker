@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Data;
 using MySql.Data.MySqlClient;
+using System.Linq;
+using AskSpeakerServer.EntityFramework;
 
 namespace AskSpeakerServer
 {
@@ -42,6 +44,12 @@ namespace AskSpeakerServer
 			dbcmd = null;
 			dbcon.Close();
 			dbcon = null;
+			using(var ctx = new AskSpeakerContext()){
+				var roles = from p in ctx.UserRoles select p;
+				foreach (var r in roles) {
+					Console.WriteLine($"{r.UserRoleID} - {r.RoleName}");
+				}
+			}
 		}
 	}
 }
