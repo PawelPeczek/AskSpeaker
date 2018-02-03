@@ -1,1 +1,13 @@
-﻿<Properties StartupItem="AskSpeakerServer/AskSpeakerServer.csproj" />
+﻿<Properties StartupItem="AskSpeakerServer/AskSpeakerServer.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="AskSpeakerServer/Program.cs">
+    <Files>
+      <File FileName="AskSpeakerServer/Program.cs" Line="10" Column="4" />
+      <File FileName="AskSpeakerServer/App.config" Line="1" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

@@ -1,0 +1,4 @@
+*.userprefs
+*.sln.tmp
+/AskSpeakerServer/AskSpeakerServer/bin/*
+/AskSpeakerServer/AskSpeakerServer/obj/*
