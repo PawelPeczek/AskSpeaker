@@ -53,6 +53,9 @@
     <Compile Include="EntityFramework\AskSpeakerContext.cs" />
     <Compile Include="EntityFramework\UserRoles.cs" />
     <Compile Include="EntityFramework\Users.cs" />
+    <Compile Include="EntityFramework\Events.cs" />
+    <Compile Include="EntityFramework\Questions.cs" />
+    <Compile Include="EntityFramework\Votes.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

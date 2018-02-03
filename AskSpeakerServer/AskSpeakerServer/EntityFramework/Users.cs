@@ -1,10 +1,15 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.Generic;
 
 namespace AskSpeakerServer {
 	public class Users {
-		
+
+		public Users(){
+			Events = new HashSet<Events>();
+		}
+
 		[Key]
 		public int UserID {
 			get;
@@ -24,13 +29,18 @@ namespace AskSpeakerServer {
 		}
 
 		[ForeignKey("UserRoles")]
-		public int UserRoles_UserRoleID {
+		public int UserRoleID {
 			get;
 			set;
 		}
 
 		public virtual UserRoles UserRole { 
 			get; 
+			set;
+		}
+
+		public virtual ICollection<Events> Events {
+			get;
 			set;
 		}
 
