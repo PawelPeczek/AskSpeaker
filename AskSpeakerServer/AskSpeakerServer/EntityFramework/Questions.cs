@@ -30,13 +30,13 @@ namespace AskSpeakerServer {
 		}
 
 		[Required]
-		[ForeignKey("Events")]
+		[ForeignKey("Event")]
 		public int EventID {
 			get;
 			set;
 		}
 
-		[ForeignKey("Questions")]
+		[ForeignKey("Merged")]
 		public int MergedWith {
 			get;
 			set;

@@ -28,8 +28,13 @@ namespace AskSpeakerServer {
 		}
 
 		[Required]
-		[ForeignKey("Questions")]
+		[ForeignKey("Question")]
 		public int QuestionID {
+			get;
+			set;
+		}
+
+		public virtual Questions Question {
 			get;
 			set;
 		}

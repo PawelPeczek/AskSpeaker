@@ -57,7 +57,7 @@ namespace AskSpeakerServer {
 		}
 
 		[Required]
-		[ForeignKey("Users")]
+		[ForeignKey("User")]
 		public int UserID {
 			get;
 			set;

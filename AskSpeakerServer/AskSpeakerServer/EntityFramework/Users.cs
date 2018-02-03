@@ -31,7 +31,7 @@ namespace AskSpeakerServer {
 		}
 
 		[Required]
-		[ForeignKey("UserRoles")]
+		[ForeignKey("UserRole")]
 		public int UserRoleID {
 			get;
 			set;
