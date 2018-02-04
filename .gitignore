@@ -3,6 +3,7 @@
 /AskSpeakerServer/AskSpeakerServer/bin/*
 /AskSpeakerServer/AskSpeakerServer/obj/*
 /AskSpeakerServer/packages/*
+/AskSpeakerServer/AskSpeakerServer/packages/*
 /AskSpeakerDumbClient/AskSpeakerDumbClient/bin/*
 /AskSpeakerDumbClient/AskSpeakerDumbClient/obj/*
 /AskSpeakerDumbClient/packages/*
