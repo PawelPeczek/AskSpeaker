@@ -16,6 +16,15 @@ namespace AskSpeakerServer.BackEnd {
 		private void NullAction(bool d){
 			Console.WriteLine ($"Completed with: {d}");
 		}
+
+		protected override void OnError (WebSocketSharp.ErrorEventArgs e) {
+			Console.WriteLine ("Error handling");
+			Console.WriteLine (e.Message);
+		}
+
+		protected override void OnClose (WebSocketSharp.CloseEventArgs e) {
+			Console.WriteLine ("Closing client connection!");
+		}
 	}
 }
 

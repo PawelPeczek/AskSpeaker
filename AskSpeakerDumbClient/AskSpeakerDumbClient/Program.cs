@@ -9,7 +9,14 @@ namespace AskSpeakerDumbClient {
 					ws.OnMessage += (sender, e) => {
 						Console.WriteLine ($"Recieved message: {e.Data}");
 					};
+					ws.OnError += (object sender, ErrorEventArgs e) => {
+						Console.WriteLine (e.Exception.Message);
+					};
+					ws.OnOpen += Console.WriteLine ("OnOpen()");
+				Console.WriteLine (ws.ReadyState);
+				Console.ReadKey ();
 					ws.Connect ();
+				Console.WriteLine (ws.Ping());
 					Console.ReadKey ();
 				}
 		}

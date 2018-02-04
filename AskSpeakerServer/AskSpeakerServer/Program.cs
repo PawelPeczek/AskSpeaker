@@ -6,9 +6,10 @@ using AskSpeakerServer.EntityFramework;
 using AskSpeakerServer.BackEnd;
 using System.Security.Cryptography;
 using System.Text;
-using WebSocketSharp;
-using WebSocketSharp.Server;
-using System.Security.Cryptography.X509Certificates;
+using System.Threading;
+using SuperSocket.WebSocket;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AskSpeakerServer
 {
@@ -38,14 +39,25 @@ namespace AskSpeakerServer
 //				ctx.Events.Add (Event);
 //				ctx.SaveChanges();
 			}
-
-			WebSocketServer wss = new WebSocketServer ("ws://localhost:10000");
-			wss.AddWebSocketService<ClientRequests> ("/ClientRequest");
-			wss.Start ();
-			Console.WriteLine ("Press any key to quit...");
+			UserRequests server = new UserRequests ();
+			server.NewMessageReceived += async (session, value) => {
+				var ses = session.AppServer.GetAllSessions();
+				foreach(var s in ses){
+					await Task.Run(() => s.Send($"Echo from host {session.SessionID}:\n{value}"));
+				};
+				await Task.Run(() => session.Send("Don't worry - your message was send!"));
+			
+			};
+			server.NewSessionConnected += async (WebSocketSession session) => {
+				await Task.Run(() => session.Send("You're logged in!"));
+				Console.WriteLine("Client connected!");
+			};
+			server.SessionClosed += delegate(WebSocketSession session, SuperSocket.SocketBase.CloseReason value) {
+				Console.WriteLine("Sesion closed!");
+			};
+			server.Start ();
 			Console.ReadKey ();
-			wss.Stop ();
-
+			server.Stop ();
 		}
 	}
 }

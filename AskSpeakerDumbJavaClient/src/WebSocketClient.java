@@ -3,7 +3,8 @@ import java.net.URI;
 
 @ClientEndpoint
 public class WebSocketClient {
-    private final String Uri = "ws://localhost:10000/ClientRequest";
+    private final String Uri = "ws://localhost:10000";
+    private Session session;
 
     public WebSocketClient(){
         try{
@@ -16,12 +17,16 @@ public class WebSocketClient {
     }
 
     @OnOpen
-    public void onOpen(){
+    public void onOpen(Session s){
+        s.getAsyncRemote().sendText("Hello there from me!");
         System.out.println("Hello World!");
     }
+
 
     @OnMessage
     public void onMessage(String message){
         System.out.println("Recieved message: " + message);
     }
+
+
 }
