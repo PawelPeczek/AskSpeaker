@@ -43,8 +43,8 @@
     <Reference Include="MySql.Data">
       <HintPath>packages\ztools.other.MySql.Data.6.9.8\lib\net45\MySql.Data.dll</HintPath>
     </Reference>
-    <Reference Include="MySql.Data.Entity.EF6">
-      <HintPath>..\..\..\Pobrane\mysql-connector-net-6.10.6-noinstall\v4.5.2\MySql.Data.Entity.EF6.dll</HintPath>
+    <Reference Include="websocket-sharp">
+      <HintPath>..\packages\WebSocketSharpFork.1.0.4.0\lib\net35\websocket-sharp.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -56,11 +56,15 @@
     <Compile Include="EntityFramework\Events.cs" />
     <Compile Include="EntityFramework\Questions.cs" />
     <Compile Include="EntityFramework\Votes.cs" />
+    <Compile Include="BackEnd\ClientRequests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
     <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="BackEnd\" />
   </ItemGroup>
 </Project>

@@ -2,3 +2,6 @@
 *.sln.tmp
 /AskSpeakerServer/AskSpeakerServer/bin/*
 /AskSpeakerServer/AskSpeakerServer/obj/*
+AskSpeakerDumbClient/AskSpeakerDumbClient/bin/*
+AskSpeakerDumbClient/AskSpeakerDumbClient/obj/*
+
