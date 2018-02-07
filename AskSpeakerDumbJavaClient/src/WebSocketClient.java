@@ -1,15 +1,18 @@
 import javax.websocket.*;
+import javax.websocket.server.ServerEndpointConfig;
 import java.net.URI;
 
 @ClientEndpoint
 public class WebSocketClient {
-    private final String Uri = "ws://localhost:10000";
+    private final String Uri = "ws://localhost:10000/any_path";
     private Session session;
 
     public WebSocketClient(){
         try{
+            ServerEndpointConfig.Configurator c = new ServerEndpointConfig.Configurator();
+
             WebSocketContainer container = ContainerProvider.getWebSocketContainer();
-            container.connectToServer(this, new URI(Uri));
+            session = container.connectToServer(this, new URI(Uri));
         } catch (Exception ex){
             System.out.println("[ERROR]");
             System.out.println(ex.getMessage());
@@ -28,5 +31,8 @@ public class WebSocketClient {
         System.out.println("Recieved message: " + message);
     }
 
-
+    @OnClose
+    public void onClose(){
+        System.out.println("Server closed!");
+    }
 }
