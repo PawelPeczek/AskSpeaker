@@ -8,6 +8,8 @@
     <RootNamespace>AskSpeakerServer</RootNamespace>
     <AssemblyName>AskSpeakerServer</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -65,6 +67,43 @@
     <Reference Include="SuperSocket.SocketService">
       <HintPath>..\packages\SuperSocket.Engine.1.6.6.1\lib\net45\SuperSocket.SocketService.exe</HintPath>
     </Reference>
+    <Reference Include="NuGet.Versioning">
+      <HintPath>packages\NuGet.Versioning.4.2.0\lib\net45\NuGet.Versioning.dll</HintPath>
+    </Reference>
+    <Reference Include="NuGet.Common">
+      <HintPath>packages\NuGet.Common.4.2.0\lib\net45\NuGet.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="NuGet.Frameworks">
+      <HintPath>packages\NuGet.Frameworks.4.2.0\lib\net45\NuGet.Frameworks.dll</HintPath>
+    </Reference>
+    <Reference Include="NuGet.Packaging.Core.Types">
+      <HintPath>packages\NuGet.Packaging.Core.Types.4.2.0\lib\net45\NuGet.Packaging.Core.Types.dll</HintPath>
+    </Reference>
+    <Reference Include="NuGet.Packaging.Core">
+      <HintPath>packages\NuGet.Packaging.Core.4.2.0\lib\net45\NuGet.Packaging.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="NuGet.Packaging">
+      <HintPath>packages\NuGet.Packaging.4.2.0\lib\net45\NuGet.Packaging.dll</HintPath>
+    </Reference>
+    <Reference Include="NuGet.Repositories">
+      <HintPath>packages\NuGet.Repositories.4.2.0\lib\net45\NuGet.Repositories.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NuGet.RuntimeModel">
+      <HintPath>packages\NuGet.RuntimeModel.4.2.0\lib\net45\NuGet.RuntimeModel.dll</HintPath>
+    </Reference>
+    <Reference Include="NuGet.ContentModel">
+      <HintPath>packages\NuGet.ContentModel.4.2.0\lib\net45\NuGet.ContentModel.dll</HintPath>
+    </Reference>
+    <Reference Include="NuGet.Client">
+      <HintPath>packages\NuGet.Client.4.2.0\lib\net45\NuGet.Client.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -75,19 +114,23 @@
     <Compile Include="EntityFramework\Events.cs" />
     <Compile Include="EntityFramework\Questions.cs" />
     <Compile Include="EntityFramework\Votes.cs" />
-    <Compile Include="BackEnd\UserRequests.cs" />
+    <Compile Include="BackEnd\AdministratorServer.cs" />
+    <Compile Include="BackEnd\AdministratorRequests\AdminRequestTypes.cs" />
+    <Compile Include="BackEnd\AdministratorRequests\AdminRequestHandler.cs" />
+    <Compile Include="BackEnd\AdministratorRequests\AdminRequestDispather.cs" />
+    <Compile Include="BackEnd\AdministratorRequests\AdminRequestLogic.cs" />
+    <Compile Include="BackEnd\AdministratorRequests\AdminAuthenticationModule.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
     <None Include="app.config" />
-    <None Include="Config\log4net.config" />
-    <None Include="Config\log4net.unix.config" />
     <None Include="supersocket.cmd" />
     <None Include="supersocket.sh" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="BackEnd\" />
+    <Folder Include="BackEnd\AdministratorRequests\" />
   </ItemGroup>
 </Project>

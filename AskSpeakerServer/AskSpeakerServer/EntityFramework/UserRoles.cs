@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace AskSpeakerServer {
 	public class UserRoles {
@@ -22,6 +23,7 @@ namespace AskSpeakerServer {
 			set;
 		}
 
+		[JsonIgnore]
 		public virtual ICollection<Users> Users {
 			get;
 			set;

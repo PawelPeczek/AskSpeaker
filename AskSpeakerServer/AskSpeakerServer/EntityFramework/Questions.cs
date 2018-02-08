@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace AskSpeakerServer {
 	public class Questions {
@@ -42,16 +43,19 @@ namespace AskSpeakerServer {
 			set;
 		}
 
+		[JsonIgnore]
 		public virtual Events Event { 
 			get;
 			set;
 		}
 
+		[JsonIgnore]
 		public virtual Questions Merged { 
 			get;
 			set;
 		}
 
+		[JsonIgnore]
 		public virtual ICollection<Votes> Votes {
 			get;
 			set;

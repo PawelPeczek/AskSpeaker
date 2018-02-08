@@ -10,9 +10,10 @@ public class WebSocketClient {
     public WebSocketClient(){
         try{
             ServerEndpointConfig.Configurator c = new ServerEndpointConfig.Configurator();
-
             WebSocketContainer container = ContainerProvider.getWebSocketContainer();
+            System.out.println("Before conn!");
             session = container.connectToServer(this, new URI(Uri));
+            System.out.println("After conn!");
         } catch (Exception ex){
             System.out.println("[ERROR]");
             System.out.println(ex.getMessage());

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Newtonsoft.Json;
 
 namespace AskSpeakerServer {
 	public class Votes {
@@ -34,6 +35,7 @@ namespace AskSpeakerServer {
 			set;
 		}
 
+		[JsonIgnore]
 		public virtual Questions Question {
 			get;
 			set;

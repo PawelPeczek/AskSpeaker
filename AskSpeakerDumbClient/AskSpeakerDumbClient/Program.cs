@@ -10,8 +10,8 @@ namespace AskSpeakerDumbClient {
 		public static void Main (string[] args) {
 			Console.WriteLine ("Hello World!");
 			List<KeyValuePair<String, String>> l = new List<KeyValuePair<String, String>> ();
-			l.Add (new KeyValuePair<String, String> ("user", "admin"));
-			l.Add (new KeyValuePair<String, String> ("pw", "secret"));
+			l.Add (new KeyValuePair<String, String> ("user", "DumbUser"));
+			l.Add (new KeyValuePair<String, String> ("pw", "zaq1@WSX"));
 			WebSocket ws = new WebSocket ("wss://localhost:10000", "", l);
 			// Just for now with self-generated certificate
 			ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => {return true;};
@@ -25,12 +25,12 @@ namespace AskSpeakerDumbClient {
 			};
 
 			ws.Closed += (object sender, EventArgs e) => {
-				Console.WriteLine (((ClosedEventArgs)e).Reason);
+				Console.WriteLine (((ClosedEventArgs)e).Code);
 			};
 			ws.MessageReceived += (object sender, MessageReceivedEventArgs e) => {
 				Console.WriteLine (e.Message);
 			};
-
+		
 			ws.Open ();
 			Console.ReadKey ();
 			if(ws.State != WebSocketState.Closed)

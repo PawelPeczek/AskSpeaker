@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace AskSpeakerServer {
 	public class Events {
@@ -63,11 +64,13 @@ namespace AskSpeakerServer {
 			set;
 		}
 
+		[JsonIgnore]
 		public virtual Users User {
 			get;
 			set;
 		}
 
+		[JsonIgnore]
 		public virtual ICollection<Questions> Questions {
 			get;
 			set;
