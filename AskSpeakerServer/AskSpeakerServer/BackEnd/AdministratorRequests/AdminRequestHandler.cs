@@ -6,22 +6,22 @@ using Newtonsoft.Json;
 namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 	public class AdminRequestHandler {
 		
-		private IDictionary<Object, Object> Container;
+		private IDictionary<Object, Object> Credentials;
+		private Dictionary<string, string> DeserializedMsg;
 		private string Message;
 
-		public AdminRequestHandler (IDictionary<Object, Object> container, string message) {
-			Container = container;
+		public AdminRequestHandler (IDictionary<Object, Object> credentials, string message) {
+			Credentials = credentials;
+			DeserializedMsg = 
+				JsonConvert.DeserializeObject<Dictionary<string, string>> (message);
 			Message = message;
 		}
 
 		public string ProceedRequest(){
-			Dictionary<string, string> deserializedMsg = 
-				JsonConvert.DeserializeObject<Dictionary<string, string>> (Message);
-			if (!deserializedMsg.ContainsKey ("request"))
+			if (!DeserializedMsg.ContainsKey ("Request"))
 				throw new ApplicationException ("Invalid message format.");
-			AdminRequestTypes reqType = GetRequestType (deserializedMsg["request"]);
-
-			return "";
+			AdminRequestTypes reqType = GetRequestType (DeserializedMsg["request"]);
+			return AdminRequestDispather.Dispath (reqType, Message, Credentials);
 		}
 
 		private AdminRequestTypes GetRequestType (string requestString){

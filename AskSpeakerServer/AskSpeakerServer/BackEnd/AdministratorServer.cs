@@ -67,13 +67,14 @@ namespace AskSpeakerServer.BackEnd {
 				await Task.Run(() => DispathResponse(session, response));
 			} catch(ApplicationException ex) {
 				await Task.Run (() => session.CloseWithHandshake (400, $"JSON contract violation: {ex.Message}"));
+			} catch(FieldAccessException ex) {
+				await Task.Run (() => session.CloseWithHandshake (401, $"Unauthorized operation. {ex.Message}"));
 			}
 		}
 
 		private void DispathResponse(WebSocketSession session, string response){
 			if (response != null) {
 				foreach (WebSocketSession s in GetAllSessions()) {
-					if (!s.Equals (session))
 						s.Send (response);
 				}
 			}

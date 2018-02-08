@@ -120,6 +120,9 @@
     <Compile Include="BackEnd\AdministratorRequests\AdminRequestDispather.cs" />
     <Compile Include="BackEnd\AdministratorRequests\AdminRequestLogic.cs" />
     <Compile Include="BackEnd\AdministratorRequests\AdminAuthenticationModule.cs" />
+    <Compile Include="BackEnd\Messages\Requests\EventCloseRequest.cs" />
+    <Compile Include="BackEnd\Messages\Responses\EventCloseResponse.cs" />
+    <Compile Include="BackEnd\Messages\Responses\SuPermissionsCheckResponse.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -132,5 +135,8 @@
   <ItemGroup>
     <Folder Include="BackEnd\" />
     <Folder Include="BackEnd\AdministratorRequests\" />
+    <Folder Include="BackEnd\Messages\" />
+    <Folder Include="BackEnd\Messages\Requests\" />
+    <Folder Include="BackEnd\Messages\Responses\" />
   </ItemGroup>
 </Project>
