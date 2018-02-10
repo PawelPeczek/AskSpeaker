@@ -1,12 +1,12 @@
 ﻿using System;
+using AskSpeakerServer.BackEnd.AdministratorRequests;
 
 namespace AskSpeakerServer.BackEnd.Messages.Responses {
 	public class SuPermissionsCheckResponse {
 
 		public string Response {
 			get;
-			set;
-		}
+		} = AdminRequestTypes.SuPermissionsCheck.GetRequestString();
 
 		public bool Permissions {
 			get;

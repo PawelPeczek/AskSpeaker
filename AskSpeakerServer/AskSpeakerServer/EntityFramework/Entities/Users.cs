@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace AskSpeakerServer {
+namespace AskSpeakerServer.EntityFramework.Entities {
 	public class Users {
 
 		public Users(){

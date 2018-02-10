@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace AskSpeakerServer {
+namespace AskSpeakerServer.EntityFramework.Entities {
 	public class UserRoles {
 
 		public UserRoles(){

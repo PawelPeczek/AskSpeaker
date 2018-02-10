@@ -109,20 +109,22 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EntityFramework\AskSpeakerContext.cs" />
-    <Compile Include="EntityFramework\UserRoles.cs" />
-    <Compile Include="EntityFramework\Users.cs" />
-    <Compile Include="EntityFramework\Events.cs" />
-    <Compile Include="EntityFramework\Questions.cs" />
-    <Compile Include="EntityFramework\Votes.cs" />
     <Compile Include="BackEnd\AdministratorServer.cs" />
     <Compile Include="BackEnd\AdministratorRequests\AdminRequestTypes.cs" />
     <Compile Include="BackEnd\AdministratorRequests\AdminRequestHandler.cs" />
     <Compile Include="BackEnd\AdministratorRequests\AdminRequestDispather.cs" />
     <Compile Include="BackEnd\AdministratorRequests\AdminRequestLogic.cs" />
     <Compile Include="BackEnd\AdministratorRequests\AdminAuthenticationModule.cs" />
-    <Compile Include="BackEnd\Messages\Requests\EventCloseRequest.cs" />
-    <Compile Include="BackEnd\Messages\Responses\EventCloseResponse.cs" />
     <Compile Include="BackEnd\Messages\Responses\SuPermissionsCheckResponse.cs" />
+    <Compile Include="EntityFramework\Entities\Events.cs" />
+    <Compile Include="EntityFramework\Entities\Questions.cs" />
+    <Compile Include="EntityFramework\Entities\UserRoles.cs" />
+    <Compile Include="EntityFramework\Entities\Users.cs" />
+    <Compile Include="EntityFramework\Entities\Votes.cs" />
+    <Compile Include="BackEnd\Messages\Bidirectional\EventCloseMessage.cs" />
+    <Compile Include="BackEnd\Messages\Bidirectional\EventEditCreateMessage.cs" />
+    <Compile Include="BackEnd\Messages\Bidirectional\QuestionCancellMessage.cs" />
+    <Compile Include="BackEnd\Messages\Bidirectional\QuestionMergeMessage.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -138,5 +140,7 @@
     <Folder Include="BackEnd\Messages\" />
     <Folder Include="BackEnd\Messages\Requests\" />
     <Folder Include="BackEnd\Messages\Responses\" />
+    <Folder Include="EntityFramework\Entities\" />
+    <Folder Include="BackEnd\Messages\Bidirectional\" />
   </ItemGroup>
 </Project>

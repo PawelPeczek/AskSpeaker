@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
 
-namespace AskSpeakerServer {
+namespace AskSpeakerServer.EntityFramework.Entities {
 	public class Votes {
 
 		private short ValueStored;

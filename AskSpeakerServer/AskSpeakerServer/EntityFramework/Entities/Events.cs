@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace AskSpeakerServer {
+namespace AskSpeakerServer.EntityFramework.Entities {
 	public class Events {
 
 		public Events(){
@@ -74,6 +74,17 @@ namespace AskSpeakerServer {
 		public virtual ICollection<Questions> Questions {
 			get;
 			set;
+		}
+
+		public void PropertiesCopy(Events another){
+			EventID = another.EventID;
+			EventHash = another.EventHash;
+			EventName = another.EventName;
+			EventDesc = another.EventDesc;
+			SpeakerName = another.SpeakerName;
+			SpeakerSurname = another.SpeakerSurname;
+			Closed = another.Closed;
+			UserID = another.UserID;
 		}
 	}
 }

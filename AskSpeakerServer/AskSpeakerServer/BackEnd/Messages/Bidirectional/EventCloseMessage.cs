@@ -1,10 +1,10 @@
 ﻿using System;
 using AskSpeakerServer.BackEnd.AdministratorRequests;
 
-namespace AskSpeakerServer.BackEnd.Messages.Responses {
-	public class EventCloseResponse {
+namespace AskSpeakerServer.BackEnd.Messages.Bidirectional {
+	public class EventCloseMessage {
 		
-		public string Response {
+		public string Message {
 			get;
 		} = AdminRequestTypes.EventClose.GetRequestString();
 

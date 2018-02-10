@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Entity;
+using AskSpeakerServer.EntityFramework.Entities;
 
 namespace AskSpeakerServer.EntityFramework {
 	public class AskSpeakerContext : DbContext {

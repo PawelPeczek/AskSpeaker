@@ -1,25 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using AskSpeakerServer.BackEnd.Messages.Requests;
+using AskSpeakerServer.BackEnd.Messages.Bidirectional;
 
 namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 	public static class AdminRequestDispather {
-		public static string Dispath
+		public static object Dispath
 		(AdminRequestTypes reqType, string message, IDictionary<Object, Object> credentials) {
 			AdminRequestLogic logic = new AdminRequestLogic (credentials);
-			string result = null;
+			object result = null;
 			try {
 				switch (reqType) {
 				case AdminRequestTypes.SuPermissionsCheck:
 					result = logic.CheckSuPermistions ();
 					break;
 				case AdminRequestTypes.EventClose:
-					EventCloseRequest request = JsonConvert.DeserializeObject<EventCloseRequest>(message);
-					result = logic.CloseEvent (request);
+					result = logic.CloseEvent (JsonConvert.DeserializeObject<EventCloseMessage>(message));
 					break;
 				case AdminRequestTypes.EventEdit:
-					result = logic.EditEvent ();
+					result = logic.EditEvent (JsonConvert.DeserializeObject<EventEditCreateMessage>(message));
+					break;
+				case AdminRequestTypes.EventCreate:
+					result = logic.CreateEvent (JsonConvert.DeserializeObject<EventEditCreateMessage>(message));
 					break;
 				default:
 					throw new NotImplementedException();
@@ -27,8 +29,6 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 			} catch(JsonSerializationException ex){
 				throw new ApplicationException (ex.Message);
 			}
-
-
 			return result;
 		}
 			

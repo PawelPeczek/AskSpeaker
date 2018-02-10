@@ -17,7 +17,7 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 			Message = message;
 		}
 
-		public string ProceedRequest(){
+		public object ProceedRequest(){
 			if (!DeserializedMsg.ContainsKey ("Request"))
 				throw new ApplicationException ("Invalid message format.");
 			AdminRequestTypes reqType = GetRequestType (DeserializedMsg["request"]);

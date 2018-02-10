@@ -41,8 +41,8 @@ namespace AskSpeakerServer.BackEnd {
 				await Task.Run (() => ResolveCredentials (session));
 				Console.WriteLine ("Credentials resolved");
 				await Task.Run (() => SendEventsInformation(session));
-			} catch(ApplicationException){
-				await Task.Run (() => session.CloseWithHandshake (401, "Invalid credentials."));
+			} catch(ApplicationException ex){
+				await Task.Run (() => session.CloseWithHandshake (401, $"Invalid credentials. {ex.Message}"));
 			}
 				
 		}
@@ -50,20 +50,21 @@ namespace AskSpeakerServer.BackEnd {
 		private void ResolveCredentials(WebSocketSession session){
 			List<KeyValuePair<object, object>> credentials =
 				AdminAuthenticationModule.ResolveCredentials (session.Cookies);
+			
 			foreach (KeyValuePair<object, object> item in credentials) {
 				session.Items.Add (item);
 			}
 		}
 
 		private void SendEventsInformation(WebSocketSession session){
-			string response = AdminRequestLogic.GetJsonEventsInfo (session.Items);
+			string response = JsonSerialize(AdminRequestLogic.GetEventsInfo (session.Items));
 			session.Send (response);
 		}
 
 		private async void NewMessageHandler(WebSocketSession session, string value) {
 			try {
 				AdminRequestHandler reqHandler = new AdminRequestHandler(session.Items, value);
-				string response = await Task.Run(() => reqHandler.ProceedRequest());
+				object response = await Task.Run(() => reqHandler.ProceedRequest());
 				await Task.Run(() => DispathResponse(session, response));
 			} catch(ApplicationException ex) {
 				await Task.Run (() => session.CloseWithHandshake (400, $"JSON contract violation: {ex.Message}"));
@@ -72,10 +73,10 @@ namespace AskSpeakerServer.BackEnd {
 			}
 		}
 
-		private void DispathResponse(WebSocketSession session, string response){
+		private void DispathResponse(WebSocketSession session, object response){
 			if (response != null) {
 				foreach (WebSocketSession s in GetAllSessions()) {
-						s.Send (response);
+					s.Send (JsonSerialize(response));
 				}
 			}
 		}

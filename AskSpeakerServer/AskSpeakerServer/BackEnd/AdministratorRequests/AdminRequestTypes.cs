@@ -33,16 +33,17 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 	}
 
 	public enum AdminRequestTypes {
-		SuPermissionsCheck,
-		EventEdit,
-		EventClose,
-		EventCreate,
-		QuestionCancell,
-		QuestionMerge,
-		UserCreate,
-		UserDelete,
-		PasswordChange,
-		PasswordChangeWithSu
+		[AdminRequestAttriute("su-check")] SuPermissionsCheck,
+		[AdminRequestAttriute("event-edit")] EventEdit,
+		[AdminRequestAttriute("event-close")] EventClose,
+		[AdminRequestAttriute("event-create")] EventCreate,
+		[AdminRequestAttriute("question-cancell")] QuestionCancell,
+		[AdminRequestAttriute("question-merge")] QuestionMerge,
+		[AdminRequestAttriute("question-edit")] QuestionEdit,
+		[AdminRequestAttriute("user-create")] UserCreate,
+		[AdminRequestAttriute("user-delete")] UserDelete,
+		[AdminRequestAttriute("password-change")] PasswordChange,
+		[AdminRequestAttriute("su-password-change")] PasswordChangeWithSu
 	}
 }
 
