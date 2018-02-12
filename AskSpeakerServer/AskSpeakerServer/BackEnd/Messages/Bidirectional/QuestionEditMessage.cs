@@ -2,18 +2,18 @@
 using AskSpeakerServer.BackEnd.AdministratorRequests;
 
 namespace AskSpeakerServer.BackEnd.Messages.Bidirectional {
-	public class QuestionMergeMessage {
-		
+	public class QuestionEditMessage {
+
 		public string Message {
 			get;
-		} = AdminRequestTypes.QuestionMerge.GetRequestString(); 
+		} = AdminRequestTypes.QuestionEdit.GetRequestString();
 
-		public int MasterID { 
+		public int QuestionID {
 			get;
 			set;
 		}
 
-		public int SlaveID {
+		public string NewQuestionContent {
 			get;
 			set;
 		}

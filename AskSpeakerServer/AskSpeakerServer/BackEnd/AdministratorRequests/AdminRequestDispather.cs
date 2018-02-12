@@ -23,6 +23,16 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 				case AdminRequestTypes.EventCreate:
 					result = logic.CreateEvent (JsonConvert.DeserializeObject<EventEditCreateMessage>(message));
 					break;
+				case AdminRequestTypes.QuestionCancell:
+					result = logic.CancellQuestion(JsonConvert.DeserializeObject<QuestionCancellMessage>(message));
+					break;
+				case AdminRequestTypes.QuestionMerge:
+					result = logic.MergeQuestions(JsonConvert.DeserializeObject<QuestionMergeMessage>(message));
+					break;
+				case AdminRequestTypes.QuestionEdit:
+					result = logic.EditQuestion(JsonConvert.DeserializeObject<QuestionEditMessage>(message));
+					break;
+				
 				default:
 					throw new NotImplementedException();
 				}

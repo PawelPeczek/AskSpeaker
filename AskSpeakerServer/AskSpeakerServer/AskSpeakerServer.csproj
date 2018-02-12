@@ -125,6 +125,13 @@
     <Compile Include="BackEnd\Messages\Bidirectional\EventEditCreateMessage.cs" />
     <Compile Include="BackEnd\Messages\Bidirectional\QuestionCancellMessage.cs" />
     <Compile Include="BackEnd\Messages\Bidirectional\QuestionMergeMessage.cs" />
+    <Compile Include="BackEnd\Messages\Bidirectional\QuestionEditMessage.cs" />
+    <Compile Include="BackEnd\Messages\Requests\UserCreateRequest.cs" />
+    <Compile Include="BackEnd\Messages\Requests\UserDeleteRequest.cs" />
+    <Compile Include="BackEnd\Messages\Responses\OperationResponse.cs" />
+    <Compile Include="BackEnd\Messages\Requests\PasswordChangeRequest.cs" />
+    <Compile Include="BackEnd\Messages\Requests\PasswordChangeSuRequest.cs" />
+    <Compile Include="BackEnd\AdministratorRequests\PasswordHasChangedException.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

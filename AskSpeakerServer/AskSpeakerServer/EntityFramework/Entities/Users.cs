@@ -9,6 +9,7 @@ namespace AskSpeakerServer.EntityFramework.Entities {
 
 		public Users(){
 			Events = new HashSet<Events>();
+			Active = true;
 		}
 
 		[Key]
@@ -34,6 +35,11 @@ namespace AskSpeakerServer.EntityFramework.Entities {
 		[Required]
 		[ForeignKey("UserRole")]
 		public int UserRoleID {
+			get;
+			set;
+		}
+
+		public bool Active {
 			get;
 			set;
 		}

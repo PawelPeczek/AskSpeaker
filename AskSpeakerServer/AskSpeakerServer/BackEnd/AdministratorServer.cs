@@ -40,6 +40,7 @@ namespace AskSpeakerServer.BackEnd {
 			try {
 				await Task.Run (() => ResolveCredentials (session));
 				Console.WriteLine ("Credentials resolved");
+				await Task.Run(() => CheckSingleSessionPerUser(session));
 				await Task.Run (() => SendEventsInformation(session));
 			} catch(ApplicationException ex){
 				await Task.Run (() => session.CloseWithHandshake (401, $"Invalid credentials. {ex.Message}"));
@@ -68,8 +69,18 @@ namespace AskSpeakerServer.BackEnd {
 				await Task.Run(() => DispathResponse(session, response));
 			} catch(ApplicationException ex) {
 				await Task.Run (() => session.CloseWithHandshake (400, $"JSON contract violation: {ex.Message}"));
-			} catch(FieldAccessException ex) {
+			} catch(UnauthorizedAccessException ex) {
 				await Task.Run (() => session.CloseWithHandshake (401, $"Unauthorized operation. {ex.Message}"));
+			} catch (PasswordHasChangedException ex){
+				await Task.Run (() => session.CloseWithHandshake (113, ex.Message));
+			}
+		}
+
+		private void CheckSingleSessionPerUser(WebSocketSession session){
+			foreach (WebSocketSession anotherSession in GetAllSessions()) {
+				if (anotherSession.Items.ContainsKey ("UserID") &&
+				   (int)anotherSession.Items["UserID"] == (int)session.Items ["UserID"])
+					throw new ApplicationException ("Another session for current user is active.");
 			}
 		}
 
