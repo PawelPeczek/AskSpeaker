@@ -12,6 +12,7 @@ using System.Security.Cryptography;
 using System.Linq;
 using System.Text;
 using AskSpeakerServer.BackEnd.AdministratorRequests;
+using System.Threading;
 
 namespace AskSpeakerServer.BackEnd {
 	public class AdministratorServer : WebSocketServer {
@@ -37,15 +38,19 @@ namespace AskSpeakerServer.BackEnd {
 		}
 
 		private async void NewSessionHandler(WebSocketSession session){
-			try {
-				await Task.Run (() => ResolveCredentials (session));
-				Console.WriteLine ("Credentials resolved");
-				await Task.Run(() => CheckSingleSessionPerUser(session));
-				await Task.Run (() => SendEventsInformation(session));
-			} catch(ApplicationException ex){
-				await Task.Run (() => session.CloseWithHandshake (401, $"Invalid credentials. {ex.Message}"));
-			}
-				
+				try {
+					ManualResetEvent synchro = new ManualResetEvent(false);
+					session.Items.Add("SyncObject", synchro);
+					Console.WriteLine ("NewSessionHandlerFired!");
+					await Task.Run (() => ResolveCredentials (session));
+					Console.WriteLine ("Credentials resolved");
+					await Task.Run (() => CheckSingleSessionPerUser (session));
+					Console.WriteLine ("SingleSession checked");
+					synchro.Set();
+					await Task.Run (() => SendEventsInformation (session));
+				} catch (ApplicationException ex) {
+					Task.Run (() => session.CloseWithHandshake (401, $"Invalid credentials. {ex.Message}"));
+				}
 		}
 
 		private void ResolveCredentials(WebSocketSession session){
@@ -58,15 +63,12 @@ namespace AskSpeakerServer.BackEnd {
 		}
 
 		private void SendEventsInformation(WebSocketSession session){
-			string response = JsonSerialize(AdminRequestLogic.GetEventsInfo (session.Items));
-			session.Send (response);
+			session.Send (AdminRequestLogic.GetEventsInfoJSON (session.Items));
 		}
 
 		private async void NewMessageHandler(WebSocketSession session, string value) {
 			try {
-				AdminRequestHandler reqHandler = new AdminRequestHandler(session.Items, value);
-				object response = await Task.Run(() => reqHandler.ProceedRequest());
-				await Task.Run(() => DispathResponse(session, response));
+				await Task.Run(() => NewMessageTask(session, value));
 			} catch(ApplicationException ex) {
 				await Task.Run (() => session.CloseWithHandshake (400, $"JSON contract violation: {ex.Message}"));
 			} catch(UnauthorizedAccessException ex) {
@@ -76,12 +78,25 @@ namespace AskSpeakerServer.BackEnd {
 			}
 		}
 
+		private void NewMessageTask(WebSocketSession session, string value){
+			((ManualResetEvent)session.Items["SyncObject"]).WaitOne();
+			Console.WriteLine ("New message!");
+			AdminRequestHandler reqHandler = new AdminRequestHandler(session.Items, value);
+			Console.WriteLine ("Before ProceedRequest");
+			object response = reqHandler.ProceedRequest();
+			DispathResponse(session, response);
+		}
+
 		private void CheckSingleSessionPerUser(WebSocketSession session){
+			int counter = 0;
 			foreach (WebSocketSession anotherSession in GetAllSessions()) {
 				if (anotherSession.Items.ContainsKey ("UserID") &&
-				   (int)anotherSession.Items["UserID"] == (int)session.Items ["UserID"])
-					throw new ApplicationException ("Another session for current user is active.");
+				    (int)anotherSession.Items ["UserID"] == (int)session.Items ["UserID"]) {
+					counter++;
+				}
 			}
+			if (counter > 1) throw new ApplicationException ("Another session for current user is active.");
+
 		}
 
 		private void DispathResponse(WebSocketSession session, object response){

@@ -14,26 +14,30 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 	public class AdminRequestLogic {
 		private IDictionary<Object, Object> Credentials;
 
-		public static IQueryable<Events> GetEventsInfo(IDictionary<object, object> credentials){
-			IQueryable<Events> result;
+		public static string GetEventsInfoJSON(IDictionary<object, object> credentials){
+			Console.WriteLine ("GetEventsInfo fired");
+			string result;
 			using(AskSpeakerContext ctx = new AskSpeakerContext ()){
-				ctx.Database.Log = s => Console.WriteLine (s);
 				int userID = (int)credentials ["UserID"];
+				IQueryable<Events> events;
 				if ((string)credentials ["Privilages"] == "SuperAdmin") {
-					result = 
+					events = 
 						from e in ctx.Events
 						where e.UserID == userID
 						select e;
 				} else {
-					result = 
+					events = 
 						from e in ctx.Events
 						select e;
 				}
+				result = JsonConvert.SerializeObject (events);
 			}
+			Console.WriteLine ("GetEventsInfo returning info");
 			return result;
 		}
 
 		public AdminRequestLogic (IDictionary<Object, Object> credentials) {
+			Console.WriteLine ("AdminRequestLogic ctor");
 			Credentials = credentials;
 			if (!AdminAuthenticationModule.IsUserStillActive (credentials))
 				throw new UnauthorizedAccessException ("User account was deleted.");
@@ -42,6 +46,7 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 		}
 
 		public SuPermissionsCheckResponse CheckSuPermistions() {
+			Console.WriteLine ("CheckSuPermistions()");
 			SuPermissionsCheckResponse result = new SuPermissionsCheckResponse ();
 			result.Permissions = AdminAuthenticationModule.IsUserSuperAdmin(Credentials);
 			return result;
@@ -203,6 +208,7 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 					user.Password = encryptedNewPasswd;
 					ctx.SaveChanges ();
 					result.OperationStatus = true;
+					Credentials ["PasswordChanged"] = true;
 				} else {
 					result.OperationStatus = false;
 					result.ErrorCause = "Unresolved credentials.";
@@ -224,6 +230,7 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 					user.Password = encryptedNewPasswd;
 					ctx.SaveChanges ();
 					result.OperationStatus = true;
+					if((int)Credentials ["UserID"] == request.UserID) Credentials ["PasswordChanged"] = true;
 				} else {
 					result.OperationStatus = false;
 					result.ErrorCause = "Unresolved credentials.";

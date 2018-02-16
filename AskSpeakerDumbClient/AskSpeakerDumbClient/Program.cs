@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 using System.Threading.Tasks;
 using System.Net;
+using AskSpeakerServer.BackEnd.Messages.Requests;
+using Newtonsoft.Json;
 
 namespace AskSpeakerDumbClient {
 	class MainClass {
@@ -17,7 +19,7 @@ namespace AskSpeakerDumbClient {
 			ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => {return true;};
 			ws.Opened += async (sender, e) => {
 				Console.WriteLine ("Connected!");
-				await Task.Run(() => ((WebSocket) sender).Send("Hello!"));
+				await Task.Run(() => ((WebSocket) sender).Send(JsonConvert.SerializeObject(new SuPermissionsCheckRequest())));
 			};
 			ws.Error += (object sender, SuperSocket.ClientEngine.ErrorEventArgs e) => {
 				Console.WriteLine (e.Exception.Message);
@@ -26,6 +28,7 @@ namespace AskSpeakerDumbClient {
 
 			ws.Closed += (object sender, EventArgs e) => {
 				Console.WriteLine (((ClosedEventArgs)e).Code);
+				Console.WriteLine (((ClosedEventArgs)e).Reason);
 			};
 			ws.MessageReceived += (object sender, MessageReceivedEventArgs e) => {
 				Console.WriteLine (e.Message);

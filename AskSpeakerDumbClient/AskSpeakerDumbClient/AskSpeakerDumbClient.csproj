@@ -38,10 +38,64 @@
       <HintPath>..\packages\WebSocket4Net.0.15.2\lib\net45\WebSocket4Net.dll</HintPath>
     </Reference>
     <Reference Include="glib-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <Reference Include="Microsoft.Web.XmlTransform">
+      <HintPath>..\packages\Microsoft.Web.Xdt.2.1.1\lib\net40\Microsoft.Web.XmlTransform.dll</HintPath>
+    </Reference>
+    <Reference Include="NuGet.Versioning">
+      <HintPath>..\packages\NuGet.Versioning.4.2.0\lib\net45\NuGet.Versioning.dll</HintPath>
+    </Reference>
+    <Reference Include="NuGet.Common">
+      <HintPath>..\packages\NuGet.Common.4.2.0\lib\net45\NuGet.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="NuGet.Frameworks">
+      <HintPath>..\packages\NuGet.Frameworks.4.2.0\lib\net45\NuGet.Frameworks.dll</HintPath>
+    </Reference>
+    <Reference Include="NuGet.Packaging.Core.Types">
+      <HintPath>..\packages\NuGet.Packaging.Core.Types.4.2.0\lib\net45\NuGet.Packaging.Core.Types.dll</HintPath>
+    </Reference>
+    <Reference Include="NuGet.Packaging.Core">
+      <HintPath>..\packages\NuGet.Packaging.Core.4.2.0\lib\net45\NuGet.Packaging.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="NuGet.Packaging">
+      <HintPath>..\packages\NuGet.Packaging.4.2.0\lib\net45\NuGet.Packaging.dll</HintPath>
+    </Reference>
+    <Reference Include="NuGet.Repositories">
+      <HintPath>..\packages\NuGet.Repositories.4.2.0\lib\net45\NuGet.Repositories.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NuGet.RuntimeModel">
+      <HintPath>..\packages\NuGet.RuntimeModel.4.2.0\lib\net45\NuGet.RuntimeModel.dll</HintPath>
+    </Reference>
+    <Reference Include="NuGet.ContentModel">
+      <HintPath>..\packages\NuGet.ContentModel.4.2.0\lib\net45\NuGet.ContentModel.dll</HintPath>
+    </Reference>
+    <Reference Include="NuGet.Client">
+      <HintPath>..\packages\NuGet.Client.4.2.0\lib\net45\NuGet.Client.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Messages\Bidirectional\EventCloseMessage.cs" />
+    <Compile Include="Messages\Bidirectional\EventEditCreateMessage.cs" />
+    <Compile Include="Messages\Bidirectional\QuestionCancellMessage.cs" />
+    <Compile Include="Messages\Bidirectional\QuestionEditMessage.cs" />
+    <Compile Include="Messages\Bidirectional\QuestionMergeMessage.cs" />
+    <Compile Include="Messages\Requests\PasswordChangeRequest.cs" />
+    <Compile Include="Messages\Requests\PasswordChangeSuRequest.cs" />
+    <Compile Include="Messages\Requests\UserCreateRequest.cs" />
+    <Compile Include="Messages\Requests\UserDeleteRequest.cs" />
+    <Compile Include="Messages\Responses\OperationResponse.cs" />
+    <Compile Include="Messages\Responses\SuPermissionsCheckResponse.cs" />
+    <Compile Include="AdministratorRequests\AdminRequestTypes.cs" />
+    <Compile Include="Messages\Requests\SuPermissionsCheckRequest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

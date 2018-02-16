@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using AskSpeakerServer.BackEnd.Messages.Bidirectional;
+using AskSpeakerServer.BackEnd.Messages.Requests;
 
 namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 	public static class AdminRequestDispather {
@@ -32,9 +33,19 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 				case AdminRequestTypes.QuestionEdit:
 					result = logic.EditQuestion(JsonConvert.DeserializeObject<QuestionEditMessage>(message));
 					break;
-				
-				default:
-					throw new NotImplementedException();
+				case AdminRequestTypes.UserCreate:
+					result = logic.CreateUser(JsonConvert.DeserializeObject<UserCreateRequest>(message));
+					break;
+				case AdminRequestTypes.UserDelete:
+					result = logic.DeactivateUser(JsonConvert.DeserializeObject<UserDeleteRequest>(message));
+					break;
+				case AdminRequestTypes.PasswordChange:
+					result = logic.ChangePassword(JsonConvert.DeserializeObject<PasswordChangeRequest>(message));
+					break;
+				case AdminRequestTypes.PasswordChangeWithSu:
+					result = logic.ChangePasswordWithSuPermissions
+						(JsonConvert.DeserializeObject<PasswordChangeSuRequest>(message));
+					break;
 				}
 			} catch(JsonSerializationException ex){
 				throw new ApplicationException (ex.Message);
