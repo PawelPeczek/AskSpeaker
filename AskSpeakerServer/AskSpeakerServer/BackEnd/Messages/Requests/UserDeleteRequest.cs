@@ -12,6 +12,11 @@ namespace AskSpeakerServer.BackEnd.Messages.Requests {
 			get;
 			set;
 		}
+
+		public int NewEventOwnerID {
+			get;
+			set;
+		}
 	}
 }
 

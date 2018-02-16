@@ -16,16 +16,21 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 					result = logic.CheckSuPermistions ();
 					break;
 				case AdminRequestTypes.EventClose:
-					result = logic.CloseEvent (JsonConvert.DeserializeObject<EventCloseMessage>(message));
+					result = logic.CloseEvent (JsonConvert.DeserializeObject<EventOpenCloseMessage>(message));
+					break;
+				case AdminRequestTypes.EventReOpen:
+					result = logic.ReOpenEvent (JsonConvert.DeserializeObject<EventOpenCloseMessage>(message));
 					break;
 				case AdminRequestTypes.EventEdit:
 					result = logic.EditEvent (JsonConvert.DeserializeObject<EventEditCreateMessage>(message));
 					break;
 				case AdminRequestTypes.EventCreate:
+					Console.WriteLine ("Trying to deserialize");
 					result = logic.CreateEvent (JsonConvert.DeserializeObject<EventEditCreateMessage>(message));
+					Console.WriteLine ("[DONE]");
 					break;
 				case AdminRequestTypes.QuestionCancell:
-					result = logic.CancellQuestion(JsonConvert.DeserializeObject<QuestionCancellMessage>(message));
+					result = logic.CancellQuestion(JsonConvert.DeserializeObject<QuestionCancelMessage>(message));
 					break;
 				case AdminRequestTypes.QuestionMerge:
 					result = logic.MergeQuestions(JsonConvert.DeserializeObject<QuestionMergeMessage>(message));
@@ -45,6 +50,10 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 				case AdminRequestTypes.PasswordChangeWithSu:
 					result = logic.ChangePasswordWithSuPermissions
 						(JsonConvert.DeserializeObject<PasswordChangeSuRequest>(message));
+					break;
+				case AdminRequestTypes.EventChangeOwnership:
+					result = logic.ChangeEventOwnership
+						(JsonConvert.DeserializeObject<EventOwnershipChangeRequest>(message));
 					break;
 				}
 			} catch(JsonSerializationException ex){

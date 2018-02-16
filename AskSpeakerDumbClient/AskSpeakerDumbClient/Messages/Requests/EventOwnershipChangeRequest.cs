@@ -2,18 +2,18 @@
 using AskSpeakerServer.BackEnd.AdministratorRequests;
 
 namespace AskSpeakerServer.BackEnd.Messages.Requests {
-	public class UserDeleteRequest {
+	public class EventOwnershipChangeRequest {
 
 		public string Request {
 			get;
-		} = AdminRequestTypes.UserDelete.GetRequestString();
+		} = AdminRequestTypes.EventChangeOwnership.GetRequestString(); 
 
-		public int UserID {
+		public int EventID {
 			get;
 			set;
 		}
 
-		public int NewEventOwnerID {
+		public int newOwnerID {
 			get;
 			set;
 		}

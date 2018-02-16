@@ -70,6 +70,7 @@ namespace AskSpeakerServer.BackEnd {
 
 		private async void NewMessageHandler(WebSocketSession session, string value) {
 			try {
+				Console.WriteLine (value);
 				await Task.Run(() => NewMessageTask(session, value));
 			} catch(ApplicationException ex) {
 				await Task.Run (() => session.CloseWithHandshake (400, $"JSON contract violation: {ex.Message}"));
@@ -117,6 +118,8 @@ namespace AskSpeakerServer.BackEnd {
 						currentSessionAtList = true;
 					s.Send (serializedResponse);
 				}
+				// The strange thing is that GetAllSessions() do not always
+				// contains current session...
 				if (!currentSessionAtList)
 					session.Send (serializedResponse);
 			}

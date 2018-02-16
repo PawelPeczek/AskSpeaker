@@ -7,20 +7,28 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 	public class AdminRequestHandler {
 		
 		private IDictionary<Object, Object> Credentials;
-		private Dictionary<string, string> DeserializedMsg;
+		private Dictionary<string, object> DeserializedMsg;
 		private string Message;
 
 		public AdminRequestHandler (IDictionary<Object, Object> credentials, string message) {
 			Credentials = credentials;
+			Console.WriteLine ("Trying to firs deserialize to dictionary");
 			DeserializedMsg = 
-				JsonConvert.DeserializeObject<Dictionary<string, string>> (message);
+				JsonConvert.DeserializeObject<Dictionary<string, object>> (message);
+			Console.WriteLine ("Deserializing to dictionary [OK]");
 			Message = message;
 		}
 
 		public object ProceedRequest(){
-			if (!DeserializedMsg.ContainsKey ("Request"))
+			Console.WriteLine ("ProceedRequest() starts!");
+			if (!DeserializedMsg.ContainsKey ("Request") && !DeserializedMsg.ContainsKey ("Message"))
 				throw new ApplicationException ("Invalid message format.");
-			AdminRequestTypes reqType = GetRequestType (DeserializedMsg["Request"]);
+			AdminRequestTypes reqType;	
+			if (DeserializedMsg.ContainsKey ("Request")) {
+				reqType = GetRequestType ((string)DeserializedMsg ["Request"]);
+			} else {
+				reqType = GetRequestType ((string)DeserializedMsg ["Message"]);
+			}
 			Console.WriteLine ("Before dispath");
 			return AdminRequestDispather.Dispath (reqType, Message, Credentials);
 		}

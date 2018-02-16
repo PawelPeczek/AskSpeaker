@@ -30,7 +30,9 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 						from e in ctx.Events
 						select e;
 				}
+				Console.WriteLine ("Before error");
 				result = JsonConvert.SerializeObject (events);
+				Console.WriteLine ("After error");
 			}
 			Console.WriteLine ("GetEventsInfo returning info");
 			return result;
@@ -53,27 +55,37 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 		}
 
 
-		public EventCloseMessage CloseEvent(EventCloseMessage request){
-			EventCloseMessage result;
+		public EventOpenCloseMessage CloseEvent(EventOpenCloseMessage request){
+			EventOpenCloseMessage result = null;
 			using (AskSpeakerContext ctx = new AskSpeakerContext ()) {
 				Events selectedEvent = FetchEventWithGivenID(ctx, request.EventID);
 				if (selectedEvent.Closed == false) {
 					selectedEvent.Closed = true;
 					ctx.SaveChanges ();
+					result = request;
 				}
-				result = new EventCloseMessage ();
-				result.EventID = request.EventID;
 			}
 			return result;
 		}
-			
+
+		public EventOpenCloseMessage ReOpenEvent(EventOpenCloseMessage request){
+			EventOpenCloseMessage result = null;
+			using (AskSpeakerContext ctx = new AskSpeakerContext ()) {
+				Events selectedEvent = FetchEventWithGivenID(ctx, request.EventID);
+				if (selectedEvent.Closed == true) {
+					selectedEvent.Closed = false;
+					ctx.SaveChanges ();
+					result = request;
+				}
+			}
+			return result;
+		}
+
 		public EventEditCreateMessage EditEvent(EventEditCreateMessage request){
 			EventEditCreateMessage result;
 			using (AskSpeakerContext ctx = new AskSpeakerContext ()) {
 				Events selectedEvent = FetchEventWithGivenID(ctx, request.Event.EventID);
-				if(request.Event.UserID != selectedEvent.UserID && 
-				   !AdminAuthenticationModule.IsUserSuperAdmin(Credentials))
-					throw new UnauthorizedAccessException("Only SuperAdmin can change the ownership of Event.");
+				// Hash, EventID and UserID are never copied!!!
 				selectedEvent.PropertiesCopy (request.Event);
 				try {
 					ctx.SaveChanges();
@@ -89,11 +101,14 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 
 		public EventEditCreateMessage CreateEvent(EventEditCreateMessage request){
 			using (AskSpeakerContext ctx = new AskSpeakerContext ()) {
-				if (request.Event.Questions.Any ()) {
-					request.Event.Questions = new HashSet<Questions>();
-				}
-				request.Event.User = null;
-				request.Event.User.UserID = (int)Credentials ["UserId"];
+				Console.WriteLine ("Before trying to read credentials");
+				Console.WriteLine ("Is Credential fulfilled with UserID: " + Credentials.ContainsKey("UserID"));
+				Users eventOwner = FetchUserWithGivenID (ctx, (int)Credentials ["UserID"]);
+				request.Event.User = eventOwner;
+				Console.WriteLine ("After trying to read credentials");
+				do {
+					request.Event.EventHash = Events.GenerateHash ();	
+				} while(IsEventWithGivenHashExists (ctx, request.Event.EventHash));
 				ctx.Events.Add (request.Event);
 				try {
 					ctx.SaveChanges();
@@ -104,7 +119,7 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 			return request;
 		}
 
-		public QuestionCancellMessage CancellQuestion(QuestionCancellMessage request){
+		public QuestionCancelMessage CancellQuestion(QuestionCancelMessage request){
 			using (AskSpeakerContext ctx = new AskSpeakerContext ()) {
 				Questions question = FetchActiveQuestionWithGivenID (ctx, request.QuestionID);
 				question.Anulled = true;
@@ -185,6 +200,7 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 					result.ErrorCause = "User already deleted.";
 				} else {
 					user.Active = false;
+					ChangeEventsOwnerShip (ctx, user, request.NewEventOwnerID);
 					try {
 						ctx.SaveChanges();
 						result.OperationStatus = true;
@@ -199,6 +215,7 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 
 		public OperationResponse ChangePassword(PasswordChangeRequest request){
 			OperationResponse result = new OperationResponse ();
+			result.Response = AdminRequestTypes.PasswordChange.GetRequestString ();
 			using (AskSpeakerContext ctx = new AskSpeakerContext ()) {
 				Users user = FetchUserWithGivenID (ctx, (int)Credentials ["UserID"]);
 				Console.WriteLine ("User that was fetched: " + user.UserName);
@@ -223,9 +240,11 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 			if (!AdminAuthenticationModule.IsUserSuperAdmin (Credentials))
 				throw new UnauthorizedAccessException ("SuperUser access required.");
 			OperationResponse result = new OperationResponse ();
+			result.Response = AdminRequestTypes.PasswordChangeWithSu.GetRequestString ();
 			using (AskSpeakerContext ctx = new AskSpeakerContext ()) {
-				Users user = FetchUserWithGivenID (ctx, (int)Credentials ["UserID"]);
+				Users user = FetchUserWithGivenID (ctx, request.UserID);
 				if (user != null) {
+					Console.WriteLine ($"New password: {request.NewPassword} for user {user.UserName}");
 					SHA256 SHAEncryptor = SHA256Managed.Create ();
 					byte[] encryptedNewPasswd = SHAEncryptor.ComputeHash (Encoding.Unicode.GetBytes (request.NewPassword));
 					user.Password = encryptedNewPasswd;
@@ -240,6 +259,26 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 			return result;
 		}
 
+		public OperationResponse ChangeEventOwnership(EventOwnershipChangeRequest request){
+			if (!AdminAuthenticationModule.IsUserSuperAdmin (Credentials))
+				throw new UnauthorizedAccessException ("SuperUser access required.");
+			OperationResponse result = new OperationResponse ();
+			result.Response = AdminRequestTypes.EventChangeOwnership.GetRequestString ();
+			using (AskSpeakerContext ctx = new AskSpeakerContext ()) {
+				try {
+					Events chosenEvent = FetchEventWithGivenID (ctx, request.EventID);
+					Users user = FetchUserWithGivenID (ctx, request.newOwnerID);
+					chosenEvent.User = user;
+					ctx.SaveChanges ();
+					result.OperationStatus = true;
+				} catch(Exception ex){
+					result.OperationStatus = false;
+					result.ErrorCause = ex.Message;
+				}
+			}
+			return result;
+		}
+
 		private Questions FetchActiveQuestionWithGivenID(AskSpeakerContext ctx, int QuestionID){
 			Questions question = 
 				(from q in ctx.Questions
@@ -247,7 +286,8 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 				     q.QuestionID == QuestionID
 				 select q).FirstOrDefault ();
 			if (question == null)
-				throw new ApplicationException ($"There is no question with such ID ({QuestionID}) or the question is closed.");
+				throw new ApplicationException ($"There is no question with such ID ({QuestionID}) " +
+												"or the question is closed.");
 			if (!AdminAuthenticationModule.IsPermissionToEventModifGranted(question.Event.UserID, Credentials))
 				throw new UnauthorizedAccessException("Only SuperAdmin can cancell a quetsion assigned to event " +
 					"hosted by another user.");
@@ -262,7 +302,7 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 			if (result == null)
 				throw new ApplicationException ("There is no event with such ID.");
 			if (!AdminAuthenticationModule.IsPermissionToEventModifGranted(result.UserID, Credentials))
-				throw new UnauthorizedAccessException("Only SuperAdmin can close event hosted by another user.");
+				throw new UnauthorizedAccessException("Only SuperAdmin can modify event hosted by another user.");
 			return result;
 		}
 
@@ -273,9 +313,27 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 					where u.UserID == UserID &&
 					u.Active == true
 					select u).FirstOrDefault();
+			if (user == null)
+				throw new ApplicationException ("No user found.");
 			return user;
 		}
-			
+
+		private bool IsEventWithGivenHashExists(AskSpeakerContext ctx, string hash){
+			return (
+			     from e in ctx.Events
+				 where e.EventHash == hash
+				 select e
+			).Any ();
+		}
+
+		private void ChangeEventsOwnerShip(AskSpeakerContext ctx, Users user, int newOwnerID){
+			Users newOwner = FetchUserWithGivenID (ctx, newOwnerID);
+			if (newOwner == null)
+				throw new ApplicationException ("There is no such active user.");
+			foreach (Events userEvent in user.Events) {
+				userEvent.User = newOwner;
+			}
+		}
 	}
 }
 

@@ -2,11 +2,12 @@
 using AskSpeakerServer.BackEnd.AdministratorRequests;
 
 namespace AskSpeakerServer.BackEnd.Messages.Bidirectional {
-	public class EventCloseMessage {
+	public class EventOpenCloseMessage {
 		
 		public string Message {
 			get;
-		} = AdminRequestTypes.EventClose.GetRequestString();
+			set;
+		}
 
 		public int EventID {
 			get;

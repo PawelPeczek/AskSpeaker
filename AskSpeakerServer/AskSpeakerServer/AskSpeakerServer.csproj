@@ -121,9 +121,7 @@
     <Compile Include="EntityFramework\Entities\UserRoles.cs" />
     <Compile Include="EntityFramework\Entities\Users.cs" />
     <Compile Include="EntityFramework\Entities\Votes.cs" />
-    <Compile Include="BackEnd\Messages\Bidirectional\EventCloseMessage.cs" />
     <Compile Include="BackEnd\Messages\Bidirectional\EventEditCreateMessage.cs" />
-    <Compile Include="BackEnd\Messages\Bidirectional\QuestionCancellMessage.cs" />
     <Compile Include="BackEnd\Messages\Bidirectional\QuestionMergeMessage.cs" />
     <Compile Include="BackEnd\Messages\Bidirectional\QuestionEditMessage.cs" />
     <Compile Include="BackEnd\Messages\Requests\UserCreateRequest.cs" />
@@ -132,6 +130,9 @@
     <Compile Include="BackEnd\Messages\Requests\PasswordChangeRequest.cs" />
     <Compile Include="BackEnd\Messages\Requests\PasswordChangeSuRequest.cs" />
     <Compile Include="BackEnd\AdministratorRequests\PasswordHasChangedException.cs" />
+    <Compile Include="BackEnd\Messages\Bidirectional\QuestionCancelMessage.cs" />
+    <Compile Include="BackEnd\Messages\Requests\EventOwnershipChangeRequest.cs" />
+    <Compile Include="BackEnd\Messages\Bidirectional\EventOpenCloseMessage.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

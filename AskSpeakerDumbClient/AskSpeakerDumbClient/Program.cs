@@ -6,14 +6,17 @@ using System.Threading.Tasks;
 using System.Net;
 using AskSpeakerServer.BackEnd.Messages.Requests;
 using Newtonsoft.Json;
+using AskSpeakerServer.BackEnd.Messages.Bidirectional;
+using AskSpeakerServer.BackEnd.AdministratorRequests;
+using AskSpeakerServer.EntityFramework.Entities;
 
 namespace AskSpeakerDumbClient {
 	class MainClass {
 		public static void Main (string[] args) {
 			Console.WriteLine ("Hello World!");
 			List<KeyValuePair<String, String>> l = new List<KeyValuePair<String, String>> ();
-			l.Add (new KeyValuePair<String, String> ("user", "MyUser"));
-			l.Add (new KeyValuePair<String, String> ("pw", "zse4%RDX"));
+			l.Add (new KeyValuePair<String, String> ("user", "DumbUser"));
+			l.Add (new KeyValuePair<String, String> ("pw", "zaq1@WSX"));
 			WebSocket ws = new WebSocket ("wss://localhost:10000", "", l);
 			// Just for now with self-generated certificate
 			ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => {return true;};
@@ -24,10 +27,35 @@ namespace AskSpeakerDumbClient {
 //				request.Password = "zaq1@WSX";
 //				UserDeleteRequest request = new UserDeleteRequest();
 //				request.UserID = 2;
-				PasswordChangeRequest request = new PasswordChangeRequest();
-				request.OldPassword = "zaq1@WSX";
-				request.NewPassword = "zse4%RDX";
-				await Task.Run(() => ((WebSocket) sender).Send(JsonConvert.SerializeObject(new PasswordChangeSuRequest())));
+//				PasswordChangeRequest request = new PasswordChangeRequest();
+//				request.OldPassword = "zaq1@WSX";
+//				request.NewPassword = "zse4%RDX";
+//				EventEditCreateMessage request = new EventEditCreateMessage();
+//				request.Message = AdminRequestTypes.EventEdit.GetRequestString();
+//				request.Event = new Events();
+//				request.Event.EventID = 1;
+//				request.Event.EventDesc = "My new modified event";
+//				request.Event.EventHash = "h6k9(0";
+//				request.Event.EventName = "SuperEvent 2.0";
+//				request.Event.SpeakerName = "Jan";
+//				request.Event.SpeakerSurname = "Kowalski";
+//				EventOpenCloseMessage request = new EventOpenCloseMessage();
+//				request.Message = AdminRequestTypes.EventReOpen.GetRequestString();
+//				request.EventID = 1;
+//				QuestionCancelMessage request = new QuestionCancelMessage();
+//				PasswordChangeSuRequest request = new PasswordChangeSuRequest();
+//				request.NewPassword = "zaq1@WSX";
+//				request.UserID = 2;
+//				UserCreateRequest request = new UserCreateRequest();
+//				request.Password = "zaq1@WSX";
+//				request.UserName = "kowalski";
+//				UserDeleteRequest request = new UserDeleteRequest();
+//				request.NewEventOwnerID = 1;
+//				request.UserID = 7;
+				EventOwnershipChangeRequest request = new EventOwnershipChangeRequest();
+				request.newOwnerID = 1;
+				request.EventID = 51; 
+				await Task.Run(() => ((WebSocket) sender).Send(JsonConvert.SerializeObject(request)));
 			};
 			ws.Error += (object sender, SuperSocket.ClientEngine.ErrorEventArgs e) => {
 				Console.WriteLine (e.Exception.Message);

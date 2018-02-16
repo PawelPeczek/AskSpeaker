@@ -2,7 +2,7 @@
 using AskSpeakerServer.BackEnd.AdministratorRequests;
 
 namespace AskSpeakerServer.BackEnd.Messages.Bidirectional  {
-	public class QuestionCancellMessage {
+	public class QuestionCancelMessage {
 		
 		public string Message {
 			get;

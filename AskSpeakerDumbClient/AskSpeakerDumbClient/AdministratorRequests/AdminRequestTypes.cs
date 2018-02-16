@@ -37,6 +37,8 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 		[AdminRequestAttriute("event-edit")] EventEdit,
 		[AdminRequestAttriute("event-close")] EventClose,
 		[AdminRequestAttriute("event-create")] EventCreate,
+		[AdminRequestAttriute("event-change-ownership")] EventChangeOwnership,
+		[AdminRequestAttriute("event-reopen")] EventReOpen,
 		[AdminRequestAttriute("question-cancell")] QuestionCancell,
 		[AdminRequestAttriute("question-merge")] QuestionMerge,
 		[AdminRequestAttriute("question-edit")] QuestionEdit,
