@@ -201,9 +201,10 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 			OperationResponse result = new OperationResponse ();
 			using (AskSpeakerContext ctx = new AskSpeakerContext ()) {
 				Users user = FetchUserWithGivenID (ctx, (int)Credentials ["UserID"]);
+				Console.WriteLine ("User that was fetched: " + user.UserName);
 				SHA256 SHAEncryptor = SHA256Managed.Create ();
 				byte[] encryptedOldPasswd = SHAEncryptor.ComputeHash (Encoding.Unicode.GetBytes (request.OldPassword));
-				if (user != null && user.Password.Equals(encryptedOldPasswd)) {
+				if (user != null && user.Password.SequenceEqual(encryptedOldPasswd)) {
 					byte[] encryptedNewPasswd = SHAEncryptor.ComputeHash (Encoding.Unicode.GetBytes (request.NewPassword));
 					user.Password = encryptedNewPasswd;
 					ctx.SaveChanges ();

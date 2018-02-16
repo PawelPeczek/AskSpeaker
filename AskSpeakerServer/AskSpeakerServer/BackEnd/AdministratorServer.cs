@@ -49,7 +49,9 @@ namespace AskSpeakerServer.BackEnd {
 					synchro.Set();
 					await Task.Run (() => SendEventsInformation (session));
 				} catch (ApplicationException ex) {
-					Task.Run (() => session.CloseWithHandshake (401, $"Invalid credentials. {ex.Message}"));
+					await Task.Run (() => session.CloseWithHandshake (401, $"Error while authorization. {ex.Message}"));
+				} catch (UnauthorizedAccessException ex){
+					await Task.Run (() => session.CloseWithHandshake (401, $"Invalid credentials. {ex.Message}"));
 				}
 		}
 
@@ -89,21 +91,34 @@ namespace AskSpeakerServer.BackEnd {
 
 		private void CheckSingleSessionPerUser(WebSocketSession session){
 			int counter = 0;
+			Console.WriteLine ($"CheckSingleSessionPerUser(), sessionCount: {GetAllSessions().Count()}");
 			foreach (WebSocketSession anotherSession in GetAllSessions()) {
-				if (anotherSession.Items.ContainsKey ("UserID") &&
+				Console.WriteLine ($"Checking for session {session.SessionID} -> compare with {anotherSession.SessionID}");
+				if (session != anotherSession &&
+					anotherSession.Items.ContainsKey ("UserID") &&
 				    (int)anotherSession.Items ["UserID"] == (int)session.Items ["UserID"]) {
 					counter++;
 				}
 			}
-			if (counter > 1) throw new ApplicationException ("Another session for current user is active.");
+			if (counter > 0) {
+				Console.WriteLine ("Found another session with the same user!");
+				throw new ApplicationException ("Another session for current user is active.");
+			}
 
 		}
 
 		private void DispathResponse(WebSocketSession session, object response){
 			if (response != null) {
+				string serializedResponse = JsonSerialize (response);
+				bool currentSessionAtList = false;
 				foreach (WebSocketSession s in GetAllSessions()) {
-					s.Send (JsonSerialize(response));
+					Console.WriteLine ($"Sending response to {s.SessionID}");
+					if (s == session)
+						currentSessionAtList = true;
+					s.Send (serializedResponse);
 				}
+				if (!currentSessionAtList)
+					session.Send (serializedResponse);
 			}
 		}
 

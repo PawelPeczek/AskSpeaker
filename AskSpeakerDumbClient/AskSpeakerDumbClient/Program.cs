@@ -12,14 +12,22 @@ namespace AskSpeakerDumbClient {
 		public static void Main (string[] args) {
 			Console.WriteLine ("Hello World!");
 			List<KeyValuePair<String, String>> l = new List<KeyValuePair<String, String>> ();
-			l.Add (new KeyValuePair<String, String> ("user", "DumbUser"));
-			l.Add (new KeyValuePair<String, String> ("pw", "zaq1@WSX"));
+			l.Add (new KeyValuePair<String, String> ("user", "MyUser"));
+			l.Add (new KeyValuePair<String, String> ("pw", "zse4%RDX"));
 			WebSocket ws = new WebSocket ("wss://localhost:10000", "", l);
 			// Just for now with self-generated certificate
 			ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => {return true;};
 			ws.Opened += async (sender, e) => {
 				Console.WriteLine ("Connected!");
-				await Task.Run(() => ((WebSocket) sender).Send(JsonConvert.SerializeObject(new SuPermissionsCheckRequest())));
+//				UserCreateRequest request = new UserCreateRequest();
+//				request.UserName = "MyUser1";
+//				request.Password = "zaq1@WSX";
+//				UserDeleteRequest request = new UserDeleteRequest();
+//				request.UserID = 2;
+				PasswordChangeRequest request = new PasswordChangeRequest();
+				request.OldPassword = "zaq1@WSX";
+				request.NewPassword = "zse4%RDX";
+				await Task.Run(() => ((WebSocket) sender).Send(JsonConvert.SerializeObject(new PasswordChangeSuRequest())));
 			};
 			ws.Error += (object sender, SuperSocket.ClientEngine.ErrorEventArgs e) => {
 				Console.WriteLine (e.Exception.Message);
