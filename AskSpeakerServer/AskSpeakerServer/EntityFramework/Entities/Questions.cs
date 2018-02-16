@@ -9,6 +9,8 @@ namespace AskSpeakerServer.EntityFramework.Entities {
 		public Questions () {
 			Anulled = false;
 			Votes = new HashSet<Votes>();
+			VotesPlus = 0;
+			VotesMinus = 0;
 		}
 
 		[Key]
@@ -24,12 +26,14 @@ namespace AskSpeakerServer.EntityFramework.Entities {
 			set;
 		}
 
+		[JsonIgnore]
 		[Required]
 		public bool Anulled { 
 			get; 
 			set; 
 		}
 
+		[JsonIgnore]
 		[Required]
 		[ForeignKey("Event")]
 		public int EventID {
@@ -37,6 +41,7 @@ namespace AskSpeakerServer.EntityFramework.Entities {
 			set;
 		}
 
+		[JsonIgnore]
 		[ForeignKey("Merged")]
 		public int MergedWith {
 			get;
@@ -57,6 +62,12 @@ namespace AskSpeakerServer.EntityFramework.Entities {
 
 		[JsonIgnore]
 		public virtual ICollection<Votes> Votes {
+			get;
+			set;
+		}
+
+		[NotMapped]
+		public int VotesSum {
 			get;
 			set;
 		}

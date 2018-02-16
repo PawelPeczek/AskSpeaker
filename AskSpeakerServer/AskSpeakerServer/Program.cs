@@ -16,8 +16,11 @@ namespace AskSpeakerServer {
 	class MainClass {
 		public static void Main (string[] args) {
 			AdministratorServer server = new AdministratorServer ();
+			SubscriberServer subscribers = new SubscriberServer ();
 			server.Start ();
+			subscribers.Start ();
 			Console.ReadKey ();
+			subscribers.Stop ();
 			server.Stop ();
 		}
 	}

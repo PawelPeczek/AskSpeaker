@@ -13,13 +13,14 @@ using System.Linq;
 using System.Text;
 using AskSpeakerServer.BackEnd.AdministratorRequests;
 using System.Threading;
+using SuperSocket.SocketBase.Config;
 
 namespace AskSpeakerServer.BackEnd {
 	public class AdministratorServer : WebSocketServer {
 
 		public AdministratorServer() : base(){
-			var serverConfig = new SuperSocket.SocketBase.Config.ServerConfig ();
-			serverConfig.MaxConnectionNumber = 10000;
+			ServerConfig serverConfig = new SuperSocket.SocketBase.Config.ServerConfig ();
+			serverConfig.MaxConnectionNumber = 50;
 			serverConfig.Port = 10000;
 			serverConfig.TextEncoding = "utf-8";
 			serverConfig.Security = "tls";
@@ -29,29 +30,33 @@ namespace AskSpeakerServer.BackEnd {
 				ClientCertificateRequired = false
 			};
 			Setup (serverConfig);
-			NewSessionConnected += NewSessionHandler;
-			NewMessageReceived += NewMessageHandler;
+			NewSessionConnected += async (session) => {
+				await Task.Run(() => HandleNewSession(session));
+			};
+			NewMessageReceived += async (session, value) => {
+				await Task.Run(() => HandleNewMessage(session, value));
+			};
 			NewDataReceived += async (session, value) => {
 				await Task.Run(() => session.CloseWithHandshake(400, "Only string JSON messages allowed."));
 			};
 
 		}
 
-		private async void NewSessionHandler(WebSocketSession session){
+		private void HandleNewSession(WebSocketSession session){
 				try {
 					ManualResetEvent synchro = new ManualResetEvent(false);
 					session.Items.Add("SyncObject", synchro);
 					Console.WriteLine ("NewSessionHandlerFired!");
-					await Task.Run (() => ResolveCredentials (session));
+					ResolveCredentials (session);
 					Console.WriteLine ("Credentials resolved");
-					await Task.Run (() => CheckSingleSessionPerUser (session));
+					CheckSingleSessionPerUser (session);
 					Console.WriteLine ("SingleSession checked");
 					synchro.Set();
-					await Task.Run (() => SendEventsInformation (session));
+					SendEventsInformation (session);
 				} catch (ApplicationException ex) {
-					await Task.Run (() => session.CloseWithHandshake (401, $"Error while authorization. {ex.Message}"));
+					session.CloseWithHandshake (401, $"Error while authorization. {ex.Message}");
 				} catch (UnauthorizedAccessException ex){
-					await Task.Run (() => session.CloseWithHandshake (401, $"Invalid credentials. {ex.Message}"));
+					session.CloseWithHandshake (401, $"Invalid credentials. {ex.Message}");
 				}
 		}
 
@@ -68,16 +73,16 @@ namespace AskSpeakerServer.BackEnd {
 			session.Send (AdminRequestLogic.GetEventsInfoJSON (session.Items));
 		}
 
-		private async void NewMessageHandler(WebSocketSession session, string value) {
+		private void HandleNewMessage(WebSocketSession session, string value) {
 			try {
 				Console.WriteLine (value);
-				await Task.Run(() => NewMessageTask(session, value));
+				NewMessageTask(session, value);
 			} catch(ApplicationException ex) {
-				await Task.Run (() => session.CloseWithHandshake (400, $"JSON contract violation: {ex.Message}"));
+				session.CloseWithHandshake (400, $"JSON contract violation: {ex.Message}");
 			} catch(UnauthorizedAccessException ex) {
-				await Task.Run (() => session.CloseWithHandshake (401, $"Unauthorized operation. {ex.Message}"));
+				session.CloseWithHandshake (401, $"Unauthorized operation. {ex.Message}");
 			} catch (PasswordHasChangedException ex){
-				await Task.Run (() => session.CloseWithHandshake (113, ex.Message));
+				session.CloseWithHandshake (113, ex.Message);
 			}
 		}
 

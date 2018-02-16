@@ -115,24 +115,27 @@
     <Compile Include="BackEnd\AdministratorRequests\AdminRequestDispather.cs" />
     <Compile Include="BackEnd\AdministratorRequests\AdminRequestLogic.cs" />
     <Compile Include="BackEnd\AdministratorRequests\AdminAuthenticationModule.cs" />
-    <Compile Include="BackEnd\Messages\Responses\SuPermissionsCheckResponse.cs" />
     <Compile Include="EntityFramework\Entities\Events.cs" />
     <Compile Include="EntityFramework\Entities\Questions.cs" />
     <Compile Include="EntityFramework\Entities\UserRoles.cs" />
     <Compile Include="EntityFramework\Entities\Users.cs" />
     <Compile Include="EntityFramework\Entities\Votes.cs" />
-    <Compile Include="BackEnd\Messages\Bidirectional\EventEditCreateMessage.cs" />
-    <Compile Include="BackEnd\Messages\Bidirectional\QuestionMergeMessage.cs" />
-    <Compile Include="BackEnd\Messages\Bidirectional\QuestionEditMessage.cs" />
-    <Compile Include="BackEnd\Messages\Requests\UserCreateRequest.cs" />
-    <Compile Include="BackEnd\Messages\Requests\UserDeleteRequest.cs" />
-    <Compile Include="BackEnd\Messages\Responses\OperationResponse.cs" />
-    <Compile Include="BackEnd\Messages\Requests\PasswordChangeRequest.cs" />
-    <Compile Include="BackEnd\Messages\Requests\PasswordChangeSuRequest.cs" />
     <Compile Include="BackEnd\AdministratorRequests\PasswordHasChangedException.cs" />
-    <Compile Include="BackEnd\Messages\Bidirectional\QuestionCancelMessage.cs" />
-    <Compile Include="BackEnd\Messages\Requests\EventOwnershipChangeRequest.cs" />
-    <Compile Include="BackEnd\Messages\Bidirectional\EventOpenCloseMessage.cs" />
+    <Compile Include="BackEnd\SubscriberServer.cs" />
+    <Compile Include="BackEnd\SubscriberRequests\SubscriberRequestLogic.cs" />
+    <Compile Include="BackEnd\SubscriberRequests\SubscriberRequestTypes.cs" />
+    <Compile Include="BackEnd\AdministratorMessages\Responses\SuPermissionsCheckResponse.cs" />
+    <Compile Include="BackEnd\AdministratorMessages\Bidirectional\EventOpenCloseMessage.cs" />
+    <Compile Include="BackEnd\AdministratorMessages\Bidirectional\EventEditCreateMessage.cs" />
+    <Compile Include="BackEnd\AdministratorMessages\Bidirectional\QuestionCancelMessage.cs" />
+    <Compile Include="BackEnd\AdministratorMessages\Bidirectional\QuestionMergeMessage.cs" />
+    <Compile Include="BackEnd\AdministratorMessages\Bidirectional\QuestionEditMessage.cs" />
+    <Compile Include="BackEnd\AdministratorMessages\Requests\UserCreateRequest.cs" />
+    <Compile Include="BackEnd\AdministratorMessages\Requests\UserDeleteRequest.cs" />
+    <Compile Include="BackEnd\AdministratorMessages\Responses\OperationResponse.cs" />
+    <Compile Include="BackEnd\AdministratorMessages\Requests\PasswordChangeRequest.cs" />
+    <Compile Include="BackEnd\AdministratorMessages\Requests\PasswordChangeSuRequest.cs" />
+    <Compile Include="BackEnd\AdministratorMessages\Requests\EventOwnershipChangeRequest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -145,10 +148,15 @@
   <ItemGroup>
     <Folder Include="BackEnd\" />
     <Folder Include="BackEnd\AdministratorRequests\" />
-    <Folder Include="BackEnd\Messages\" />
-    <Folder Include="BackEnd\Messages\Requests\" />
-    <Folder Include="BackEnd\Messages\Responses\" />
     <Folder Include="EntityFramework\Entities\" />
-    <Folder Include="BackEnd\Messages\Bidirectional\" />
+    <Folder Include="BackEnd\SubscriberRequests\" />
+    <Folder Include="BackEnd\AdministratorMessages\" />
+    <Folder Include="BackEnd\AdministratorMessages\Requests\" />
+    <Folder Include="BackEnd\AdministratorMessages\Responses\" />
+    <Folder Include="BackEnd\AdministratorMessages\Bidirectional\" />
+    <Folder Include="BackEnd\SubscriberMessages\" />
+    <Folder Include="BackEnd\SubscriberMessages\Requests\" />
+    <Folder Include="BackEnd\SubscriberMessages\Responses\" />
+    <Folder Include="BackEnd\SubscriberMessages\Updates\" />
   </ItemGroup>
 </Project>

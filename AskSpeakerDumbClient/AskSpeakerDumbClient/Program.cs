@@ -17,9 +17,9 @@ namespace AskSpeakerDumbClient {
 			List<KeyValuePair<String, String>> l = new List<KeyValuePair<String, String>> ();
 			l.Add (new KeyValuePair<String, String> ("user", "DumbUser"));
 			l.Add (new KeyValuePair<String, String> ("pw", "zaq1@WSX"));
-			WebSocket ws = new WebSocket ("wss://localhost:10000", "", l);
+			WebSocket ws = new WebSocket ("ws://localhost:11000/path", "", l);
 			// Just for now with self-generated certificate
-			ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => {return true;};
+			//ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => {return true;};
 			ws.Opened += async (sender, e) => {
 				Console.WriteLine ("Connected!");
 //				UserCreateRequest request = new UserCreateRequest();
@@ -57,9 +57,13 @@ namespace AskSpeakerDumbClient {
 				request.EventID = 51; 
 				await Task.Run(() => ((WebSocket) sender).Send(JsonConvert.SerializeObject(request)));
 			};
-			ws.Error += (object sender, SuperSocket.ClientEngine.ErrorEventArgs e) => {
-				Console.WriteLine (e.Exception.Message);
-				Console.WriteLine ("[ERROR]");
+//			ws.Error += (object sender, SuperSocket.ClientEngine.ErrorEventArgs e) => {
+//				Console.WriteLine (e.Exception.Message);
+//				Console.WriteLine ("[ERROR]");
+//			};
+
+			ws.Error += (sender, e) => {
+				Console.WriteLine ("error");
 			};
 
 			ws.Closed += (object sender, EventArgs e) => {

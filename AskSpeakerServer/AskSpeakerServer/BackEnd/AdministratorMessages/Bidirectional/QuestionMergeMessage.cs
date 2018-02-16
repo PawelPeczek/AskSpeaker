@@ -1,7 +1,7 @@
 ﻿using System;
 using AskSpeakerServer.BackEnd.AdministratorRequests;
 
-namespace AskSpeakerServer.BackEnd.Messages.Bidirectional {
+namespace AskSpeakerServer.BackEnd.AdministratorMessages.Bidirectional {
 	public class QuestionMergeMessage {
 		
 		public string Message {
