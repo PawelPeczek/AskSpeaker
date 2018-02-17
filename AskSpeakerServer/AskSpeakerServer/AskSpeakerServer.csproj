@@ -136,6 +136,7 @@
     <Compile Include="BackEnd\AdministratorMessages\Requests\PasswordChangeRequest.cs" />
     <Compile Include="BackEnd\AdministratorMessages\Requests\PasswordChangeSuRequest.cs" />
     <Compile Include="BackEnd\AdministratorMessages\Requests\EventOwnershipChangeRequest.cs" />
+    <Compile Include="BackEnd\SubscriberMessages\Responses\QuestionsListResponse.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

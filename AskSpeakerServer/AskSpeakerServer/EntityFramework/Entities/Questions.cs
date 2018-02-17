@@ -9,8 +9,7 @@ namespace AskSpeakerServer.EntityFramework.Entities {
 		public Questions () {
 			Anulled = false;
 			Votes = new HashSet<Votes>();
-			VotesPlus = 0;
-			VotesMinus = 0;
+			VotesSum = 0;
 		}
 
 		[Key]
@@ -71,6 +70,25 @@ namespace AskSpeakerServer.EntityFramework.Entities {
 			get;
 			set;
 		}
+
+		public override bool Equals (object obj) {
+			if (obj == null)
+				return false;
+			if (ReferenceEquals (this, obj))
+				return true;
+			if (obj.GetType () != typeof(Questions))
+				return false;
+			Questions other = (Questions)obj;
+			return QuestionID == other.QuestionID;
+		}
+		
+
+		public override int GetHashCode () {
+			unchecked {
+				return QuestionID.GetHashCode ();
+			}
+		}
+		
 	}
 }
 

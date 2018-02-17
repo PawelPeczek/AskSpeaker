@@ -1,7 +1,7 @@
 ﻿using System;
 using AskSpeakerServer.EntityFramework.Entities;
 
-namespace AskSpeakerServer.BackEnd.Messages.Bidirectional {
+namespace AskSpeakerServer.BackEnd.AdministratorMessages.Bidirectional {
 	public class EventEditCreateMessage {
 		
 		public string Message {

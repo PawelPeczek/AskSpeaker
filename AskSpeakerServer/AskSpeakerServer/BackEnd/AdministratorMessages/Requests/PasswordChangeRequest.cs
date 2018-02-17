@@ -1,7 +1,7 @@
 ﻿using System;
 using AskSpeakerServer.BackEnd.AdministratorRequests;
 
-namespace AskSpeakerServer.BackEnd.Messages.Requests {
+namespace AskSpeakerServer.BackEnd.AdministratorMessages.Requests {
 	public class PasswordChangeRequest {
 
 		public string Request {

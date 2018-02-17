@@ -1,7 +1,7 @@
 ﻿using System;
 using AskSpeakerServer.BackEnd.AdministratorRequests;
 
-namespace AskSpeakerServer.BackEnd.Messages.Responses {
+namespace AskSpeakerServer.BackEnd.AdministratorMessages.Responses {
 	public class SuPermissionsCheckResponse {
 
 		public string Response {

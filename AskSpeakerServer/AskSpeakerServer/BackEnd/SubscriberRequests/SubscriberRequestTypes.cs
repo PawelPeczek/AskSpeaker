@@ -18,22 +18,22 @@ namespace AskSpeakerServer.BackEnd.SubscriberRequests {
 
 	public static class RequestStrings {
 
-		public static string GetRequestString(this AdminRequestTypes reqType){
+		public static string GetRequestString(this SubscriberRequestTypes reqType){
 			SubscriberRequestAttribute attr = GetAttr (reqType);
 			return attr.RequestStrings;
 		}
 
-		private static SubscriberRequestAttribute GetAttr(AdminRequestTypes p){
+		private static SubscriberRequestAttribute GetAttr(SubscriberRequestTypes p){
 			return (SubscriberRequestAttribute)Attribute.GetCustomAttribute(ForValue(p), typeof(SubscriberRequestAttribute));
 		}
 
-		private static MemberInfo ForValue(AdminRequestTypes p) {
-			return typeof(AdminRequestTypes).GetField(Enum.GetName(typeof(AdminRequestTypes), p));
+		private static MemberInfo ForValue(SubscriberRequestTypes p) {
+			return typeof(SubscriberRequestTypes).GetField(Enum.GetName(typeof(SubscriberRequestTypes), p));
 		}
 	}
 
-	public enum AdminRequestTypes {
-		[SubscriberRequestAttribute("initial-request")] InitialRequest 
+	public enum SubscriberRequestTypes {
+		[SubscriberRequestAttribute("questions-request")] QuestionsRequest 
 	}
 }
 

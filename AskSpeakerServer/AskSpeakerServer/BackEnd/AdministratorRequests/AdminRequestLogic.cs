@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using AskSpeakerServer.EntityFramework;
 using System.Linq;
 using Newtonsoft.Json;
-using AskSpeakerServer.BackEnd.Messages.Responses;
+using AskSpeakerServer.BackEnd.AdministratorMessages.Responses;
 using AskSpeakerServer.EntityFramework.Entities;
-using AskSpeakerServer.BackEnd.Messages.Bidirectional;
-using AskSpeakerServer.BackEnd.Messages.Requests;
+using AskSpeakerServer.BackEnd.AdministratorMessages.Bidirectional;
+using AskSpeakerServer.BackEnd.AdministratorMessages.Requests;
 using System.Text;
 using System.Security.Cryptography;
 
