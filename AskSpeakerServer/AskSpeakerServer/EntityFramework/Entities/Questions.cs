@@ -42,7 +42,7 @@ namespace AskSpeakerServer.EntityFramework.Entities {
 
 		[JsonIgnore]
 		[ForeignKey("Merged")]
-		public int MergedWith {
+		public int? MergedWith {
 			get;
 			set;
 		}

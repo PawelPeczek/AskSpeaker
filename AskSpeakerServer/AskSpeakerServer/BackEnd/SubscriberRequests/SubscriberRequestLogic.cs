@@ -9,15 +9,17 @@ using AskSpeakerServer.BackEnd.SubscriberMessages.Responses;
 namespace AskSpeakerServer {
 	public class SubscriberRequestLogic {
 
-		public static string GetQuestionsJSON(string path){
+		public static string GetQuestionsJSON(string hash){
 			string result;
 			using (AskSpeakerContext ctx = new AskSpeakerContext ()) {
-				Events choseenEvent = FetchEventWithGivenHash (ctx, path);
-				ICollection<Questions> allQuestions = choseenEvent.Questions;
+				Events chosenEvent = FetchEventWithGivenHash (ctx, hash);
+				ICollection<Questions> allQuestions = chosenEvent.Questions;
 				Dictionary<Questions, List<Questions>> mergedTo = new Dictionary<Questions, List<Questions>> ();
 				HashSet<Questions> primaryQuestions = new HashSet<Questions> ();
 				foreach (Questions question in allQuestions) {
-					question.VotesSum = question.Votes.Sum(o => o.Value);
+					question.VotesSum = (from v in ctx.Votes 
+										 where v.QuestionID == question.QuestionID 
+										 select v).Sum(o => o.Value);
 					if (question.Merged == null) {
 						primaryQuestions.Add (question);
 					} else {
@@ -28,7 +30,7 @@ namespace AskSpeakerServer {
 				}
 				CountVotesForPrimaryQuestions (allQuestions, mergedTo);
 				QuestionsListResponse response = new QuestionsListResponse ();
-				response.Path = path;
+				response.Path = hash;
 				response.Questions = primaryQuestions;
 				result = JsonConvert.SerializeObject (response);
 			}
@@ -48,7 +50,7 @@ namespace AskSpeakerServer {
 			if (!alreadyMemorized.Contains (question)) {
 				if (mergedTo.ContainsKey (question)){
 					foreach (Questions questionFromMergedList in mergedTo[question]) {
-						CountVotesForSingleQuestion (question, alreadyMemorized, mergedTo);
+						CountVotesForSingleQuestion (questionFromMergedList, alreadyMemorized, mergedTo);
 						question.VotesSum += questionFromMergedList.VotesSum;
 					}
 				}

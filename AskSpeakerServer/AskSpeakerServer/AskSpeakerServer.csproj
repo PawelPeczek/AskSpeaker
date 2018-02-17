@@ -104,6 +104,12 @@
     <Reference Include="NuGet.Client">
       <HintPath>packages\NuGet.Client.4.2.0\lib\net45\NuGet.Client.dll</HintPath>
     </Reference>
+    <Reference Include="MySql.Web">
+      <HintPath>..\..\..\Pobrane\mysql-connector-net-6.10.6-noinstall%281%29\v4.5.2\MySql.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data.Entity.EF6">
+      <HintPath>..\..\..\Pobrane\mysql-connector-net-6.10.6-noinstall%281%29\v4.5.2\MySql.Data.Entity.EF6.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />

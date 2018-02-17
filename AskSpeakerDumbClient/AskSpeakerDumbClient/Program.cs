@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using AskSpeakerServer.BackEnd.Messages.Bidirectional;
 using AskSpeakerServer.BackEnd.AdministratorRequests;
 using AskSpeakerServer.EntityFramework.Entities;
+using System.IO;
 
 namespace AskSpeakerDumbClient {
 	class MainClass {
@@ -17,11 +18,11 @@ namespace AskSpeakerDumbClient {
 			List<KeyValuePair<String, String>> l = new List<KeyValuePair<String, String>> ();
 			l.Add (new KeyValuePair<String, String> ("user", "DumbUser"));
 			l.Add (new KeyValuePair<String, String> ("pw", "zaq1@WSX"));
-			WebSocket ws = new WebSocket ("ws://localhost:11000/path", "", l);
+			WebSocket ws = new WebSocket ("ws://localhost:11000/ryr(po", "", l);
 			// Just for now with self-generated certificate
 			//ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => {return true;};
 			ws.Opened += async (sender, e) => {
-				Console.WriteLine ("Connected!");
+				Console.WriteLine ("Connected, waiting for init response!");
 //				UserCreateRequest request = new UserCreateRequest();
 //				request.UserName = "MyUser1";
 //				request.Password = "zaq1@WSX";
@@ -52,23 +53,27 @@ namespace AskSpeakerDumbClient {
 //				UserDeleteRequest request = new UserDeleteRequest();
 //				request.NewEventOwnerID = 1;
 //				request.UserID = 7;
-				EventOwnershipChangeRequest request = new EventOwnershipChangeRequest();
-				request.newOwnerID = 1;
-				request.EventID = 51; 
-				await Task.Run(() => ((WebSocket) sender).Send(JsonConvert.SerializeObject(request)));
+//				EventOwnershipChangeRequest request = new EventOwnershipChangeRequest();
+//				request.newOwnerID = 1;
+//				request.EventID = 51; 
+//				await Task.Run(() => ((WebSocket) sender).Send(JsonConvert.SerializeObject(request)));
 			};
 //			ws.Error += (object sender, SuperSocket.ClientEngine.ErrorEventArgs e) => {
 //				Console.WriteLine (e.Exception.Message);
 //				Console.WriteLine ("[ERROR]");
 //			};
 
-			ws.Error += (sender, e) => {
-				Console.WriteLine ("error");
+			ws.Error += (object sender, SuperSocket.ClientEngine.ErrorEventArgs e) => {
+				Console.WriteLine ("ERROR");
+				Console.WriteLine (e.Exception.Message);
 			};
 
+
 			ws.Closed += (object sender, EventArgs e) => {
-				Console.WriteLine (((ClosedEventArgs)e).Code);
-				Console.WriteLine (((ClosedEventArgs)e).Reason);
+				if(e.GetType() == typeof(ClosedEventArgs)){
+					Console.WriteLine (((ClosedEventArgs)e).Code);
+					Console.WriteLine (((ClosedEventArgs)e).Reason);
+				}
 			};
 			ws.MessageReceived += (object sender, MessageReceivedEventArgs e) => {
 				Console.WriteLine (e.Message);
@@ -79,5 +84,7 @@ namespace AskSpeakerDumbClient {
 			if(ws.State != WebSocketState.Closed)
 				ws.Close ();
 		}
+
+
 	}
 }

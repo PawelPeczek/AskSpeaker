@@ -21,6 +21,7 @@ namespace AskSpeakerServer.EntityFramework.Entities {
 			}
 
 			set { 
+				Console.WriteLine ($"Trying to set value: {value}");
 				if(value == 1 || value == -1){
 					ValueStored = value;
 				} else 

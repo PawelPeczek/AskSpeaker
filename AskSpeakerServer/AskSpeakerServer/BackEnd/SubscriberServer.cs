@@ -23,8 +23,14 @@ namespace AskSpeakerServer.BackEnd {
 
 
 		private void HandleInitialRequest(WebSocketSession session){
-			string response = SubscriberRequestLogic.GetQuestionsJSON (session.Path);
-			session.Send (response);
+			try{
+				Console.WriteLine ("Path: " + session.Path);
+				string hash = session.Path.Substring(session.Path.IndexOf("/") + 1, session.Path.Length - 1);
+				string response = SubscriberRequestLogic.GetQuestionsJSON (hash);
+				session.Send (response);
+			} catch (ApplicationException ex){
+				session.CloseWithHandshake (400, ex.Message);
+			}
 		}
 	}
 }
