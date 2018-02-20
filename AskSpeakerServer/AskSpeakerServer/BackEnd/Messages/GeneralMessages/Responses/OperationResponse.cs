@@ -1,13 +1,9 @@
 ﻿using System;
 using AskSpeakerServer.BackEnd.AdministratorRequests;
+using AskSpeakerServer.Messages.Prototypes;
 
-namespace AskSpeakerServer.BackEnd.AdministratorMessages.Responses {
-	public class OperationResponse {
-
-		public string Response {
-			get;
-			set;
-		}
+namespace AskSpeakerServer.BackEnd.Messages.GeneralMessages.Responses {
+	public class OperationResponse : RegisteredResponsePrototype {
 
 		public bool OperationStatus {
 			get;

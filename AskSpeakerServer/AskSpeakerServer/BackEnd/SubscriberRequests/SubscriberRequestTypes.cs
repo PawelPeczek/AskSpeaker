@@ -33,7 +33,10 @@ namespace AskSpeakerServer.BackEnd.SubscriberRequests {
 	}
 
 	public enum SubscriberRequestTypes {
-		[SubscriberRequestAttribute("questions-request")] QuestionsRequest 
+		[SubscriberRequestAttribute("questions-request")] QuestionsRequest,
+		[SubscriberRequestAttribute("vote-request")] VoteRequest,
+		[SubscriberRequestAttribute("question-add-request")] QuestionAddRequest,
+		[SubscriberRequestAttribute("question-report-request")] QuestionReportRequest
 	}
 }
 

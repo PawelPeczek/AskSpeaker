@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using AskSpeakerServer.BackEnd.AdministratorMessages.Bidirectional;
-using AskSpeakerServer.BackEnd.AdministratorMessages.Requests;
+using AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Bidirectional;
+using AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Requests;
 
 namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 	public static class AdminRequestDispather {

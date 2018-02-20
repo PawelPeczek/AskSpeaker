@@ -19,8 +19,10 @@ namespace AskSpeakerServer.BackEnd {
 			NewDataReceived += async (session, value) => {
 				await Task.Run(() => session.CloseWithHandshake(400, "Only string JSON messages allowed."));
 			};
+			NewMessageReceived += async (session, value) => {
+				await Task.Run(() => HandleRequest(session, value));
+			};
 		}
-
 
 		private void HandleInitialRequest(WebSocketSession session){
 			try{
@@ -31,6 +33,10 @@ namespace AskSpeakerServer.BackEnd {
 			} catch (ApplicationException ex){
 				session.CloseWithHandshake (400, ex.Message);
 			}
+		}
+
+		private void HandleRequest(WebSocketSession session, string value){
+			
 		}
 	}
 }

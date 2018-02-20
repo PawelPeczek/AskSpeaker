@@ -76,7 +76,7 @@ namespace AskSpeakerServer.BackEnd {
 		private void HandleNewMessage(WebSocketSession session, string value) {
 			try {
 				Console.WriteLine (value);
-				NewMessageTask(session, value);
+				GenerateResponse(session, value);
 			} catch(ApplicationException ex) {
 				session.CloseWithHandshake (400, $"JSON contract violation: {ex.Message}");
 			} catch(UnauthorizedAccessException ex) {
@@ -86,7 +86,7 @@ namespace AskSpeakerServer.BackEnd {
 			}
 		}
 
-		private void NewMessageTask(WebSocketSession session, string value){
+		private void GenerateResponse(WebSocketSession session, string value){
 			((ManualResetEvent)session.Items["SyncObject"]).WaitOne();
 			Console.WriteLine ("New message!");
 			AdminRequestHandler reqHandler = new AdminRequestHandler(session.Items, value);

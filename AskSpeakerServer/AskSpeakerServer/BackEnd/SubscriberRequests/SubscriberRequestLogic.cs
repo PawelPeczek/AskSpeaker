@@ -4,7 +4,7 @@ using AskSpeakerServer.EntityFramework.Entities;
 using System.Linq;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using AskSpeakerServer.BackEnd.SubscriberMessages.Responses;
+using AskSpeakerServer.BackEnd.Messages.SubscriberMessages.Responses;
 
 namespace AskSpeakerServer {
 	public class SubscriberRequestLogic {
@@ -66,6 +66,7 @@ namespace AskSpeakerServer {
 				throw new ApplicationException ("Event with given hash doesn't exist.");
 			return result;
 		}
+			
 	}
 }
 

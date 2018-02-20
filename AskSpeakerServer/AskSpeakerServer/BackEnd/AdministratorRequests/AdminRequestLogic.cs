@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using AskSpeakerServer.EntityFramework;
 using System.Linq;
 using Newtonsoft.Json;
-using AskSpeakerServer.BackEnd.AdministratorMessages.Responses;
+using AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Responses;
 using AskSpeakerServer.EntityFramework.Entities;
-using AskSpeakerServer.BackEnd.AdministratorMessages.Bidirectional;
-using AskSpeakerServer.BackEnd.AdministratorMessages.Requests;
+using AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Bidirectional;
+using AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Requests;
 using System.Text;
 using System.Security.Cryptography;
+using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Responses;
 
 namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 	public class AdminRequestLogic {
