@@ -132,11 +132,6 @@
     <Compile Include="BackEnd\SubscriberRequests\SubscriberRequestTypes.cs" />
     <Compile Include="BackEnd\SubscriberRequests\SubscriberRequestHandler.cs" />
     <Compile Include="BackEnd\SubscriberRequests\SubscriberRequestDispather.cs" />
-    <Compile Include="BackEnd\Messages\AdministratorMessages\Bidirectional\EventEditCreateMessage.cs" />
-    <Compile Include="BackEnd\Messages\AdministratorMessages\Bidirectional\EventOpenCloseMessage.cs" />
-    <Compile Include="BackEnd\Messages\AdministratorMessages\Bidirectional\QuestionCancelMessage.cs" />
-    <Compile Include="BackEnd\Messages\AdministratorMessages\Bidirectional\QuestionEditMessage.cs" />
-    <Compile Include="BackEnd\Messages\AdministratorMessages\Bidirectional\QuestionMergeMessage.cs" />
     <Compile Include="BackEnd\Messages\AdministratorMessages\Requests\EventOwnershipChangeRequest.cs" />
     <Compile Include="BackEnd\Messages\AdministratorMessages\Requests\PasswordChangeRequest.cs" />
     <Compile Include="BackEnd\Messages\AdministratorMessages\Requests\PasswordChangeSuRequest.cs" />
@@ -148,18 +143,30 @@
     <Compile Include="BackEnd\Messages\SubscriberMessages\Requests\VoteQuestionRequest.cs" />
     <Compile Include="BackEnd\Messages\SubscriberMessages\Responses\QuestionsListResponse.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
-    <Compile Include="BackEnd\Messages\Prototypes\MessagePrototype.cs" />
     <Compile Include="BackEnd\Messages\Prototypes\RequestPrototype.cs" />
-    <Compile Include="BackEnd\Messages\Prototypes\RegisteredRequestPrototype.cs" />
     <Compile Include="BackEnd\Messages\Prototypes\ResponsePrototype.cs" />
-    <Compile Include="BackEnd\Messages\Prototypes\TimeRegisteredCommunicationPrototype.cs" />
-    <Compile Include="BackEnd\Messages\Prototypes\RegisteredResponsePrototype.cs" />
-    <Compile Include="BackEnd\Messages\GeneralMessages\Responses\OperationResponse.cs" />
     <Compile Include="BackEnd\Messages\SubscriberMessages\Requests\RenewQuestionsRequest.cs" />
     <Compile Include="Extensions\BooleanExtensions.cs" />
-    <Compile Include="BackEnd\Messages\SubscriberMessages\Responses\QuestionAddResponse.cs" />
     <Compile Include="BackEnd\Messages\GeneralMessages\ResponseCodes.cs" />
     <Compile Include="Extensions\ResponseCodesExtensions.cs" />
+    <Compile Include="BackEnd\Messages\AdministratorMessages\Requests\EventEditCreateRequest.cs" />
+    <Compile Include="BackEnd\Messages\AdministratorMessages\Requests\EventOpenCloseRequest.cs" />
+    <Compile Include="BackEnd\Messages\AdministratorMessages\Requests\QuestionCancelRequest.cs" />
+    <Compile Include="BackEnd\Messages\AdministratorMessages\Requests\QuestionEditRequest.cs" />
+    <Compile Include="BackEnd\Messages\AdministratorMessages\Requests\QuestionMergeRequest.cs" />
+    <Compile Include="BackEnd\Messages\Prototypes\TimeRegisteredCommunicationChunkPrototype.cs" />
+    <Compile Include="BackEnd\Messages\Prototypes\BroadcastPrototype.cs" />
+    <Compile Include="BackEnd\Messages\GeneralMessages\Requests\BaseRequest.cs" />
+    <Compile Include="BackEnd\Messages\GeneralMessages\Responses\OperationResponse.cs" />
+    <Compile Include="BackEnd\Messages\AdministratorMessages\Broadcast\EventEditCreateBroadcast.cs" />
+    <Compile Include="BackEnd\Messages\AdministratorMessages\Broadcast\EventOpenCloseBroadcast.cs" />
+    <Compile Include="BackEnd\Messages\AdministratorMessages\Broadcast\EventOwnershipChangeBroadcast.cs" />
+    <Compile Include="BackEnd\Messages\AdministratorMessages\Broadcast\QuestionCancelBroadcast.cs" />
+    <Compile Include="BackEnd\Messages\AdministratorMessages\Broadcast\QuestionEditBroadcast.cs" />
+    <Compile Include="BackEnd\Messages\AdministratorMessages\Broadcast\QuestionMergeBroadcast.cs" />
+    <Compile Include="BackEnd\Messages\CommunicationChunk.cs" />
+    <Compile Include="BackEnd\Messages\SubscriberMessages\Broadcast\QuestionAddBroadcast.cs" />
+    <Compile Include="BackEnd\Messages\SubscriberMessages\Broadcast\QuestionVoteBroadcast.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -181,5 +188,8 @@
     <Folder Include="Extensions\" />
     <Folder Include="BackEnd\Messages\GeneralMessages\" />
     <Folder Include="BackEnd\Messages\GeneralMessages\Responses\" />
+    <Folder Include="BackEnd\Messages\GeneralMessages\Requests\" />
+    <Folder Include="BackEnd\Messages\AdministratorMessages\Broadcast\" />
+    <Folder Include="BackEnd\Messages\SubscriberMessages\Broadcast\" />
   </ItemGroup>
 </Project>

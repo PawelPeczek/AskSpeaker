@@ -8,6 +8,7 @@ using AskSpeakerServer.BackEnd.Messages.SubscriberMessages.Responses;
 using AskSpeakerServer.BackEnd.Messages.SubscriberMessages.Requests;
 using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Responses;
 using AskSpeakerServer.Extensions;
+using AskSpeakerServer.BackEnd.Messages.GeneralMessages;
 
 
 namespace AskSpeakerServer.BackEnd.SubscriberRequests {
@@ -34,9 +35,7 @@ namespace AskSpeakerServer.BackEnd.SubscriberRequests {
 				}
 				CountVotesForPrimaryQuestions (allQuestions, mergedTo);
 				QuestionsListResponse response = new QuestionsListResponse ();
-				response.SetCurrentTimestamp ();
-				response.Response = SubscriberRequestTypes.QuestionsRequest.GetRequestString ();
-				response.RequestID = RequestID;
+				response.PrepareToSend (SubscriberRequestTypes.QuestionsRequest.GetRequestString (), RequestID);
 				response.Path = hash;
 				response.Questions = primaryQuestions;
 				result = JsonConvert.SerializeObject (response);
@@ -83,11 +82,9 @@ namespace AskSpeakerServer.BackEnd.SubscriberRequests {
 		public string ObtainQuestionsList(RenewQuestionsRequest request){
 			return GetQuestionsJSON (Hash, request.RequestID);
 		}
-
-		public OperationResponse VoteQuestion(VoteQuestionRequest request){
-			OperationResponse response = new OperationResponse ();
-			response.RequestID = request.RequestID;
-			response.Response = SubscriberRequestTypes.VoteRequest.GetRequestString();
+			
+		public QuestionVoteBroadcast VoteQuestion(VoteQuestionRequest request){
+			QuestionVoteBroadcast result = new QuestionVoteBroadcast ();
 			using (AskSpeakerContext ctx = new AskSpeakerContext ()) {
 				Votes vote = new Votes ();
 				Questions question = (from q in ctx.Questions
@@ -96,8 +93,8 @@ namespace AskSpeakerServer.BackEnd.SubscriberRequests {
 									  q.Event.EventHash == Hash
 									  select q).FirstOrDefault();
 				if (question == null) {
-					response.ErrorCause = "There is no such question at the selected event.";
-					response.ErrorCode = ResponseCodes.CannotFindRequiredDataItem.GetResponseCodeInt ();
+					result.ErrorCause = "There is no such question at the selected event.";
+					result.ErrorCode = ResponseCodes.CannotFindRequiredDataItem.GetResponseCodeInt ();
 				}
 				vote.Question = question;
 				vote.Value = request.VoteUp.ConvertVote ();
@@ -105,17 +102,15 @@ namespace AskSpeakerServer.BackEnd.SubscriberRequests {
 				try {
 					ctx.SaveChanges ();
 				} catch(Exception ex) {
-					response.ErrorCause = "Error while saving vote.";
-					response.ErrorCode = ResponseCodes.DataConstraintViolated.GetResponseCodeInt ();
+					result.SetError (ResponseCodes.DataConstraintViolated, "Error while saving vote.");
 				}
-				response.SetCurrentTimestamp ();
+				result.PrepareToSend (request.RequestID);
 			}
-			return response;
+			return result;
 		}
 
-		public QuestionAddResponse AddQuestion(QuestionAddRequest request){
-			QuestionAddResponse result = new QuestionAddResponse ();
-			result.RequestID = request.RequestID;
+		public QuestionAddBroadcast AddQuestion(QuestionAddRequest request){
+			QuestionAddBroadcast result = new QuestionAddBroadcast ();
 			using (AskSpeakerContext ctx = new AskSpeakerContext ()) {
 				Questions question = new Questions ();
 				Events selectedEvent = FetchEventWithGivenHash (ctx, Hash);
@@ -128,10 +123,9 @@ namespace AskSpeakerServer.BackEnd.SubscriberRequests {
 					result.Question = question;
 				} catch (Exception ex) {
 					result.Question = null;
-					result.ErrorCode = ResponseCodes.DataConstraintViolated.GetResponseCodeInt ();
-					result.ErrorMessage = "Question to long (maximal length: 350 characters).";
+					result.SetError (ResponseCodes.DataConstraintViolated, "Error while saving vote.");
 				}
-				result.SetCurrentTimestamp ();
+				result.PrepareToSend (request.RequestID);
 			}
 			return result;
 		}

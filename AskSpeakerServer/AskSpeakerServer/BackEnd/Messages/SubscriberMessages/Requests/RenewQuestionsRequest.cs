@@ -1,12 +1,12 @@
 ﻿using System;
 using AskSpeakerServer.BackEnd.SubscriberRequests;
-using AskSpeakerServer.Messages.Prototypes;
+using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Requests;
 
 namespace AskSpeakerServer.BackEnd.Messages.SubscriberMessages.Requests{
-	public class RenewQuestionsRequest : RegisteredRequestPrototype {
+	public class RenewQuestionsRequest : BaseRequest {
 
 		public RenewQuestionsRequest () {
-			this.Request = SubscriberRequestTypes.QuestionsRequest.GetRequestString();
+			Request = SubscriberRequestTypes.QuestionsRequest.GetRequestString();
 		}
 
 	}

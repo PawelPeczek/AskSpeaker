@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using AskSpeakerServer.EntityFramework;
 using System.Linq;
 using Newtonsoft.Json;
-using AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Responses;
 using AskSpeakerServer.EntityFramework.Entities;
-using AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Bidirectional;
-using AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Requests;
 using System.Text;
 using System.Security.Cryptography;
+using AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Responses;
+using AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Requests;
 using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Responses;
 
 namespace AskSpeakerServer.BackEnd.AdministratorRequests {
@@ -56,8 +55,8 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 		}
 
 
-		public EventOpenCloseMessage CloseEvent(EventOpenCloseMessage request){
-			EventOpenCloseMessage result = null;
+		public EventOpenCloseRequest CloseEvent(EventOpenCloseRequest request){
+			EventOpenCloseRequest result = null;
 			using (AskSpeakerContext ctx = new AskSpeakerContext ()) {
 				Events selectedEvent = FetchEventWithGivenID(ctx, request.EventID);
 				if (selectedEvent.Closed == false) {
@@ -69,8 +68,8 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 			return result;
 		}
 
-		public EventOpenCloseMessage ReOpenEvent(EventOpenCloseMessage request){
-			EventOpenCloseMessage result = null;
+		public EventOpenCloseRequest ReOpenEvent(EventOpenCloseRequest request){
+			EventOpenCloseRequest result = null;
 			using (AskSpeakerContext ctx = new AskSpeakerContext ()) {
 				Events selectedEvent = FetchEventWithGivenID(ctx, request.EventID);
 				if (selectedEvent.Closed == true) {
@@ -82,8 +81,8 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 			return result;
 		}
 
-		public EventEditCreateMessage EditEvent(EventEditCreateMessage request){
-			EventEditCreateMessage result;
+		public EventEditCreateRequest EditEvent(EventEditCreateRequest request){
+			EventEditCreateRequest result;
 			using (AskSpeakerContext ctx = new AskSpeakerContext ()) {
 				Events selectedEvent = FetchEventWithGivenID(ctx, request.Event.EventID);
 				// Hash, EventID and UserID are never copied!!!
@@ -93,14 +92,14 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 				} catch (Exception ex){
 					throw new ApplicationException ($"Broken JSON Event-serialize contract. Details: {ex.Message}");
 				}
-				result = new EventEditCreateMessage ();
-				result.Message = AdminRequestTypes.EventEdit.GetRequestString ();
+				result = new EventEditCreateRequest ();
+				result.Request = AdminRequestTypes.EventEdit.GetRequestString ();
 				result.Event = selectedEvent;
 			}
 			return result;
 		}
 
-		public EventEditCreateMessage CreateEvent(EventEditCreateMessage request){
+		public EventEditCreateRequest CreateEvent(EventEditCreateRequest request){
 			using (AskSpeakerContext ctx = new AskSpeakerContext ()) {
 				Console.WriteLine ("Before trying to read credentials");
 				Console.WriteLine ("Is Credential fulfilled with UserID: " + Credentials.ContainsKey("UserID"));
@@ -120,7 +119,7 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 			return request;
 		}
 
-		public QuestionCancelMessage CancellQuestion(QuestionCancelMessage request){
+		public QuestionCancelRequest CancellQuestion(QuestionCancelRequest request){
 			using (AskSpeakerContext ctx = new AskSpeakerContext ()) {
 				Questions question = FetchActiveQuestionWithGivenID (ctx, request.QuestionID);
 				question.Anulled = true;
@@ -129,7 +128,7 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 			return request;
 		}
 
-		public QuestionMergeMessage MergeQuestions(QuestionMergeMessage request){
+		public QuestionMergeRequest MergeQuestions(QuestionMergeRequest request){
 			using (AskSpeakerContext ctx = new AskSpeakerContext ()) {
 				Questions master = FetchActiveQuestionWithGivenID (ctx, request.MasterID);
 				Questions slave = FetchActiveQuestionWithGivenID (ctx, request.SlaveID);
@@ -141,7 +140,7 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 			return request;
 		}
 
-		public QuestionEditMessage EditQuestion(QuestionEditMessage request) {
+		public QuestionEditRequest EditQuestion(QuestionEditRequest request) {
 			using (AskSpeakerContext ctx = new AskSpeakerContext ()) {
 				Questions origin = FetchActiveQuestionWithGivenID (ctx, request.QuestionID);
 				origin.QuestionContent = request.NewQuestionContent;

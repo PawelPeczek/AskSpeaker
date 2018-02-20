@@ -1,7 +1,7 @@
 ﻿using System;
 
-namespace AskSpeakerServer.Messages.Prototypes  {
-	public class RequestPrototype {
+namespace AskSpeakerServer.BackEnd.Messages.Prototypes  {
+	public abstract class RequestPrototype {
 		public string Request {
 			get;
 			set;

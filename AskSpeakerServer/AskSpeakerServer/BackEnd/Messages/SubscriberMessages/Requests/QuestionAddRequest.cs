@@ -1,9 +1,9 @@
 ﻿using System;
 using AskSpeakerServer.BackEnd.SubscriberRequests;
-using AskSpeakerServer.Messages.Prototypes;
+using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Requests;
 
 namespace AskSpeakerServer.BackEnd.Messages.SubscriberMessages.Requests{
-	public class QuestionAddRequest : RegisteredRequestPrototype {
+	public class QuestionAddRequest : BaseRequest {
 
 		public QuestionAddRequest(){
 			Request =  SubscriberRequestTypes.QuestionAddRequest.GetRequestString();

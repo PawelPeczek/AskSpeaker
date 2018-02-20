@@ -1,9 +1,9 @@
 ﻿using System;
 using AskSpeakerServer.BackEnd.AdministratorRequests;
-using AskSpeakerServer.Messages.Prototypes;
+using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Responses;
 
 namespace AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Requests {
-	public class UserCreateRequest : RegisteredRequestPrototype {
+	public class UserCreateRequest : BaseRequest {
 
 		public UserCreateRequest(){
 			Request = AdminRequestTypes.UserCreate.GetRequestString();

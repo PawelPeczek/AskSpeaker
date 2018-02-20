@@ -3,9 +3,9 @@ using AskSpeakerServer.BackEnd.AdministratorRequests;
 using AskSpeakerServer.Messages.Prototypes;
 
 namespace AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Responses {
-	public class SuPermissionsCheckResponse : ResponsePrototype {
+	public class SuPermissionsCheckResponse : OperationResponse {
 
-		public SuPermissionsCheckResponse(){
+		public SuPermissionsCheckResponse() {
 			this.Response = AdminRequestTypes.SuPermissionsCheck.GetRequestString();
 		}
 

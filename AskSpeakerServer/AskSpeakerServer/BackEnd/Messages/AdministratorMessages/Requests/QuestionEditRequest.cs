@@ -3,18 +3,18 @@ using AskSpeakerServer.BackEnd.AdministratorRequests;
 using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Responses;
 
 namespace AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Requests {
-	public class PasswordChangeSuRequest : BaseRequest {
+	public class QuestionEditRequest : BaseRequest {
 
-		public PasswordChangeSuRequest() {
-			Request = AdminRequestTypes.PasswordChangeWithSu.GetRequestString();
+		public QuestionEditRequest(){
+			Request = AdminRequestTypes.QuestionEdit.GetRequestString();
 		}
 
-		public int UserID {
+		public int QuestionID {
 			get;
 			set;
 		}
 
-		public string NewPassword {
+		public string NewQuestionContent {
 			get;
 			set;
 		}

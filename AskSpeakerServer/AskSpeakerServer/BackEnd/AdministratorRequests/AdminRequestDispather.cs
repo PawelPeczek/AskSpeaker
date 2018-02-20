@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Bidirectional;
 using AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Requests;
 
 namespace AskSpeakerServer.BackEnd.AdministratorRequests {
@@ -16,27 +15,25 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 					result = logic.CheckSuPermistions ();
 					break;
 				case AdminRequestTypes.EventClose:
-					result = logic.CloseEvent (JsonConvert.DeserializeObject<EventOpenCloseMessage>(message));
+					result = logic.CloseEvent (JsonConvert.DeserializeObject<EventOpenCloseRequest>(message));
 					break;
 				case AdminRequestTypes.EventReOpen:
-					result = logic.ReOpenEvent (JsonConvert.DeserializeObject<EventOpenCloseMessage>(message));
+					result = logic.ReOpenEvent (JsonConvert.DeserializeObject<EventOpenCloseRequest>(message));
 					break;
 				case AdminRequestTypes.EventEdit:
-					result = logic.EditEvent (JsonConvert.DeserializeObject<EventEditCreateMessage>(message));
+					result = logic.EditEvent (JsonConvert.DeserializeObject<EventEditCreateRequest>(message));
 					break;
 				case AdminRequestTypes.EventCreate:
-					Console.WriteLine ("Trying to deserialize");
-					result = logic.CreateEvent (JsonConvert.DeserializeObject<EventEditCreateMessage>(message));
-					Console.WriteLine ("[DONE]");
+					result = logic.CreateEvent (JsonConvert.DeserializeObject<EventEditCreateRequest>(message));
 					break;
 				case AdminRequestTypes.QuestionCancell:
-					result = logic.CancellQuestion(JsonConvert.DeserializeObject<QuestionCancelMessage>(message));
+					result = logic.CancellQuestion(JsonConvert.DeserializeObject<QuestionCancelRequest>(message));
 					break;
 				case AdminRequestTypes.QuestionMerge:
-					result = logic.MergeQuestions(JsonConvert.DeserializeObject<QuestionMergeMessage>(message));
+					result = logic.MergeQuestions(JsonConvert.DeserializeObject<QuestionMergeRequest>(message));
 					break;
 				case AdminRequestTypes.QuestionEdit:
-					result = logic.EditQuestion(JsonConvert.DeserializeObject<QuestionEditMessage>(message));
+					result = logic.EditQuestion(JsonConvert.DeserializeObject<QuestionEditRequest>(message));
 					break;
 				case AdminRequestTypes.UserCreate:
 					result = logic.CreateUser(JsonConvert.DeserializeObject<UserCreateRequest>(message));

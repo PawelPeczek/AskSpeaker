@@ -1,9 +1,9 @@
 ﻿using System;
 using AskSpeakerServer.BackEnd.SubscriberRequests;
-using AskSpeakerServer.Messages.Prototypes;
+using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Responses;
 
 namespace AskSpeakerServer.BackEnd.Messages.SubscriberMessages.Requests {
-	public class ReportQuestionRequest : RegisteredRequestPrototype {
+	public class ReportQuestionRequest : BaseRequest {
 		
 		public ReportQuestionRequest(){
 			Request = SubscriberRequestTypes.QuestionReportRequest.GetRequestString();

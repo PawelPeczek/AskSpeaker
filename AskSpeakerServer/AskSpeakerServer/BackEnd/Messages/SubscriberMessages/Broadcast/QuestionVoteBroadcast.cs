@@ -1,12 +1,12 @@
 ﻿using System;
+using AskSpeakerServer.BackEnd.Messages.Prototypes;
 using AskSpeakerServer.BackEnd.SubscriberRequests;
-using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Requests;
 
 namespace AskSpeakerServer.BackEnd.Messages.SubscriberMessages.Requests {
-	public class VoteQuestionRequest : BaseRequest {
+	public class QuestionVoteBroadcast : BroadcastPrototype {
 
-		public VoteQuestionRequest(){
-			Request = SubscriberRequestTypes.VoteRequest.GetRequestString();
+		public QuestionVoteBroadcast(){
+			Broadcast = SubscriberRequestTypes.VoteRequest.GetRequestString();
 		}
 
 		public int QuestionID {
