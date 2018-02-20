@@ -3,6 +3,7 @@ using SuperSocket.WebSocket;
 using SuperSocket.SocketBase.Config;
 using System.Threading.Tasks;
 using AskSpeakerServer.EntityFramework;
+using AskSpeakerServer.BackEnd.SubscriberRequests;
 
 namespace AskSpeakerServer.BackEnd {
 	public class SubscriberServer : WebSocketServer {
@@ -27,7 +28,7 @@ namespace AskSpeakerServer.BackEnd {
 		private void HandleInitialRequest(WebSocketSession session){
 			try{
 				Console.WriteLine ("Path: " + session.Path);
-				string hash = session.Path.Substring(session.Path.IndexOf("/") + 1, session.Path.Length - 1);
+				string hash = GetHashFromPath(session.Path);
 				string response = SubscriberRequestLogic.GetQuestionsJSON (hash);
 				session.Send (response);
 			} catch (ApplicationException ex){
@@ -37,6 +38,10 @@ namespace AskSpeakerServer.BackEnd {
 
 		private void HandleRequest(WebSocketSession session, string value){
 			
+		}
+
+		private string GetHashFromPath(string path){
+			return path.Substring(path.IndexOf("/") + 1, path.Length - 1);
 		}
 	}
 }

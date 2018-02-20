@@ -155,6 +155,11 @@
     <Compile Include="BackEnd\Messages\Prototypes\TimeRegisteredCommunicationPrototype.cs" />
     <Compile Include="BackEnd\Messages\Prototypes\RegisteredResponsePrototype.cs" />
     <Compile Include="BackEnd\Messages\GeneralMessages\Responses\OperationResponse.cs" />
+    <Compile Include="BackEnd\Messages\SubscriberMessages\Requests\RenewQuestionsRequest.cs" />
+    <Compile Include="Extensions\BooleanExtensions.cs" />
+    <Compile Include="BackEnd\Messages\SubscriberMessages\Responses\QuestionAddResponse.cs" />
+    <Compile Include="BackEnd\Messages\GeneralMessages\ResponseCodes.cs" />
+    <Compile Include="Extensions\ResponseCodesExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

@@ -7,20 +7,20 @@ namespace AskSpeakerServer.BackEnd.SubscriberRequests {
 
 		private Dictionary<string, object> DeserializedMsg;
 		private string Message;
+		private string Hash;
 
-		public SubscriberRequestHandler (string message) {
+		public SubscriberRequestHandler (string message, string hash) {
 			Message = message;
 			DeserializedMsg = 
 				JsonConvert.DeserializeObject<Dictionary<string, object>> (message);
+			Hash = hash;
 		}
 
 		public object ProceedRequest(){
 			if (!DeserializedMsg.ContainsKey ("Request"))
 				throw new ApplicationException ("Invalid message format.");
-			SubscriberRequestTypes reqType;
-			reqType = GetRequestType ((string)DeserializedMsg ["Request"]);
-
-			return SubscriberRequestDispather.Dispath (reqType, Message);
+			SubscriberRequestTypes reqType = GetRequestType ((string)DeserializedMsg ["Request"]);
+			return SubscriberRequestDispather.Dispath (reqType, Message, Hash);
 		}
 
 		private SubscriberRequestTypes GetRequestType(string requestString){

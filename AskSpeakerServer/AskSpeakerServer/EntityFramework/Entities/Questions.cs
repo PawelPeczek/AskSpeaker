@@ -69,7 +69,7 @@ namespace AskSpeakerServer.EntityFramework.Entities {
 		public int VotesSum {
 			get;
 			set;
-		}
+		} = 0;
 
 		public override bool Equals (object obj) {
 			if (obj == null)

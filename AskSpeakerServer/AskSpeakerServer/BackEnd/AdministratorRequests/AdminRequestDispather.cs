@@ -56,7 +56,7 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 						(JsonConvert.DeserializeObject<EventOwnershipChangeRequest>(message));
 					break;
 				}
-			} catch(JsonSerializationException ex){
+			} catch(JsonReaderException ex){
 				throw new ApplicationException (ex.Message);
 			}
 			return result;

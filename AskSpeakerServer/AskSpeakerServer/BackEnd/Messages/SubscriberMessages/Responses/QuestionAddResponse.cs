@@ -1,14 +1,28 @@
 ﻿using System;
 using AskSpeakerServer.BackEnd.SubscriberRequests;
+using AskSpeakerServer.EntityFramework.Entities;
+using AskSpeakerServer.Messages.Prototypes;
+using Newtonsoft.Json;
 
-namespace AskSpeakerServer.BackEnd.SubscriberMessages.Responses {
-	public class QuestionAddResponse {
+namespace AskSpeakerServer.BackEnd.Messages.SubscriberMessages.Responses {
+	public class QuestionAddResponse : RegisteredResponsePrototype {
 
-		public string Response {
+		public QuestionAddResponse(){
+			Response = SubscriberRequestTypes.QuestionAddRequest.GetRequestString();
+		}
+
+		public int ErrorCode {
 			get;
-		} = SubscriberRequestTypes.QuestionAddRequest.GetRequestString();
+			set;
+		} = 0;
+			
+		[JsonProperty(Required = Required.AllowNull)]
+		public Questions Question {
+			get;
+			set;
+		}
 
-		public bool Status {
+		public string ErrorMessage {
 			get;
 			set;
 		}

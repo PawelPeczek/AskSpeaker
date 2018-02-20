@@ -9,6 +9,11 @@ namespace AskSpeakerServer.BackEnd.Messages.SubscriberMessages.Requests {
 			Request = SubscriberRequestTypes.VoteRequest.GetRequestString();
 		}
 
+		public int QuestionID {
+			get;
+			set;
+		}
+
 		public bool VoteUp {
 			get;
 			set;

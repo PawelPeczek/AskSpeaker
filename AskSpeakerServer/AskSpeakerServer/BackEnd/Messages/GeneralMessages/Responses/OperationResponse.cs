@@ -5,10 +5,10 @@ using AskSpeakerServer.Messages.Prototypes;
 namespace AskSpeakerServer.BackEnd.Messages.GeneralMessages.Responses {
 	public class OperationResponse : RegisteredResponsePrototype {
 
-		public bool OperationStatus {
+		public int ErrorCode {
 			get;
 			set;
-		}
+		} = 0;
 
 		public string ErrorCause {
 			get;
