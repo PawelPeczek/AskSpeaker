@@ -22,36 +22,39 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 			BroadcastPrototype broadcast;
 			try {
 				switch (((PreProcessedAdminMessage)Message).RequestType) {
+				case AdminRequestTypes.EventsInfoRenew:
+					result.PlainResponse = logic.ObtainEventsList(JsonConvert.DeserializeObject<EventsListRequest>(Message.RawMessage));
+					break;
 				case AdminRequestTypes.SuPermissionsCheck:
 					result.ResponseToSender = logic.CheckSuPermistions (JsonConvert.DeserializeObject<SuPermissionsCheckRequest>(Message.RawMessage));
 					break;
 				case AdminRequestTypes.EventClose:
 					broadcast = logic.CloseEvent (JsonConvert.DeserializeObject<EventOpenCloseRequest>(Message.RawMessage));
-					PrepareMultiDomainResult(result, broadcast);
+					PrepareOperationResponseFromBroadcast(result, broadcast);
 					break;
 				case AdminRequestTypes.EventReOpen:
 					broadcast = logic.ReOpenEvent (JsonConvert.DeserializeObject<EventOpenCloseRequest>(Message.RawMessage));
-					PrepareMultiDomainResult(result, broadcast);
+					PrepareOperationResponseFromBroadcast(result, broadcast);
 					break;
 				case AdminRequestTypes.EventEdit:
 					broadcast = logic.EditEvent (JsonConvert.DeserializeObject<EventEditCreateRequest>(Message.RawMessage));
-					PrepareMultiDomainResult(result, broadcast);
+					PrepareOperationResponseFromBroadcast(result, broadcast);
 					break;
 				case AdminRequestTypes.EventCreate:
 					broadcast = logic.CreateEvent (JsonConvert.DeserializeObject<EventEditCreateRequest>(Message.RawMessage));
-					PrepareSuperAdminResult(result, broadcast);
+					PrepareOperationResponseFromBroadcast(result, broadcast);
 					break;
 				case AdminRequestTypes.QuestionCancell:
 					broadcast = logic.CancellQuestion(JsonConvert.DeserializeObject<QuestionCancelRequest>(Message.RawMessage));
-					PrepareOtherDomainResult(result, broadcast);
+					PrepareOperationResponseFromBroadcast(result, broadcast);
 					break;
 				case AdminRequestTypes.QuestionMerge:
 					broadcast = logic.MergeQuestions(JsonConvert.DeserializeObject<QuestionMergeRequest>(Message.RawMessage));
-					PrepareOtherDomainResult(result, broadcast);
+					PrepareOperationResponseFromBroadcast(result, broadcast);
 					break;
 				case AdminRequestTypes.QuestionEdit:
 					broadcast = logic.EditQuestion(JsonConvert.DeserializeObject<QuestionEditRequest>(Message.RawMessage));
-					PrepareOtherDomainResult(result, broadcast);
+					PrepareOperationResponseFromBroadcast(result, broadcast);
 					break;
 				case AdminRequestTypes.UserCreate:
 					result.ResponseToSender = logic.CreateUser(JsonConvert.DeserializeObject<UserCreateRequest>(Message.RawMessage));
@@ -69,7 +72,7 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 				case AdminRequestTypes.EventChangeOwnership:
 					broadcast = logic.ChangeEventOwnership
 						(JsonConvert.DeserializeObject<EventOwnershipChangeRequest>(Message.RawMessage));
-					PrepareSelfDomainResult(result, broadcast);
+					PrepareOperationResponseFromBroadcast(result, broadcast);
 					break;
 				}
 			} catch(JsonReaderException ex) {

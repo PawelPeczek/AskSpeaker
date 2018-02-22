@@ -11,8 +11,6 @@ namespace AskSpeakerServer.BackEnd.Messages.Prototypes  {
 		protected void SetCurrentTimestamp(){
 			Timestamp = DateTime.Now.GetTimestamp();
 		}
-
-		public abstract void PrepareToSend(string header);
 	}
 }
 

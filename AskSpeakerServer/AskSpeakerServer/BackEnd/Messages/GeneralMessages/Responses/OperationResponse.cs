@@ -8,15 +8,11 @@ namespace AskSpeakerServer.BackEnd.Messages.GeneralMessages.Responses {
 			set;
 		}
 			
-		public void PrepareToSend(string header, int requestID){
-			PrepareToSend (header);
-			RequestID = requestID;
-		}
-
-		public override void PrepareToSend(string header = null){
+		public void PrepareToSend(int requestID, string header = null){
 			if (header != null)
 				Response = header;
 			SetCurrentTimestamp ();
+			RequestID = requestID;
 		}
 
 		public void CopyFromBroadcast(BroadcastPrototype o){

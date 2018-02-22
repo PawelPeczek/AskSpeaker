@@ -15,9 +15,12 @@ using AskSpeakerServer.BackEnd.AdministratorRequests;
 using System.Threading;
 using SuperSocket.SocketBase.Config;
 using AskSpeakerServer.BackEnd.Messages;
+using AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Broadcast;
 
 namespace AskSpeakerServer.BackEnd {
 	public class AdministratorServer : WebSocketServer {
+
+		private SubscriberServer SubscriberServer;
 
 		public AdministratorServer() : base(){
 			ServerConfig serverConfig = new SuperSocket.SocketBase.Config.ServerConfig ();
@@ -40,7 +43,10 @@ namespace AskSpeakerServer.BackEnd {
 			NewDataReceived += async (session, value) => {
 				await Task.Run(() => session.CloseWithHandshake(400, "Only string JSON messages allowed."));
 			};
+		}
 
+		public void ProvideSubscriberServer(SubscriberServer subscriberServer){
+			SubscriberServer = subscriberServer;
 		}
 
 		private void HandleNewSession(WebSocketSession session){
@@ -93,7 +99,7 @@ namespace AskSpeakerServer.BackEnd {
 			PreProcessedAdminMessage prepMessage = new PreProcessedAdminMessage (message);
 			AdminRequestDispather dispather = new AdminRequestDispather (prepMessage, session.Items);
 			CommunicationChunk response = dispather.Dispath ();
-			DispathResponse(session, response);
+			DispathResponse(session, prepMessage.RequestType , response);
 		}
 
 		private void CheckSingleSessionPerUser(WebSocketSession session){
@@ -114,21 +120,30 @@ namespace AskSpeakerServer.BackEnd {
 
 		}
 
-		private void DispathResponse(WebSocketSession session, CommunicationChunk response){
-			if (response != null) {
-				string serializedResponse = JsonSerialize (response);
-				bool currentSessionAtList = false;
-				foreach (WebSocketSession s in GetAllSessions()) {
-					Console.WriteLine ($"Sending response to {s.SessionID}");
-					if (s == session)
-						currentSessionAtList = true;
-					s.Send (serializedResponse);
-				}
-				// The strange thing is that GetAllSessions() do not always
-				// contains current session...
-				if (!currentSessionAtList)
-					session.Send (serializedResponse);
+		private void DispathResponse(WebSocketSession session, AdminRequestTypes reqType, CommunicationChunk response){
+			switch (reqType) {
+				case AdminRequestTypes.EventsInfoRenew:
+					session.Send (response.PlainResponse);
+					break;
+				case AdminRequestTypes.SuPermissionsCheck:
+				case AdminRequestTypes.UserCreate:
+				case AdminRequestTypes.PasswordChange:
+				case AdminRequestTypes.PasswordChangeWithSu:
+				case AdminRequestTypes.UserDelete:
+					session.Send (JsonSerialize (response.ResponseToSender));
+					break;
+				case AdminRequestTypes.EventChangeOwnership:
+					session.Send (JsonSerialize (response.ResponseToSender));
+					InformNewEventOwnerIfConnected (session, (EventOwnershipChangeBroadcast)response.BroadcastResponse);
+					break;
 			}
+		}
+
+		private void InformNewEventOwnerIfConnected(WebSocketSession session, EventOwnershipChangeBroadcast message){
+			WebSocketSession targetSession =
+				GetSessions ((s) => s.Items.ContainsKey ("UserID") && (int)s.Items ["UserID"] == message.newOwnerID).FirstOrDefault ();
+			if (targetSession != null && targetSession != session)
+				targetSession.Send (JsonSerialize (message));
 		}
 
 

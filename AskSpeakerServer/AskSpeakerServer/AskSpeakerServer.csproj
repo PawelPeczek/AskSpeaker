@@ -170,6 +170,8 @@
     <Compile Include="BackEnd\PreProcessedAdminMessage.cs" />
     <Compile Include="BackEnd\PreProcessedSubscriberMessage.cs" />
     <Compile Include="BackEnd\PreProcessedMessage.cs" />
+    <Compile Include="BackEnd\Messages\AdministratorMessages\Responses\EventsListResponse.cs" />
+    <Compile Include="BackEnd\Messages\AdministratorMessages\Requests\EventsListRequest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

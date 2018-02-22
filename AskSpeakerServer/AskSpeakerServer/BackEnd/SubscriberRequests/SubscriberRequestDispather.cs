@@ -27,17 +27,17 @@ namespace AskSpeakerServer.BackEnd.SubscriberRequests {
 				switch (((PreProcessedSubscriberMessage)Message).RequestType) {
 					case SubscriberRequestTypes.QuestionsRequest:
 						result.PlainResponse = logic.ObtainQuestionsList 
-						(JsonConvert.DeserializeObject<RenewQuestionsRequest>(Message.RawMessage));
+							(JsonConvert.DeserializeObject<RenewQuestionsRequest>(Message.RawMessage));
 						break;
 					case SubscriberRequestTypes.VoteRequest:
 						broadcast = 
 							logic.VoteQuestion(JsonConvert.DeserializeObject<VoteQuestionRequest>(Message.RawMessage));
-							PrepareSelfDomainResult(result, broadcast);
+						PrepareOperationResponseFromBroadcast(result, broadcast);
 						break;
 					case SubscriberRequestTypes.QuestionAddRequest:
 						broadcast = 
 							logic.AddQuestion(JsonConvert.DeserializeObject<QuestionAddRequest>(Message.RawMessage));
-							PrepareSelfDomainResult(result, broadcast);
+						PrepareOperationResponseFromBroadcast(result, broadcast);
 						break;
 					default:
 						throw new NotImplementedException();

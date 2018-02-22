@@ -33,6 +33,7 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 	}
 
 	public enum AdminRequestTypes {
+		[AdminRequestAttriute("events-info-renew")] EventsInfoRenew,
 		[AdminRequestAttriute("su-check")] SuPermissionsCheck,
 		[AdminRequestAttriute("event-edit")] EventEdit,
 		[AdminRequestAttriute("event-close")] EventClose,

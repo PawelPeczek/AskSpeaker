@@ -11,7 +11,7 @@ namespace AskSpeakerServer.BackEnd.Messages.Prototypes {
 			set;
 		}
 
-		public override void PrepareToSend(string header = null){
+		public void PrepareToSend(string header = null){
 			if(header != null)
 				Broadcast = header;
 			SetCurrentTimestamp ();

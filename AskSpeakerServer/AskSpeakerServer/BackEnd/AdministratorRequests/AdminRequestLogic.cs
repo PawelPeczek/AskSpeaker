@@ -17,24 +17,25 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 	public class AdminRequestLogic {
 		private IDictionary<Object, Object> Credentials;
 
-		public static string GetEventsInfoJSON(IDictionary<object, object> credentials){
+		public static string GetEventsInfoJSON(IDictionary<object, object> credentials, int requestID = -1){
 			Console.WriteLine ("GetEventsInfo fired");
 			string result;
 			using(AskSpeakerContext ctx = new AskSpeakerContext ()){
 				int userID = (int)credentials ["UserID"];
-				IQueryable<Events> events;
+				EventsListResponse response = new EventsListResponse ();
 				if ((string)credentials ["Privilages"] == "SuperAdmin") {
-					events = 
+					response.Events = 
 						from e in ctx.Events
 						where e.UserID == userID
 						select e;
 				} else {
-					events = 
+					response.Events = 
 						from e in ctx.Events
 						select e;
 				}
 				Console.WriteLine ("Before error");
-				result = JsonConvert.SerializeObject (events);
+				response.PrepareToSend (requestID);
+				result = JsonConvert.SerializeObject (response);
 				Console.WriteLine ("After error");
 			}
 			Console.WriteLine ("GetEventsInfo returning info");
@@ -50,11 +51,15 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 				throw new PasswordHasChangedException ("Password for user has changed during this session.");
 		}
 
+		public string ObtainEventsList(EventsListRequest request){
+			return	GetEventsInfoJSON (Credentials, request.RequestID);	
+		}
+
 		public SuPermissionsCheckResponse CheckSuPermistions(SuPermissionsCheckRequest request) {
 			Console.WriteLine ("CheckSuPermistions()");
 			SuPermissionsCheckResponse result = new SuPermissionsCheckResponse ();
 			result.PermissionsGranted = AdminAuthenticationModule.IsUserSuperAdmin(Credentials);
-			result.PrepareToSend (AdminRequestTypes.SuPermissionsCheck.GetRequestString());
+			result.PrepareToSend (request.RequestID);
 			return result;
 		}
 
@@ -195,7 +200,7 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 				} catch (DataException ex){
 					throw new DataException ($"Error while creating user. Details:\n {ex.Message}");
 				}
-				result.PrepareToSend (AdminRequestTypes.UserCreate.GetRequestString());
+				result.PrepareToSend (request.RequestID, AdminRequestTypes.UserCreate.GetRequestString());
 			}
 			return result;
 		}
@@ -223,7 +228,7 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 						throw new DataException ($"Error while deleting user. Details:\n {ex.Message}");
 					}
 				}
-				result.PrepareToSend (AdminRequestTypes.UserDelete.GetRequestString ());
+				result.PrepareToSend (request.RequestID, AdminRequestTypes.UserDelete.GetRequestString ());
 			}
 			return result;
 		}
@@ -244,7 +249,7 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 				} else {
 					throw new ArgumentException ("Wrong origin password.");
 				}
-				result.PrepareToSend (AdminRequestTypes.PasswordChange.GetRequestString());
+				result.PrepareToSend (request.RequestID, AdminRequestTypes.PasswordChange.GetRequestString());
 			}
 			return result;
 		}
@@ -263,7 +268,7 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 				user.Password = encryptedNewPasswd;
 				ctx.SaveChanges ();
 				if((int)Credentials ["UserID"] == request.UserID) Credentials ["PasswordChanged"] = true;
-				result.PrepareToSend (AdminRequestTypes.PasswordChangeWithSu.GetRequestString());
+				result.PrepareToSend (request.RequestID, AdminRequestTypes.PasswordChangeWithSu.GetRequestString());
 			}
 			return result;
 		}

@@ -7,7 +7,7 @@ using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Responses;
 namespace AskSpeakerServer.BackEnd.Messages.SubscriberMessages.Responses {
 	public class QuestionsListResponse : OperationResponse {
 
-		public QuestionsListResponse(){
+		public QuestionsListResponse() {
 			Response = SubscriberRequestTypes.QuestionsRequest.GetRequestString();
 		}
 

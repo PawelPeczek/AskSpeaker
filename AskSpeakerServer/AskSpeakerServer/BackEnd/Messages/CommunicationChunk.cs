@@ -5,7 +5,7 @@ using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Responses;
 namespace AskSpeakerServer.BackEnd.Messages {
 	public class CommunicationChunk {
 
-		public object PlainResponse {
+		public string PlainResponse {
 			get;
 			set;
 		} = null;
@@ -15,20 +15,11 @@ namespace AskSpeakerServer.BackEnd.Messages {
 			set;
 		} = null;
 
-		public BroadcastPrototype SelfDomainMessage {
+		public BroadcastPrototype BroadcastResponse {
 			get;
 			set;
 		} = null;
 
-		public BroadcastPrototype OtherDomainMessage {
-			get;
-			set;
-		}
-
-		public BroadcastPrototype SuperAdminMessage {
-			get;
-			set;
-		}
 
 		public static OperationResponse PrepareResponse(int requestID, BroadcastPrototype message) {
 			OperationResponse result = new OperationResponse ();

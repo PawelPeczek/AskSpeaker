@@ -15,7 +15,7 @@ using System.Data;
 namespace AskSpeakerServer.BackEnd.SubscriberRequests {
 	public class SubscriberRequestLogic {
 
-		public static string GetQuestionsJSON(string hash, int RequestID = 0){
+		public static string GetQuestionsJSON(string hash, int requestID = -1){
 			string result;
 			using (AskSpeakerContext ctx = new AskSpeakerContext ()) {
 				Events chosenEvent = FetchEventWithGivenHash (ctx, hash);
@@ -36,7 +36,7 @@ namespace AskSpeakerServer.BackEnd.SubscriberRequests {
 				}
 				CountVotesForPrimaryQuestions (allQuestions, mergedTo);
 				QuestionsListResponse response = new QuestionsListResponse ();
-				response.PrepareToSend ();
+				response.PrepareToSend (requestID);
 				response.Path = hash;
 				response.Questions = primaryQuestions;
 				result = JsonConvert.SerializeObject (response);
