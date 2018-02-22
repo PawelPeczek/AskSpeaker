@@ -117,7 +117,6 @@
     <Compile Include="EntityFramework\AskSpeakerContext.cs" />
     <Compile Include="BackEnd\AdministratorServer.cs" />
     <Compile Include="BackEnd\AdministratorRequests\AdminRequestTypes.cs" />
-    <Compile Include="BackEnd\AdministratorRequests\AdminRequestHandler.cs" />
     <Compile Include="BackEnd\AdministratorRequests\AdminRequestDispather.cs" />
     <Compile Include="BackEnd\AdministratorRequests\AdminRequestLogic.cs" />
     <Compile Include="BackEnd\AdministratorRequests\AdminAuthenticationModule.cs" />
@@ -167,14 +166,15 @@
     <Compile Include="BackEnd\Messages\SubscriberMessages\Broadcast\QuestionAddBroadcast.cs" />
     <Compile Include="BackEnd\Messages\SubscriberMessages\Broadcast\QuestionVoteBroadcast.cs" />
     <Compile Include="BackEnd\Messages\AdministratorMessages\Requests\SuPermissionsCheckRequest.cs" />
-    <Compile Include="BackEnd\PreProcessedMessage.cs" />
     <Compile Include="BackEnd\Dispather.cs" />
+    <Compile Include="BackEnd\PreProcessedAdminMessage.cs" />
+    <Compile Include="BackEnd\PreProcessedSubscriberMessage.cs" />
+    <Compile Include="BackEnd\PreProcessedMessage.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="app.config" />
     <None Include="supersocket.cmd" />
     <None Include="supersocket.sh" />
   </ItemGroup>

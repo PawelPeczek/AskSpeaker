@@ -3,9 +3,9 @@ using AskSpeakerServer.BackEnd.Messages.Prototypes;
 using AskSpeakerServer.BackEnd.AdministratorRequests;
 
 namespace AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Broadcast {
-	public class EventOwnershipChangeRequest : BroadcastPrototype {
+	public class EventOwnershipChangeBroadcast : BroadcastPrototype {
 
-		public EventOwnershipChangeRequest(){
+		public EventOwnershipChangeBroadcast(){
 			Broadcast = AdminRequestTypes.EventChangeOwnership.GetRequestString(); 
 		}
 

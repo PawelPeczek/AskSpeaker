@@ -88,7 +88,6 @@ namespace AskSpeakerServer.EntityFramework.Entities {
 			EventDesc = another.EventDesc;
 			SpeakerName = another.SpeakerName;
 			SpeakerSurname = another.SpeakerSurname;
-			Closed = another.Closed;
 		}
 
 		public static string GenerateHash(){

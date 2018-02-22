@@ -7,7 +7,9 @@ namespace AskSpeakerServer.BackEnd.Messages.GeneralMessages {
 		CannotFindRequiredDataItem = 2,
 		ActivityAlreadyDone = 3,
 		PermissionsError = 4,
-		JSONContractError = 5
+		JSONContractError = 5,
+		InvalidOperation = 6,
+		WrongOriginData = 7
 	}
 }
 

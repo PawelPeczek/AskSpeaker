@@ -1,45 +1,36 @@
 ﻿using System;
-using AskSpeakerServer.BackEnd.SubscriberRequests;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace AskSpeakerServer.BackEnd {
+	public abstract class PreProcessedMessage {
 
-	public class PreProcessedMessage {
-		
-		public string Request {
+		public string RawMessage {
 			get;
-			set;
+			protected set;
 		}
 
-		public SubscriberRequestTypes RequestType {
+		public string Request {
 			get;
-			set;
+			protected set;
 		}
 
 		public int RequestID {
 			get;
-			set;
+			protected set;
 		}
-			
+
 		public PreProcessedMessage(string message){
 			Dictionary<string, object> DeserializedMsg = 
 				JsonConvert.DeserializeObject<Dictionary<string, object>> (message);
 			if (!DeserializedMsg.ContainsKey ("Request") && !DeserializedMsg.ContainsKey ("RequestID"))
 				throw new ApplicationException ("Invalid message format.");
-			Message = message;
-			RequestType = GetRequestType ((string)DeserializedMsg ["Request"]);
+			RawMessage = message;
+			SetRequestType ((string)DeserializedMsg ["Request"]);
 			RequestID = (int)DeserializedMsg ["RequestID"];
 		}
 
-		private SubscriberRequestTypes GetRequestType(string requestString){
-			foreach (SubscriberRequestTypes reqType in Enum.GetValues(typeof(SubscriberRequestTypes))) {
-				if (requestString.ToLower () == reqType.GetRequestString ()) {
-					return reqType;
-				}	
-			}
-			throw new ApplicationException ($"Request {requestString} is not supported.");
-		}
+		protected abstract void SetRequestType (string requestString);
 	}
 }
 

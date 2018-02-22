@@ -14,6 +14,7 @@ using System.Text;
 using AskSpeakerServer.BackEnd.AdministratorRequests;
 using System.Threading;
 using SuperSocket.SocketBase.Config;
+using AskSpeakerServer.BackEnd.Messages;
 
 namespace AskSpeakerServer.BackEnd {
 	public class AdministratorServer : WebSocketServer {
@@ -73,10 +74,10 @@ namespace AskSpeakerServer.BackEnd {
 			session.Send (AdminRequestLogic.GetEventsInfoJSON (session.Items));
 		}
 
-		private void HandleNewMessage(WebSocketSession session, string value) {
+		private void HandleNewMessage(WebSocketSession session, string message) {
 			try {
-				Console.WriteLine (value);
-				GenerateResponse(session, value);
+				Console.WriteLine (message);
+				GenerateResponse(session, message);
 			} catch(ApplicationException ex) {
 				session.CloseWithHandshake (400, $"JSON contract violation: {ex.Message}");
 			} catch(UnauthorizedAccessException ex) {
@@ -86,12 +87,12 @@ namespace AskSpeakerServer.BackEnd {
 			}
 		}
 
-		private void GenerateResponse(WebSocketSession session, string value){
+		private void GenerateResponse(WebSocketSession session, string message){
 			((ManualResetEvent)session.Items["SyncObject"]).WaitOne();
 			Console.WriteLine ("New message!");
-			AdminRequestHandler reqHandler = new AdminRequestHandler(session.Items, value);
-			Console.WriteLine ("Before ProceedRequest");
-			object response = reqHandler.ProceedRequest();
+			PreProcessedAdminMessage prepMessage = new PreProcessedAdminMessage (message);
+			AdminRequestDispather dispather = new AdminRequestDispather (prepMessage, session.Items);
+			CommunicationChunk response = dispather.Dispath ();
 			DispathResponse(session, response);
 		}
 
@@ -113,7 +114,7 @@ namespace AskSpeakerServer.BackEnd {
 
 		}
 
-		private void DispathResponse(WebSocketSession session, object response){
+		private void DispathResponse(WebSocketSession session, CommunicationChunk response){
 			if (response != null) {
 				string serializedResponse = JsonSerialize (response);
 				bool currentSessionAtList = false;

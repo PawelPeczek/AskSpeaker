@@ -11,15 +11,9 @@ namespace AskSpeakerServer.BackEnd.Messages.Prototypes {
 			set;
 		}
 
-		[JsonIgnore]
-		public int RequestID {
-			get;
-		}
-
-		public void PrepareToSend(int requestID, string header = null){
+		public override void PrepareToSend(string header = null){
 			if(header != null)
 				Broadcast = header;
-			RequestID = requestID;
 			SetCurrentTimestamp ();
 		}
 	}

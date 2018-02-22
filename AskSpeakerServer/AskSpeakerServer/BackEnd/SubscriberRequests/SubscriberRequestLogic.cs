@@ -36,7 +36,7 @@ namespace AskSpeakerServer.BackEnd.SubscriberRequests {
 				}
 				CountVotesForPrimaryQuestions (allQuestions, mergedTo);
 				QuestionsListResponse response = new QuestionsListResponse ();
-				response.PrepareToSend (SubscriberRequestTypes.QuestionsRequest.GetRequestString (), RequestID);
+				response.PrepareToSend ();
 				response.Path = hash;
 				response.Questions = primaryQuestions;
 				result = JsonConvert.SerializeObject (response);
@@ -70,7 +70,7 @@ namespace AskSpeakerServer.BackEnd.SubscriberRequests {
 							 where e.EventHash == hash
 							 select e).FirstOrDefault ();
 			if (result == null)
-				throw new ApplicationException ("Event with given hash doesn't exist.");
+				throw new KeyNotFoundException ("Event with given hash doesn't exist.");
 			return result;
 		}
 
@@ -88,18 +88,18 @@ namespace AskSpeakerServer.BackEnd.SubscriberRequests {
 			QuestionVoteBroadcast result = new QuestionVoteBroadcast ();
 			using (AskSpeakerContext ctx = new AskSpeakerContext ()) {
 				Votes vote = new Votes ();
-				Questions question = FetchRequestedQuestion (request.QuestionID);
+				Questions question = FetchRequestedQuestion (ctx, request.QuestionID);
 				vote.Question = question;
 				vote.Value = request.VoteUp.ConvertVote ();
 				ctx.Votes.Add (vote);
 				try {
 					ctx.SaveChanges ();
-				} catch (DataException ex) {
+				} catch (DataException) {
 					// Replacing error message that is not approptiate to client eyes.
 					throw new DataException ("Error while updating data.");
 				}
 
-				result.PrepareToSend (request.RequestID);
+				result.PrepareToSend ();
 			}
 			return result;
 		}
@@ -115,7 +115,7 @@ namespace AskSpeakerServer.BackEnd.SubscriberRequests {
 				ctx.Questions.Add (question);
 				ctx.SaveChanges();
 				result.Question = question;
-				result.PrepareToSend (request.RequestID);
+				result.PrepareToSend ();
 			}
 			return result;
 		}
@@ -128,7 +128,7 @@ namespace AskSpeakerServer.BackEnd.SubscriberRequests {
 				q.Event.EventHash == Hash
 				select q).FirstOrDefault();
 			if (result == null) 
-				throw new ApplicationException ("There is no such question at the selected event.");
+				throw new KeyNotFoundException ("There is no such question at the selected event.");
 			return result;
 		}
 

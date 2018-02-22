@@ -54,7 +54,7 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 			Console.WriteLine ("CheckSuPermistions()");
 			SuPermissionsCheckResponse result = new SuPermissionsCheckResponse ();
 			result.PermissionsGranted = AdminAuthenticationModule.IsUserSuperAdmin(Credentials);
-			result.PrepareToSend (request.RequestID);
+			result.PrepareToSend (AdminRequestTypes.SuPermissionsCheck.GetRequestString());
 			return result;
 		}
 
@@ -69,7 +69,7 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 					result.EventID = request.RequestID;
 				} else
 					throw new ApplicationException ("Event already closed.");
-				result.PrepareToSend (request.RequestID, AdminRequestTypes.EventClose.GetRequestString());
+				result.PrepareToSend (AdminRequestTypes.EventClose.GetRequestString());
 			}
 			return result;
 		}
@@ -84,7 +84,7 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 					result.EventID = request.EventID;
 				} else 
 					throw new ApplicationException ("Event already opened.");
-				result.PrepareToSend (request.RequestID, AdminRequestTypes.EventReOpen.GetRequestString());
+				result.PrepareToSend (AdminRequestTypes.EventReOpen.GetRequestString());
 			}
 			return result;
 		}
@@ -93,15 +93,15 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 			EventEditCreateBroadcast result = new EventEditCreateBroadcast();
 			using (AskSpeakerContext ctx = new AskSpeakerContext ()) {
 				Events selectedEvent = FetchEventWithGivenID(ctx, request.Event.EventID);
-				// Hash, EventID and UserID are never copied!!!
+				// Hash, EventID, UserID and Closed are never copied!!!
 				selectedEvent.PropertiesCopy (request.Event);
 				try {
 					ctx.SaveChanges();
 					result.Event = selectedEvent;
 				} catch (DataException ex){
-					throw new DataException($"Broken JSON Event-serialize contract. Details: {ex.Message}");
+					throw new DataException($"Broken JSON Event-serialize contract. Details:\n {ex.Message}");
 				}
-				result.PrepareToSend(request.RequestID, AdminRequestTypes.EventEdit.GetRequestString());
+				result.PrepareToSend(AdminRequestTypes.EventEdit.GetRequestString());
 			}
 			return result;
 		}
@@ -119,9 +119,9 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 					ctx.SaveChanges();
 					result.Event = request.Event;
 				}  catch (DataException ex){
-					throw new DataException($"Broken JSON Event-serialize contract. Details: {ex.Message}");
+					throw new DataException($"Broken JSON Event-serialize contract. Details:\n {ex.Message}");
 				}
-				result.PrepareToSend(request.RequestID, AdminRequestTypes.EventCreate.GetRequestString());
+				result.PrepareToSend(AdminRequestTypes.EventCreate.GetRequestString());
 			}
 			return result;
 		}
@@ -135,34 +135,40 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 					ctx.SaveChanges ();
 				} else
 					throw new ApplicationException ("Question already cancelled.");
-				result.PrepareToSend (request.RequestID);
+				result.PrepareToSend ();
 			}
 			return result;
 		}
 
-		public QuestionMergeRequest MergeQuestions(QuestionMergeRequest request){
+		public QuestionMergeBroadcast MergeQuestions(QuestionMergeRequest request){
+			QuestionMergeBroadcast result = new QuestionMergeBroadcast ();
 			using (AskSpeakerContext ctx = new AskSpeakerContext ()) {
 				Questions master = FetchActiveQuestionWithGivenID (ctx, request.MasterID);
 				Questions slave = FetchActiveQuestionWithGivenID (ctx, request.SlaveID);
 				if (master.EventID != slave.EventID)
-					throw new ApplicationException ("Cannot merge questions associated to different events.");
+					throw new InvalidOperationException ("Cannot merge questions associated to different events.");
+				if(master.QuestionID == slave.QuestionID)
+					throw new InvalidOperationException ("Cannot merge question with itself.");
 				slave.Merged = master;
 				ctx.SaveChanges ();
+				result.PrepareToSend ();
 			}
-			return request;
+			return result;
 		}
 
-		public QuestionEditRequest EditQuestion(QuestionEditRequest request) {
+		public QuestionEditBroadcast EditQuestion(QuestionEditRequest request) {
+			QuestionEditBroadcast result = new QuestionEditBroadcast ();
 			using (AskSpeakerContext ctx = new AskSpeakerContext ()) {
 				Questions origin = FetchActiveQuestionWithGivenID (ctx, request.QuestionID);
 				origin.QuestionContent = request.NewQuestionContent;
 				try {
 					ctx.SaveChanges ();
-				} catch(Exception ex){
-					throw new ApplicationException ($"Broken JSON Question-serialize contract. Details: {ex.Message}");
+				} catch(DataException ex){
+					throw new DataException ($"Broken JSON Question-serialize contract. Details: {ex.Message}");
 				}
+				result.PrepareToSend ();
 			}
-			return request;
+			return result;
 		}
 			
 		public OperationResponse CreateUser(UserCreateRequest request){
@@ -186,11 +192,10 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 				ctx.Users.Add (user);
 				try {
 					ctx.SaveChanges();
-					result.OperationStatus = true;
-				} catch (Exception ex){
-					result.OperationStatus = false;
-					result.ErrorCause = ex.Message;
+				} catch (DataException ex){
+					throw new DataException ($"Error while creating user. Details:\n {ex.Message}");
 				}
+				result.PrepareToSend (AdminRequestTypes.UserCreate.GetRequestString());
 			}
 			return result;
 		}
@@ -208,19 +213,17 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 				if (user == null)
 					throw new ApplicationException ("User does not exist.");
 				if (user.Active == false) {
-					result.OperationStatus = false;
-					result.ErrorCause = "User already deleted.";
+					throw new ApplicationException("User already deleted.");
 				} else {
 					user.Active = false;
 					ChangeEventsOwnerShip (ctx, user, request.NewEventOwnerID);
 					try {
 						ctx.SaveChanges();
-						result.OperationStatus = true;
-					} catch (Exception ex){
-						result.OperationStatus = false;
-						result.ErrorCause = ex.Message;
+					} catch (DataException ex){
+						throw new DataException ($"Error while deleting user. Details:\n {ex.Message}");
 					}
 				}
+				result.PrepareToSend (AdminRequestTypes.UserDelete.GetRequestString ());
 			}
 			return result;
 		}
@@ -233,16 +236,15 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 				Console.WriteLine ("User that was fetched: " + user.UserName);
 				SHA256 SHAEncryptor = SHA256Managed.Create ();
 				byte[] encryptedOldPasswd = SHAEncryptor.ComputeHash (Encoding.Unicode.GetBytes (request.OldPassword));
-				if (user != null && user.Password.SequenceEqual(encryptedOldPasswd)) {
+				if (user.Password.SequenceEqual(encryptedOldPasswd)) {
 					byte[] encryptedNewPasswd = SHAEncryptor.ComputeHash (Encoding.Unicode.GetBytes (request.NewPassword));
 					user.Password = encryptedNewPasswd;
 					ctx.SaveChanges ();
-					result.OperationStatus = true;
 					Credentials ["PasswordChanged"] = true;
 				} else {
-					result.OperationStatus = false;
-					result.ErrorCause = "Unresolved credentials.";
+					throw new ArgumentException ("Wrong origin password.");
 				}
+				result.PrepareToSend (AdminRequestTypes.PasswordChange.GetRequestString());
 			}
 			return result;
 		}
@@ -255,38 +257,31 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 			result.Response = AdminRequestTypes.PasswordChangeWithSu.GetRequestString ();
 			using (AskSpeakerContext ctx = new AskSpeakerContext ()) {
 				Users user = FetchUserWithGivenID (ctx, request.UserID);
-				if (user != null) {
-					Console.WriteLine ($"New password: {request.NewPassword} for user {user.UserName}");
-					SHA256 SHAEncryptor = SHA256Managed.Create ();
-					byte[] encryptedNewPasswd = SHAEncryptor.ComputeHash (Encoding.Unicode.GetBytes (request.NewPassword));
-					user.Password = encryptedNewPasswd;
-					ctx.SaveChanges ();
-					result.OperationStatus = true;
-					if((int)Credentials ["UserID"] == request.UserID) Credentials ["PasswordChanged"] = true;
-				} else {
-					result.OperationStatus = false;
-					result.ErrorCause = "Unresolved credentials.";
-				}
+				Console.WriteLine ($"New password: {request.NewPassword} for user {user.UserName}");
+				SHA256 SHAEncryptor = SHA256Managed.Create ();
+				byte[] encryptedNewPasswd = SHAEncryptor.ComputeHash (Encoding.Unicode.GetBytes (request.NewPassword));
+				user.Password = encryptedNewPasswd;
+				ctx.SaveChanges ();
+				if((int)Credentials ["UserID"] == request.UserID) Credentials ["PasswordChanged"] = true;
+				result.PrepareToSend (AdminRequestTypes.PasswordChangeWithSu.GetRequestString());
 			}
 			return result;
 		}
 
-		public OperationResponse ChangeEventOwnership(EventOwnershipChangeRequest request){
+		public EventOwnershipChangeBroadcast ChangeEventOwnership(EventOwnershipChangeRequest request){
 			if (!AdminAuthenticationModule.IsUserSuperAdmin (Credentials))
 				throw new UnauthorizedAccessException ("SuperUser access required.");
-			OperationResponse result = new OperationResponse ();
-			result.Response = AdminRequestTypes.EventChangeOwnership.GetRequestString ();
+			EventOwnershipChangeBroadcast result = new EventOwnershipChangeBroadcast ();
 			using (AskSpeakerContext ctx = new AskSpeakerContext ()) {
+				Events chosenEvent = FetchEventWithGivenID (ctx, request.EventID);
+				Users user = FetchUserWithGivenID (ctx, request.newOwnerID);
+				chosenEvent.User = user;
 				try {
-					Events chosenEvent = FetchEventWithGivenID (ctx, request.EventID);
-					Users user = FetchUserWithGivenID (ctx, request.newOwnerID);
-					chosenEvent.User = user;
 					ctx.SaveChanges ();
-					result.OperationStatus = true;
-				} catch(Exception ex){
-					result.OperationStatus = false;
-					result.ErrorCause = ex.Message;
+				} catch(DataException ex){
+					throw new DataException ($"Error while changing event ownership. Details:\n {ex.Message}");
 				}
+				result.PrepareToSend ();
 			}
 			return result;
 		}
@@ -298,7 +293,7 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 				     q.QuestionID == QuestionID
 				 select q).FirstOrDefault ();
 			if (question == null)
-				throw new ApplicationException ($"There is no question with such ID ({QuestionID}) " +
+				throw new KeyNotFoundException ($"There is no question with such ID ({QuestionID}) " +
 												"or the question is closed.");
 			if (!AdminAuthenticationModule.IsPermissionToEventModifGranted(question.Event.UserID, Credentials))
 				throw new UnauthorizedAccessException("Only SuperAdmin can cancell a quetsion assigned to event " +
@@ -312,7 +307,7 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 					where e.EventID == EventID
 					select e).FirstOrDefault ();
 			if (result == null)
-				throw new ApplicationException ("There is no event with such ID.");
+				throw new KeyNotFoundException ("There is no event with such ID.");
 			if (!AdminAuthenticationModule.IsPermissionToEventModifGranted(result.UserID, Credentials))
 				throw new UnauthorizedAccessException("Only SuperAdmin can modify event hosted by another user.");
 			return result;
@@ -326,7 +321,7 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 					u.Active == true
 					select u).FirstOrDefault();
 			if (user == null)
-				throw new ApplicationException ("No user found.");
+				throw new KeyNotFoundException ("No user found.");
 			return user;
 		}
 
@@ -341,7 +336,7 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 		private void ChangeEventsOwnerShip(AskSpeakerContext ctx, Users user, int newOwnerID){
 			Users newOwner = FetchUserWithGivenID (ctx, newOwnerID);
 			if (newOwner == null)
-				throw new ApplicationException ("There is no such active user.");
+				throw new KeyNotFoundException ("There is no such active user.");
 			foreach (Events userEvent in user.Events) {
 				userEvent.User = newOwner;
 			}

@@ -2,64 +2,88 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Requests;
+using AskSpeakerServer.BackEnd.Messages;
+using System.Data;
+using AskSpeakerServer.BackEnd.Messages.GeneralMessages;
+using AskSpeakerServer.BackEnd.Messages.Prototypes;
 
 namespace AskSpeakerServer.BackEnd.AdministratorRequests {
-	public static class AdminRequestDispather : Dispather {
+	public class AdminRequestDispather : Dispather {
 		private IDictionary<Object, Object> Credentials;
 
-		public static object Dispath() {
+		public AdminRequestDispather (PreProcessedAdminMessage message, IDictionary<Object, Object> credentials){
+			Message = message;
+			Credentials = credentials;
+		}
+
+		public override CommunicationChunk Dispath() {
 			AdminRequestLogic logic = new AdminRequestLogic (Credentials);
-			object result = null;
+			CommunicationChunk result = new CommunicationChunk ();
+			BroadcastPrototype broadcast;
 			try {
-				switch (Message.RequestType) {
+				switch (((PreProcessedAdminMessage)Message).RequestType) {
 				case AdminRequestTypes.SuPermissionsCheck:
-					result = logic.CheckSuPermistions ();
+					result.ResponseToSender = logic.CheckSuPermistions (JsonConvert.DeserializeObject<SuPermissionsCheckRequest>(Message.RawMessage));
 					break;
 				case AdminRequestTypes.EventClose:
-					result = logic.CloseEvent (JsonConvert.DeserializeObject<EventOpenCloseRequest>(Message));
+					broadcast = logic.CloseEvent (JsonConvert.DeserializeObject<EventOpenCloseRequest>(Message.RawMessage));
+					PrepareMultiDomainResult(result, broadcast);
 					break;
 				case AdminRequestTypes.EventReOpen:
-					result = logic.ReOpenEvent (JsonConvert.DeserializeObject<EventOpenCloseRequest>(Message));
+					broadcast = logic.ReOpenEvent (JsonConvert.DeserializeObject<EventOpenCloseRequest>(Message.RawMessage));
+					PrepareMultiDomainResult(result, broadcast);
 					break;
 				case AdminRequestTypes.EventEdit:
-					result = logic.EditEvent (JsonConvert.DeserializeObject<EventEditCreateRequest>(Message));
+					broadcast = logic.EditEvent (JsonConvert.DeserializeObject<EventEditCreateRequest>(Message.RawMessage));
+					PrepareMultiDomainResult(result, broadcast);
 					break;
 				case AdminRequestTypes.EventCreate:
-					result = logic.CreateEvent (JsonConvert.DeserializeObject<EventEditCreateRequest>(Message));
+					broadcast = logic.CreateEvent (JsonConvert.DeserializeObject<EventEditCreateRequest>(Message.RawMessage));
+					PrepareSuperAdminResult(result, broadcast);
 					break;
 				case AdminRequestTypes.QuestionCancell:
-					result = logic.CancellQuestion(JsonConvert.DeserializeObject<QuestionCancelRequest>(Message));
+					broadcast = logic.CancellQuestion(JsonConvert.DeserializeObject<QuestionCancelRequest>(Message.RawMessage));
+					PrepareOtherDomainResult(result, broadcast);
 					break;
 				case AdminRequestTypes.QuestionMerge:
-					result = logic.MergeQuestions(JsonConvert.DeserializeObject<QuestionMergeRequest>(Message));
+					broadcast = logic.MergeQuestions(JsonConvert.DeserializeObject<QuestionMergeRequest>(Message.RawMessage));
+					PrepareOtherDomainResult(result, broadcast);
 					break;
 				case AdminRequestTypes.QuestionEdit:
-					result = logic.EditQuestion(JsonConvert.DeserializeObject<QuestionEditRequest>(Message));
+					broadcast = logic.EditQuestion(JsonConvert.DeserializeObject<QuestionEditRequest>(Message.RawMessage));
+					PrepareOtherDomainResult(result, broadcast);
 					break;
 				case AdminRequestTypes.UserCreate:
-					result = logic.CreateUser(JsonConvert.DeserializeObject<UserCreateRequest>(Message));
+					result.ResponseToSender = logic.CreateUser(JsonConvert.DeserializeObject<UserCreateRequest>(Message.RawMessage));
 					break;
 				case AdminRequestTypes.UserDelete:
-					result = logic.DeactivateUser(JsonConvert.DeserializeObject<UserDeleteRequest>(Message));
+					result.ResponseToSender = logic.DeactivateUser(JsonConvert.DeserializeObject<UserDeleteRequest>(Message.RawMessage));
 					break;
 				case AdminRequestTypes.PasswordChange:
-					result = logic.ChangePassword(JsonConvert.DeserializeObject<PasswordChangeRequest>(Message));
+					result.ResponseToSender = logic.ChangePassword(JsonConvert.DeserializeObject<PasswordChangeRequest>(Message.RawMessage));
 					break;
 				case AdminRequestTypes.PasswordChangeWithSu:
-					result = logic.ChangePasswordWithSuPermissions
-						(JsonConvert.DeserializeObject<PasswordChangeSuRequest>(Message));
+					result.ResponseToSender = logic.ChangePasswordWithSuPermissions
+						(JsonConvert.DeserializeObject<PasswordChangeSuRequest>(Message.RawMessage));
 					break;
 				case AdminRequestTypes.EventChangeOwnership:
-					result = logic.ChangeEventOwnership
-						(JsonConvert.DeserializeObject<EventOwnershipChangeRequest>(Message));
+					broadcast = logic.ChangeEventOwnership
+						(JsonConvert.DeserializeObject<EventOwnershipChangeRequest>(Message.RawMessage));
+					PrepareSelfDomainResult(result, broadcast);
 					break;
 				}
-			}  catch(JsonReaderException ex) {
+			} catch(JsonReaderException ex) {
 				result.ResponseToSender = PrepareErrorResponse (ResponseCodes.JSONContractError, ex.Message);
 			} catch(ApplicationException ex) {
-				result.ResponseToSender = PrepareErrorResponse (ResponseCodes.CannotFindRequiredDataItem, ex.Message);
+				result.ResponseToSender = PrepareErrorResponse (ResponseCodes.ActivityAlreadyDone, ex.Message);
 			} catch(UnauthorizedAccessException ex) {
 				result.ResponseToSender = PrepareErrorResponse (ResponseCodes.PermissionsError, ex.Message);
+			} catch (InvalidOperationException ex){
+				result.ResponseToSender = PrepareErrorResponse (ResponseCodes.InvalidOperation, ex.Message);
+			} catch(ArgumentException ex) {
+				result.ResponseToSender = PrepareErrorResponse (ResponseCodes.WrongOriginData, ex.Message);
+			} catch (KeyNotFoundException ex) {
+				result.ResponseToSender = PrepareErrorResponse (ResponseCodes.CannotFindRequiredDataItem, ex.Message);
 			} catch(DataException ex) {
 				result.ResponseToSender = PrepareErrorResponse (ResponseCodes.DataConstraintViolated, ex.Message);
 			}

@@ -7,43 +7,44 @@ using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Responses;
 using AskSpeakerServer.BackEnd.Messages.GeneralMessages;
 using AskSpeakerServer.Extensions;
 using System.Data;
+using System.Collections.Generic;
 
 namespace AskSpeakerServer.BackEnd.SubscriberRequests {
 	public class SubscriberRequestDispather : Dispather {
 
 		private string Hash;
 
-		public SubscriberRequestDispather(PreProcessedMessage message, string hash){
+		public SubscriberRequestDispather(PreProcessedSubscriberMessage message, string hash){
 			Message = message;
 			Hash = hash;
 		}
 
-		public CommunicationChunk Dispath(){
+		public override CommunicationChunk Dispath(){
 			CommunicationChunk result = new CommunicationChunk ();
 			SubscriberRequestLogic logic = new SubscriberRequestLogic (Hash);
 			BroadcastPrototype broadcast;
 			try{
-				switch (Message.RequestType) {
+				switch (((PreProcessedSubscriberMessage)Message).RequestType) {
 					case SubscriberRequestTypes.QuestionsRequest:
 						result.PlainResponse = logic.ObtainQuestionsList 
-						(JsonConvert.DeserializeObject<RenewQuestionsRequest>(Message));
+						(JsonConvert.DeserializeObject<RenewQuestionsRequest>(Message.RawMessage));
 						break;
 					case SubscriberRequestTypes.VoteRequest:
 						broadcast = 
-							logic.VoteQuestion(JsonConvert.DeserializeObject<VoteQuestionRequest>(Message));
-						PrepareResult(result, broadcast);
+							logic.VoteQuestion(JsonConvert.DeserializeObject<VoteQuestionRequest>(Message.RawMessage));
+							PrepareSelfDomainResult(result, broadcast);
 						break;
 					case SubscriberRequestTypes.QuestionAddRequest:
 						broadcast = 
-							logic.AddQuestion(JsonConvert.DeserializeObject<QuestionAddRequest>(Message));
-						PrepareResult(result, broadcast);
+							logic.AddQuestion(JsonConvert.DeserializeObject<QuestionAddRequest>(Message.RawMessage));
+							PrepareSelfDomainResult(result, broadcast);
 						break;
 					default:
 						throw new NotImplementedException();
 				}
 			} catch(JsonReaderException ex) {
 				result.ResponseToSender = PrepareErrorResponse (ResponseCodes.JSONContractError, ex.Message);
-			} catch(ApplicationException ex) {
+			} catch(KeyNotFoundException ex) {
 				result.ResponseToSender = PrepareErrorResponse (ResponseCodes.CannotFindRequiredDataItem, ex.Message);
 			} catch(UnauthorizedAccessException ex) {
 				result.ResponseToSender = PrepareErrorResponse (ResponseCodes.PermissionsError, ex.Message);

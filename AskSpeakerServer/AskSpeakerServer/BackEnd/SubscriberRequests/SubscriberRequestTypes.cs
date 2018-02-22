@@ -38,5 +38,6 @@ namespace AskSpeakerServer.BackEnd.SubscriberRequests {
 		[SubscriberRequestAttribute("question-add")] QuestionAddRequest,
 		[SubscriberRequestAttribute("question-report")] QuestionReportRequest
 	}
+
 }
 
