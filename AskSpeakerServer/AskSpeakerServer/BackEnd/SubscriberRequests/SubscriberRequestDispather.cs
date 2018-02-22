@@ -3,42 +3,54 @@ using Newtonsoft.Json;
 using AskSpeakerServer.BackEnd.Messages.SubscriberMessages.Requests;
 using AskSpeakerServer.BackEnd.Messages;
 using AskSpeakerServer.BackEnd.Messages.Prototypes;
+using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Responses;
+using AskSpeakerServer.BackEnd.Messages.GeneralMessages;
+using AskSpeakerServer.Extensions;
+using System.Data;
 
 namespace AskSpeakerServer.BackEnd.SubscriberRequests {
-	public static class SubscriberRequestDispather {
-		public static CommunicationChunk Dispath(SubscriberRequestTypes reqType, 
-			string message, string hash){
-			CommunicationChunk result = new CommunicationChunk ();;
-			SubscriberRequestLogic logic = new SubscriberRequestLogic (hash);
+	public class SubscriberRequestDispather : Dispather {
+
+		private string Hash;
+
+		public SubscriberRequestDispather(PreProcessedMessage message, string hash){
+			Message = message;
+			Hash = hash;
+		}
+
+		public CommunicationChunk Dispath(){
+			CommunicationChunk result = new CommunicationChunk ();
+			SubscriberRequestLogic logic = new SubscriberRequestLogic (Hash);
 			BroadcastPrototype broadcast;
 			try{
-				switch (reqType) {
+				switch (Message.RequestType) {
 					case SubscriberRequestTypes.QuestionsRequest:
 						result.PlainResponse = logic.ObtainQuestionsList 
-							(JsonConvert.DeserializeObject<RenewQuestionsRequest>(message));
+						(JsonConvert.DeserializeObject<RenewQuestionsRequest>(Message));
 						break;
 					case SubscriberRequestTypes.VoteRequest:
 						broadcast = 
-							logic.VoteQuestion(JsonConvert.DeserializeObject<VoteQuestionRequest>(message));
+							logic.VoteQuestion(JsonConvert.DeserializeObject<VoteQuestionRequest>(Message));
 						PrepareResult(result, broadcast);
 						break;
 					case SubscriberRequestTypes.QuestionAddRequest:
 						broadcast = 
-							logic.AddQuestion(JsonConvert.DeserializeObject<QuestionAddRequest>(message));
+							logic.AddQuestion(JsonConvert.DeserializeObject<QuestionAddRequest>(Message));
 						PrepareResult(result, broadcast);
 						break;
 					default:
-					throw new NotImplementedException();
+						throw new NotImplementedException();
 				}
-			} catch(JsonReaderException ex){
-				throw new ApplicationException (ex.Message);
+			} catch(JsonReaderException ex) {
+				result.ResponseToSender = PrepareErrorResponse (ResponseCodes.JSONContractError, ex.Message);
+			} catch(ApplicationException ex) {
+				result.ResponseToSender = PrepareErrorResponse (ResponseCodes.CannotFindRequiredDataItem, ex.Message);
+			} catch(UnauthorizedAccessException ex) {
+				result.ResponseToSender = PrepareErrorResponse (ResponseCodes.PermissionsError, ex.Message);
+			} catch(DataException ex) {
+				result.ResponseToSender = PrepareErrorResponse (ResponseCodes.DataConstraintViolated, ex.Message);
 			}
 			return result;
-		}
-
-		private static void PrepareResult(CommunicationChunk result, BroadcastPrototype broadcast){
-			result.SelfDomainMessage = broadcast;
-			result.ResponseToSender = CommunicationChunk.PrepareResponse(broadcast); 
 		}
 	}
 }

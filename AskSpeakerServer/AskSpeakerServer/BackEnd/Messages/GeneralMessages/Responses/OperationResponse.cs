@@ -16,10 +16,8 @@ namespace AskSpeakerServer.BackEnd.Messages.GeneralMessages.Responses {
 
 		public void CopyFromBroadcast(BroadcastPrototype o){
 			RequestID = o.RequestID;
-			ErrorCode = o.ErrorCode;
-			ErrorCause = o.ErrorCause;
 			Response = o.Broadcast;
-			Timestamp - o.Timestamp;
+			Timestamp = o.Timestamp;
 		}
 	}
 }

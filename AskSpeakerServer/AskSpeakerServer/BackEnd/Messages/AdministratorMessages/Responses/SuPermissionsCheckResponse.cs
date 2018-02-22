@@ -1,6 +1,6 @@
 ﻿using System;
 using AskSpeakerServer.BackEnd.AdministratorRequests;
-using AskSpeakerServer.Messages.Prototypes;
+using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Responses;
 
 namespace AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Responses {
 	public class SuPermissionsCheckResponse : OperationResponse {
@@ -9,7 +9,7 @@ namespace AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Responses {
 			this.Response = AdminRequestTypes.SuPermissionsCheck.GetRequestString();
 		}
 
-		public bool Permissions {
+		public bool PermissionsGranted {
 			get;
 			set;
 		}

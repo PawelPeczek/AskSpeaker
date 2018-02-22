@@ -1,6 +1,6 @@
 ﻿using System;
 using AskSpeakerServer.BackEnd.SubscriberRequests;
-using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Responses;
+using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Requests;
 
 namespace AskSpeakerServer.BackEnd.Messages.SubscriberMessages.Requests {
 	public class ReportQuestionRequest : BaseRequest {

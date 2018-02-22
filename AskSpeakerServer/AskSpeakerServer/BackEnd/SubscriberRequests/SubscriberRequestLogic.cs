@@ -9,6 +9,7 @@ using AskSpeakerServer.BackEnd.Messages.SubscriberMessages.Requests;
 using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Responses;
 using AskSpeakerServer.Extensions;
 using AskSpeakerServer.BackEnd.Messages.GeneralMessages;
+using System.Data;
 
 
 namespace AskSpeakerServer.BackEnd.SubscriberRequests {
@@ -87,23 +88,17 @@ namespace AskSpeakerServer.BackEnd.SubscriberRequests {
 			QuestionVoteBroadcast result = new QuestionVoteBroadcast ();
 			using (AskSpeakerContext ctx = new AskSpeakerContext ()) {
 				Votes vote = new Votes ();
-				Questions question = (from q in ctx.Questions
-									  where q.Anulled == false && 
-									  q.QuestionID == request.QuestionID &&
-									  q.Event.EventHash == Hash
-									  select q).FirstOrDefault();
-				if (question == null) {
-					result.ErrorCause = "There is no such question at the selected event.";
-					result.ErrorCode = ResponseCodes.CannotFindRequiredDataItem.GetResponseCodeInt ();
-				}
+				Questions question = FetchRequestedQuestion (request.QuestionID);
 				vote.Question = question;
 				vote.Value = request.VoteUp.ConvertVote ();
 				ctx.Votes.Add (vote);
 				try {
 					ctx.SaveChanges ();
-				} catch(Exception ex) {
-					result.SetError (ResponseCodes.DataConstraintViolated, "Error while saving vote.");
+				} catch (DataException ex) {
+					// Replacing error message that is not approptiate to client eyes.
+					throw new DataException ("Error while updating data.");
 				}
+
 				result.PrepareToSend (request.RequestID);
 			}
 			return result;
@@ -118,15 +113,22 @@ namespace AskSpeakerServer.BackEnd.SubscriberRequests {
 				question.QuestionContent = request.QuestionContent;
 				question.Anulled = false;
 				ctx.Questions.Add (question);
-				try {
-					ctx.SaveChanges();
-					result.Question = question;
-				} catch (Exception ex) {
-					result.Question = null;
-					result.SetError (ResponseCodes.DataConstraintViolated, "Error while saving vote.");
-				}
+				ctx.SaveChanges();
+				result.Question = question;
 				result.PrepareToSend (request.RequestID);
 			}
+			return result;
+		}
+
+
+		private Questions FetchRequestedQuestion(AskSpeakerContext ctx,  int questionID){
+			Questions result = (from q in ctx.Questions
+				where q.Anulled == false && 
+				q.QuestionID == questionID &&
+				q.Event.EventHash == Hash
+				select q).FirstOrDefault();
+			if (result == null) 
+				throw new ApplicationException ("There is no such question at the selected event.");
 			return result;
 		}
 

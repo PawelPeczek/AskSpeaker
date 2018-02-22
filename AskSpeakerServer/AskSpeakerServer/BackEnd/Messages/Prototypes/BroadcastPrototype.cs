@@ -12,16 +12,6 @@ namespace AskSpeakerServer.BackEnd.Messages.Prototypes {
 		}
 
 		[JsonIgnore]
-		public int ErrorCode {
-			get;
-		} = 0;
-
-		[JsonIgnore]
-		public string ErrorCause {
-			get;
-		}
-
-		[JsonIgnore]
 		public int RequestID {
 			get;
 		}
@@ -31,12 +21,6 @@ namespace AskSpeakerServer.BackEnd.Messages.Prototypes {
 				Broadcast = header;
 			RequestID = requestID;
 			SetCurrentTimestamp ();
-		}
-			
-
-		public void SetError(ResponseCodes errorCode, string errorCause){
-			ErrorCode = errorCode.GetResponseCodeInt();
-			ErrorCause = errorCause;
 		}
 	}
 }

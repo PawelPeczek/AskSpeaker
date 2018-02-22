@@ -9,6 +9,9 @@ using System.Security.Cryptography;
 using AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Responses;
 using AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Requests;
 using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Responses;
+using AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Broadcast;
+using AskSpeakerServer.BackEnd.Messages.GeneralMessages;
+using System.Data;
 
 namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 	public class AdminRequestLogic {
@@ -47,85 +50,94 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 				throw new PasswordHasChangedException ("Password for user has changed during this session.");
 		}
 
-		public SuPermissionsCheckResponse CheckSuPermistions() {
+		public SuPermissionsCheckResponse CheckSuPermistions(SuPermissionsCheckRequest request) {
 			Console.WriteLine ("CheckSuPermistions()");
 			SuPermissionsCheckResponse result = new SuPermissionsCheckResponse ();
-			result.Permissions = AdminAuthenticationModule.IsUserSuperAdmin(Credentials);
+			result.PermissionsGranted = AdminAuthenticationModule.IsUserSuperAdmin(Credentials);
+			result.PrepareToSend (request.RequestID);
 			return result;
 		}
 
 
-		public EventOpenCloseRequest CloseEvent(EventOpenCloseRequest request){
-			EventOpenCloseRequest result = null;
+		public EventOpenCloseBroadcast CloseEvent(EventOpenCloseRequest request){
+			EventOpenCloseBroadcast result = new EventOpenCloseBroadcast();
 			using (AskSpeakerContext ctx = new AskSpeakerContext ()) {
 				Events selectedEvent = FetchEventWithGivenID(ctx, request.EventID);
 				if (selectedEvent.Closed == false) {
 					selectedEvent.Closed = true;
 					ctx.SaveChanges ();
-					result = request;
-				}
+					result.EventID = request.RequestID;
+				} else
+					throw new ApplicationException ("Event already closed.");
+				result.PrepareToSend (request.RequestID, AdminRequestTypes.EventClose.GetRequestString());
 			}
 			return result;
 		}
 
-		public EventOpenCloseRequest ReOpenEvent(EventOpenCloseRequest request){
-			EventOpenCloseRequest result = null;
+		public EventOpenCloseBroadcast ReOpenEvent(EventOpenCloseRequest request){
+			EventOpenCloseBroadcast result = new EventOpenCloseBroadcast();
 			using (AskSpeakerContext ctx = new AskSpeakerContext ()) {
 				Events selectedEvent = FetchEventWithGivenID(ctx, request.EventID);
 				if (selectedEvent.Closed == true) {
 					selectedEvent.Closed = false;
 					ctx.SaveChanges ();
-					result = request;
-				}
+					result.EventID = request.EventID;
+				} else 
+					throw new ApplicationException ("Event already opened.");
+				result.PrepareToSend (request.RequestID, AdminRequestTypes.EventReOpen.GetRequestString());
 			}
 			return result;
 		}
 
-		public EventEditCreateRequest EditEvent(EventEditCreateRequest request){
-			EventEditCreateRequest result;
+		public EventEditCreateBroadcast EditEvent(EventEditCreateRequest request){
+			EventEditCreateBroadcast result = new EventEditCreateBroadcast();
 			using (AskSpeakerContext ctx = new AskSpeakerContext ()) {
 				Events selectedEvent = FetchEventWithGivenID(ctx, request.Event.EventID);
 				// Hash, EventID and UserID are never copied!!!
 				selectedEvent.PropertiesCopy (request.Event);
 				try {
 					ctx.SaveChanges();
-				} catch (Exception ex){
-					throw new ApplicationException ($"Broken JSON Event-serialize contract. Details: {ex.Message}");
+					result.Event = selectedEvent;
+				} catch (DataException ex){
+					throw new DataException($"Broken JSON Event-serialize contract. Details: {ex.Message}");
 				}
-				result = new EventEditCreateRequest ();
-				result.Request = AdminRequestTypes.EventEdit.GetRequestString ();
-				result.Event = selectedEvent;
+				result.PrepareToSend(request.RequestID, AdminRequestTypes.EventEdit.GetRequestString());
 			}
 			return result;
 		}
 
-		public EventEditCreateRequest CreateEvent(EventEditCreateRequest request){
+		public EventEditCreateBroadcast CreateEvent(EventEditCreateRequest request){
+			EventEditCreateBroadcast result = new EventEditCreateBroadcast ();
 			using (AskSpeakerContext ctx = new AskSpeakerContext ()) {
-				Console.WriteLine ("Before trying to read credentials");
-				Console.WriteLine ("Is Credential fulfilled with UserID: " + Credentials.ContainsKey("UserID"));
 				Users eventOwner = FetchUserWithGivenID (ctx, (int)Credentials ["UserID"]);
 				request.Event.User = eventOwner;
-				Console.WriteLine ("After trying to read credentials");
 				do {
 					request.Event.EventHash = Events.GenerateHash ();	
 				} while(IsEventWithGivenHashExists (ctx, request.Event.EventHash));
 				ctx.Events.Add (request.Event);
 				try {
 					ctx.SaveChanges();
-				} catch (Exception ex){
-					throw new ApplicationException ($"Broken JSON Event-serialize contract. Details: {ex.Message}");
+					result.Event = request.Event;
+				}  catch (DataException ex){
+					throw new DataException($"Broken JSON Event-serialize contract. Details: {ex.Message}");
 				}
+				result.PrepareToSend(request.RequestID, AdminRequestTypes.EventCreate.GetRequestString());
 			}
-			return request;
+			return result;
 		}
 
-		public QuestionCancelRequest CancellQuestion(QuestionCancelRequest request){
+		public QuestionCancelBroadcast CancellQuestion(QuestionCancelRequest request){
+			QuestionCancelBroadcast result = new QuestionCancelBroadcast ();
 			using (AskSpeakerContext ctx = new AskSpeakerContext ()) {
 				Questions question = FetchActiveQuestionWithGivenID (ctx, request.QuestionID);
-				question.Anulled = true;
-				ctx.SaveChanges ();
+				if (!question.Anulled) {
+					question.Anulled = true;
+					ctx.SaveChanges ();
+				} else
+					throw new ApplicationException ("Question already cancelled.");
+				result.PrepareToSend (request.RequestID);
 			}
-			return request;
+			return result;
 		}
 
 		public QuestionMergeRequest MergeQuestions(QuestionMergeRequest request){

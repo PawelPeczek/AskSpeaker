@@ -130,7 +130,6 @@
     <Compile Include="BackEnd\SubscriberServer.cs" />
     <Compile Include="BackEnd\SubscriberRequests\SubscriberRequestLogic.cs" />
     <Compile Include="BackEnd\SubscriberRequests\SubscriberRequestTypes.cs" />
-    <Compile Include="BackEnd\SubscriberRequests\SubscriberRequestHandler.cs" />
     <Compile Include="BackEnd\SubscriberRequests\SubscriberRequestDispather.cs" />
     <Compile Include="BackEnd\Messages\AdministratorMessages\Requests\EventOwnershipChangeRequest.cs" />
     <Compile Include="BackEnd\Messages\AdministratorMessages\Requests\PasswordChangeRequest.cs" />
@@ -167,6 +166,9 @@
     <Compile Include="BackEnd\Messages\CommunicationChunk.cs" />
     <Compile Include="BackEnd\Messages\SubscriberMessages\Broadcast\QuestionAddBroadcast.cs" />
     <Compile Include="BackEnd\Messages\SubscriberMessages\Broadcast\QuestionVoteBroadcast.cs" />
+    <Compile Include="BackEnd\Messages\AdministratorMessages\Requests\SuPermissionsCheckRequest.cs" />
+    <Compile Include="BackEnd\PreProcessedMessage.cs" />
+    <Compile Include="BackEnd\Dispather.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

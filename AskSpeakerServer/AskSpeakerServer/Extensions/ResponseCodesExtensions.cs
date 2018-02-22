@@ -1,5 +1,6 @@
 ﻿using System;
 using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Responses;
+using AskSpeakerServer.BackEnd.Messages.GeneralMessages;
 
 namespace AskSpeakerServer.Extensions {
 	public static  class ResponseCodesExtensions {
