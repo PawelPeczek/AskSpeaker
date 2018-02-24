@@ -75,8 +75,9 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 					PrepareOperationResponseFromBroadcast(result, broadcast);
 					break;
 				}
-			} catch(JsonReaderException ex) {
-				result.ResponseToSender = PrepareErrorResponse (ResponseCodes.JSONContractError, ex.Message);
+			} catch(JsonReaderException) {
+				throw new ApplicationException ("Invalid JSON request message.");
+				//result.ResponseToSender = PrepareErrorResponse (ResponseCodes.JSONContractError, ex.Message);
 			} catch(ApplicationException ex) {
 				result.ResponseToSender = PrepareErrorResponse (ResponseCodes.ActivityAlreadyDone, ex.Message);
 			} catch(UnauthorizedAccessException ex) {

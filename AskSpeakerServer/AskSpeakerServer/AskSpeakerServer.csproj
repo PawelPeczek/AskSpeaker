@@ -172,6 +172,10 @@
     <Compile Include="BackEnd\PreProcessedMessage.cs" />
     <Compile Include="BackEnd\Messages\AdministratorMessages\Responses\EventsListResponse.cs" />
     <Compile Include="BackEnd\Messages\AdministratorMessages\Requests\EventsListRequest.cs" />
+    <Compile Include="BackEnd\Messages\AdministratorMessages\Responses\SuPasswdChangeResponse.cs" />
+    <Compile Include="BackEnd\Messages\GeneralMessages\Broadcast\QuestionBroadcast.cs" />
+    <Compile Include="BackEnd\Server.cs" />
+    <Compile Include="BackEnd\SyngnalizedServer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -195,5 +199,6 @@
     <Folder Include="BackEnd\Messages\GeneralMessages\Requests\" />
     <Folder Include="BackEnd\Messages\AdministratorMessages\Broadcast\" />
     <Folder Include="BackEnd\Messages\SubscriberMessages\Broadcast\" />
+    <Folder Include="BackEnd\Messages\GeneralMessages\Broadcast\" />
   </ItemGroup>
 </Project>

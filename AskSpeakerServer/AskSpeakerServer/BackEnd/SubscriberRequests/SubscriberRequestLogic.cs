@@ -98,8 +98,7 @@ namespace AskSpeakerServer.BackEnd.SubscriberRequests {
 					// Replacing error message that is not approptiate to client eyes.
 					throw new DataException ("Error while updating data.");
 				}
-
-				result.PrepareToSend ();
+				result.PrepareToSend (Hash);
 			}
 			return result;
 		}
@@ -115,7 +114,7 @@ namespace AskSpeakerServer.BackEnd.SubscriberRequests {
 				ctx.Questions.Add (question);
 				ctx.SaveChanges();
 				result.Question = question;
-				result.PrepareToSend ();
+				result.PrepareToSend (Hash);
 			}
 			return result;
 		}

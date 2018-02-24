@@ -140,7 +140,7 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 					ctx.SaveChanges ();
 				} else
 					throw new ApplicationException ("Question already cancelled.");
-				result.PrepareToSend ();
+				result.PrepareToSend (question.Event.EventHash);
 			}
 			return result;
 		}
@@ -156,7 +156,7 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 					throw new InvalidOperationException ("Cannot merge question with itself.");
 				slave.Merged = master;
 				ctx.SaveChanges ();
-				result.PrepareToSend ();
+				result.PrepareToSend (master.Event.EventHash);
 			}
 			return result;
 		}
@@ -171,7 +171,7 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 				} catch(DataException ex){
 					throw new DataException ($"Broken JSON Question-serialize contract. Details: {ex.Message}");
 				}
-				result.PrepareToSend ();
+				result.PrepareToSend (origin.Event.EventHash);
 			}
 			return result;
 		}
@@ -255,10 +255,10 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 		}
 
 
-		public OperationResponse ChangePasswordWithSuPermissions(PasswordChangeSuRequest request){
+		public SuPasswdChangeResponse ChangePasswordWithSuPermissions(PasswordChangeSuRequest request){
 			if (!AdminAuthenticationModule.IsUserSuperAdmin (Credentials))
 				throw new UnauthorizedAccessException ("SuperUser access required.");
-			OperationResponse result = new OperationResponse ();
+			SuPasswdChangeResponse result = new SuPasswdChangeResponse ();
 			result.Response = AdminRequestTypes.PasswordChangeWithSu.GetRequestString ();
 			using (AskSpeakerContext ctx = new AskSpeakerContext ()) {
 				Users user = FetchUserWithGivenID (ctx, request.UserID);
@@ -269,6 +269,7 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 				ctx.SaveChanges ();
 				if((int)Credentials ["UserID"] == request.UserID) Credentials ["PasswordChanged"] = true;
 				result.PrepareToSend (request.RequestID, AdminRequestTypes.PasswordChangeWithSu.GetRequestString());
+				result.UserID = user.UserID;
 			}
 			return result;
 		}

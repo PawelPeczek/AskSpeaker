@@ -15,12 +15,9 @@ using System.IO;
 namespace AskSpeakerServer {
 	class MainClass {
 		public static void Main (string[] args) {
-			AdministratorServer server = new AdministratorServer ();
-			SubscriberServer subscribers = new SubscriberServer ();
+			Server server = new Server ();
 			server.Start ();
-			subscribers.Start ();
 			Console.ReadKey ();
-			subscribers.Stop ();
 			server.Stop ();
 		}
 	}

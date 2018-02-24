@@ -16,11 +16,14 @@ using System.Threading;
 using SuperSocket.SocketBase.Config;
 using AskSpeakerServer.BackEnd.Messages;
 using AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Broadcast;
+using AskSpeakerServer.BackEnd.Messages.Prototypes;
+using AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Responses;
+using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Broadcast;
 
 namespace AskSpeakerServer.BackEnd {
-	public class AdministratorServer : WebSocketServer {
+	public class AdministratorServer : SyngnalizedServer {
 
-		private SubscriberServer SubscriberServer;
+		private SubscriberServer SubscriberServer = null;
 
 		public AdministratorServer() : base(){
 			ServerConfig serverConfig = new SuperSocket.SocketBase.Config.ServerConfig ();
@@ -47,6 +50,12 @@ namespace AskSpeakerServer.BackEnd {
 
 		public void ProvideSubscriberServer(SubscriberServer subscriberServer){
 			SubscriberServer = subscriberServer;
+		}
+
+		public override bool Start () {
+			if (SubscriberServer == null)
+				throw new ApplicationException ("Cannot start AdministratorServer server without providing SubscriberServer");
+			return base.Start ();
 		}
 
 		private void HandleNewSession(WebSocketSession session){
@@ -128,13 +137,29 @@ namespace AskSpeakerServer.BackEnd {
 				case AdminRequestTypes.SuPermissionsCheck:
 				case AdminRequestTypes.UserCreate:
 				case AdminRequestTypes.PasswordChange:
-				case AdminRequestTypes.PasswordChangeWithSu:
 				case AdminRequestTypes.UserDelete:
 					session.Send (JsonSerialize (response.ResponseToSender));
 					break;
 				case AdminRequestTypes.EventChangeOwnership:
 					session.Send (JsonSerialize (response.ResponseToSender));
 					InformNewEventOwnerIfConnected (session, (EventOwnershipChangeBroadcast)response.BroadcastResponse);
+					break;
+				case AdminRequestTypes.EventEdit:
+				case AdminRequestTypes.EventClose:
+				case AdminRequestTypes.EventCreate:
+				case AdminRequestTypes.EventReOpen:
+					session.Send (JsonSerialize (response.ResponseToSender));
+					InformSuperAdminIfConnected (response.BroadcastResponse);
+					break;
+				case AdminRequestTypes.QuestionCancell:
+				case AdminRequestTypes.QuestionEdit:
+				case AdminRequestTypes.QuestionMerge:
+					session.Send (JsonSerialize (response.ResponseToSender));
+					BroadcastInfoToSubscribers ((QuestionBroadcast)response.BroadcastResponse);
+					break;
+				case AdminRequestTypes.PasswordChangeWithSu:
+					MarkPasswdChangeIfConnected ((SuPasswdChangeResponse)response.ResponseToSender);
+					session.Send (JsonSerialize (response.ResponseToSender));
 					break;
 			}
 		}
@@ -146,6 +171,26 @@ namespace AskSpeakerServer.BackEnd {
 				targetSession.Send (JsonSerialize (message));
 		}
 
+		private void InformSuperAdminIfConnected(BroadcastPrototype broadcast){
+			IEnumerable<WebSocketSession> suSessions = 
+				GetSessions ((s) => s.Items.ContainsKey ("Privilages") && (string)s.Items["Privilages"] == "SuperAdmin");
+			foreach (WebSocketSession session in suSessions) {
+				session.Send (JsonSerialize (broadcast));
+			}
+		}
+
+		private async void BroadcastInfoToSubscribers(QuestionBroadcast broadcast){
+			SubscriberServer.Synchro.WaitOne ();
+			await Task.Run(() => SubscriberServer.PropagateMessage(broadcast));
+		}
+
+		private void MarkPasswdChangeIfConnected(SuPasswdChangeResponse response){
+			WebSocketSession sessionChgPasswd = 
+				GetSessions ((s) => s.Items.ContainsKey ("UserID") && (int)s.Items["UserID"] == response.UserID)
+							.FirstOrDefault();
+			if(sessionChgPasswd != null)
+				sessionChgPasswd.Items ["PasswordChanged"] = true;
+		}
 
 	}
 }

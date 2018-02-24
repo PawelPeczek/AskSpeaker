@@ -42,8 +42,9 @@ namespace AskSpeakerServer.BackEnd.SubscriberRequests {
 					default:
 						throw new NotImplementedException();
 				}
-			} catch(JsonReaderException ex) {
-				result.ResponseToSender = PrepareErrorResponse (ResponseCodes.JSONContractError, ex.Message);
+			} catch(JsonReaderException) {
+				throw new ApplicationException ("Invalid JSON request message.");
+				//result.ResponseToSender = PrepareErrorResponse (ResponseCodes.JSONContractError, ex.Message);
 			} catch(KeyNotFoundException ex) {
 				result.ResponseToSender = PrepareErrorResponse (ResponseCodes.CannotFindRequiredDataItem, ex.Message);
 			} catch(UnauthorizedAccessException ex) {
