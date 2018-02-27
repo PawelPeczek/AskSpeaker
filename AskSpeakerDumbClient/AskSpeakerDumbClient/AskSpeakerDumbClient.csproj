@@ -84,24 +84,66 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Messages\Bidirectional\EventEditCreateMessage.cs" />
-    <Compile Include="Messages\Bidirectional\QuestionEditMessage.cs" />
-    <Compile Include="Messages\Bidirectional\QuestionMergeMessage.cs" />
-    <Compile Include="Messages\Requests\PasswordChangeRequest.cs" />
-    <Compile Include="Messages\Requests\PasswordChangeSuRequest.cs" />
-    <Compile Include="Messages\Requests\UserCreateRequest.cs" />
-    <Compile Include="Messages\Requests\UserDeleteRequest.cs" />
-    <Compile Include="Messages\Responses\OperationResponse.cs" />
-    <Compile Include="Messages\Responses\SuPermissionsCheckResponse.cs" />
-    <Compile Include="AdministratorRequests\AdminRequestTypes.cs" />
-    <Compile Include="Messages\Requests\SuPermissionsCheckRequest.cs" />
-    <Compile Include="Messages\Bidirectional\QuestionCancelMessage.cs" />
     <Compile Include="EntityFramework\Entities\Events.cs" />
-    <Compile Include="Messages\Bidirectional\EventOpenCloseMessage.cs" />
-    <Compile Include="Messages\Requests\EventOwnershipChangeRequest.cs" />
+    <Compile Include="Messages\CommunicationChunk.cs" />
+    <Compile Include="Messages\AdministratorMessages\Broadcast\EventEditCreateBroadcast.cs" />
+    <Compile Include="Messages\AdministratorMessages\Broadcast\EventOpenCloseBroadcast.cs" />
+    <Compile Include="Messages\AdministratorMessages\Broadcast\EventOwnershipChangeBroadcast.cs" />
+    <Compile Include="Messages\AdministratorMessages\Broadcast\QuestionCancelBroadcast.cs" />
+    <Compile Include="Messages\AdministratorMessages\Broadcast\QuestionEditBroadcast.cs" />
+    <Compile Include="Messages\AdministratorMessages\Broadcast\QuestionMergeBroadcast.cs" />
+    <Compile Include="Messages\AdministratorMessages\Requests\EventEditCreateRequest.cs" />
+    <Compile Include="Messages\AdministratorMessages\Requests\EventOpenCloseRequest.cs" />
+    <Compile Include="Messages\AdministratorMessages\Requests\EventOwnershipChangeRequest.cs" />
+    <Compile Include="Messages\AdministratorMessages\Requests\EventsListRequest.cs" />
+    <Compile Include="Messages\AdministratorMessages\Requests\PasswordChangeRequest.cs" />
+    <Compile Include="Messages\AdministratorMessages\Requests\PasswordChangeSuRequest.cs" />
+    <Compile Include="Messages\AdministratorMessages\Requests\QuestionCancelRequest.cs" />
+    <Compile Include="Messages\AdministratorMessages\Requests\QuestionEditRequest.cs" />
+    <Compile Include="Messages\AdministratorMessages\Requests\QuestionMergeRequest.cs" />
+    <Compile Include="Messages\AdministratorMessages\Requests\SuPermissionsCheckRequest.cs" />
+    <Compile Include="Messages\AdministratorMessages\Requests\UserCreateRequest.cs" />
+    <Compile Include="Messages\AdministratorMessages\Requests\UserDeleteRequest.cs" />
+    <Compile Include="Messages\AdministratorMessages\Responses\EventsListResponse.cs" />
+    <Compile Include="Messages\AdministratorMessages\Responses\SuPasswdChangeResponse.cs" />
+    <Compile Include="Messages\AdministratorMessages\Responses\SuPermissionsCheckResponse.cs" />
+    <Compile Include="Messages\GeneralMessages\ResponseCodes.cs" />
+    <Compile Include="Messages\GeneralMessages\Broadcast\QuestionBroadcast.cs" />
+    <Compile Include="Messages\GeneralMessages\Requests\BaseRequest.cs" />
+    <Compile Include="Messages\GeneralMessages\Responses\OperationResponse.cs" />
+    <Compile Include="Messages\Prototypes\BroadcastPrototype.cs" />
+    <Compile Include="Messages\Prototypes\RequestPrototype.cs" />
+    <Compile Include="Messages\Prototypes\ResponsePrototype.cs" />
+    <Compile Include="Messages\Prototypes\TimeRegisteredCommunicationChunkPrototype.cs" />
+    <Compile Include="Messages\SubscriberMessages\Broadcast\QuestionAddBroadcast.cs" />
+    <Compile Include="Messages\SubscriberMessages\Broadcast\QuestionVoteBroadcast.cs" />
+    <Compile Include="Messages\SubscriberMessages\Requests\QuestionAddRequest.cs" />
+    <Compile Include="Messages\SubscriberMessages\Requests\RenewQuestionsRequest.cs" />
+    <Compile Include="Messages\SubscriberMessages\Requests\ReportQuestionRequest.cs" />
+    <Compile Include="Messages\SubscriberMessages\Requests\VoteQuestionRequest.cs" />
+    <Compile Include="Messages\SubscriberMessages\Responses\QuestionsListResponse.cs" />
+    <Compile Include="SubscriberRequests\SubscriberRequestTypes.cs" />
+    <Compile Include="AdministratorRequests\AdminRequestTypes.cs" />
+    <Compile Include="Clients\AdministratorClient\SimpleAdmin.cs" />
+    <Compile Include="Clients\GeneralClient.cs" />
+    <Compile Include="Extensions\BooleanExtensions.cs" />
+    <Compile Include="Extensions\DateTimeExtensions.cs" />
+    <Compile Include="Extensions\ResponseCodesExtensions.cs" />
+    <Compile Include="Clients\SubscriberClient\SimpleSubscriber.cs" />
+    <Compile Include="Clients\AdministratorClient\AdminDialog.cs" />
+    <Compile Include="EntityFramework\Entities\Questions.cs" />
+    <Compile Include="Clients\GeneralDialog.cs" />
+    <Compile Include="Clients\AdministratorClient\Credentials.cs" />
+    <Compile Include="Clients\AdministratorClient\AdminRequestMaker.cs" />
+    <Compile Include="Clients\RequestTracker.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Clients\" />
+    <Folder Include="Clients\AdministratorClient\" />
+    <Folder Include="Clients\SubscriberClient\" />
   </ItemGroup>
 </Project>

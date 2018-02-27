@@ -31,7 +31,6 @@ namespace AskSpeakerServer.EntityFramework {
 		}
 
 		public AskSpeakerContext () : base("name=AskSpeakerContext") {
-			
 		}
 	}
 }

@@ -1,8 +1,33 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
 
-namespace AskSpeakerServer {
+namespace AskSpeakerServer.EntityFramework.Entities {
 	public class Issues {
-		public Issues () {
+
+		[Key]
+		public int IssueID {
+			get;
+			set;
+		}
+
+		[Key]
+		public int QuestionID {
+			get;
+			set;
+		}
+
+		[Required]
+		[MaxLength(512)]
+		public string IssueContent {
+			get;
+			set;
+		}
+
+		[JsonIgnore]
+		public virtual Questions Question {
+			get;
+			set;
 		}
 	}
 }

@@ -329,7 +329,7 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 			if (user == null)
 				throw new KeyNotFoundException ("No user found.");
 			return user;
-		}
+		} 
 
 		private bool IsEventWithGivenHashExists(AskSpeakerContext ctx, string hash){
 			return (

@@ -15,7 +15,7 @@ using System.Data;
 namespace AskSpeakerServer.BackEnd.SubscriberRequests {
 	public class SubscriberRequestLogic {
 
-		public static string GetQuestionsJSON(string hash, int requestID = -1){
+		public static string GetQuestionsJSON(string hash, int requestID = -1, bool extendedList = false){
 			string result;
 			using (AskSpeakerContext ctx = new AskSpeakerContext ()) {
 				Events chosenEvent = FetchEventWithGivenHash (ctx, hash);

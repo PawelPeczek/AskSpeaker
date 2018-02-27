@@ -9,6 +9,7 @@ namespace AskSpeakerServer.EntityFramework.Entities {
 		public Questions () {
 			Anulled = false;
 			Votes = new HashSet<Votes>();
+			Issues = new HashSet<Issues> ();
 			VotesSum = 0;
 		}
 
@@ -71,6 +72,24 @@ namespace AskSpeakerServer.EntityFramework.Entities {
 			set;
 		} = 0;
 
+		[NotMapped]
+		public int IssuesNumber {
+			get;
+			set;
+		} = 0;
+
+		[JsonIgnore]
+		public virtual ICollection<Issues> Issues {
+			get;
+			set;
+		}
+
+		private bool IssuesNumberSerializeFlag = false;
+
+		public void SetIssuesNumberSerializeFlag(){
+			IssuesNumberSerializeFlag = true;
+		}
+
 		public override bool Equals (object obj) {
 			if (obj == null)
 				return false;
@@ -88,7 +107,11 @@ namespace AskSpeakerServer.EntityFramework.Entities {
 				return QuestionID.GetHashCode ();
 			}
 		}
-		
+
+
+		public bool ShouldSerializeIssuesNumber(){
+			return IssuesNumberSerializeFlag;
+		}
 	}
 }
 
