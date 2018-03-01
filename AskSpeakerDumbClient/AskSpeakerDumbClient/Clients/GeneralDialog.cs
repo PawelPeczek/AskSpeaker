@@ -1,4 +1,5 @@
 ﻿using System;
+using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Requests;
 
 namespace AskSpeakerDumbClient {
 	public abstract class GeneralDialog {
@@ -15,8 +16,8 @@ namespace AskSpeakerDumbClient {
 
 		public abstract void StartDialog ();
 
-		public RequestTracker gerTequestTracker(){
-			return RequestTracker;
+		public void AddRequestToTracker(BaseRequest request){
+			RequestTracker.AddRequest (request);
 		}
 
 		protected string ReadMaskedPassword(){
@@ -37,10 +38,9 @@ namespace AskSpeakerDumbClient {
 			return pass;
 		}
 	
-		protected void ColorPrintMessage(string message, ConsoleColor color, bool withNewLine = true){
+		protected void ColorPrintMessage(string message, ConsoleColor color){
 			Console.ForegroundColor = color;
-			if (withNewLine) Console.WriteLine (message);
-			else Console.Write (message);
+			Console.WriteLine (message);
 			Console.ForegroundColor = orignalForegroundColor;
 		}
 

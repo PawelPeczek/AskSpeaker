@@ -6,11 +6,6 @@ using Newtonsoft.Json;
 namespace AskSpeakerServer.EntityFramework.Entities {
 	public class Events {
 
-		public int EventID {
-			get;
-			set;
-		}
-
 		public string EventHash {
 			get;
 			set;

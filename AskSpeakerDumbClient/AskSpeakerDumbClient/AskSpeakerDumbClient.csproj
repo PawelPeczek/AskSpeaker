@@ -87,13 +87,11 @@
     <Compile Include="EntityFramework\Entities\Events.cs" />
     <Compile Include="Messages\CommunicationChunk.cs" />
     <Compile Include="Messages\AdministratorMessages\Broadcast\EventEditCreateBroadcast.cs" />
-    <Compile Include="Messages\AdministratorMessages\Broadcast\EventOpenCloseBroadcast.cs" />
     <Compile Include="Messages\AdministratorMessages\Broadcast\EventOwnershipChangeBroadcast.cs" />
     <Compile Include="Messages\AdministratorMessages\Broadcast\QuestionCancelBroadcast.cs" />
     <Compile Include="Messages\AdministratorMessages\Broadcast\QuestionEditBroadcast.cs" />
     <Compile Include="Messages\AdministratorMessages\Broadcast\QuestionMergeBroadcast.cs" />
     <Compile Include="Messages\AdministratorMessages\Requests\EventEditCreateRequest.cs" />
-    <Compile Include="Messages\AdministratorMessages\Requests\EventOpenCloseRequest.cs" />
     <Compile Include="Messages\AdministratorMessages\Requests\EventOwnershipChangeRequest.cs" />
     <Compile Include="Messages\AdministratorMessages\Requests\EventsListRequest.cs" />
     <Compile Include="Messages\AdministratorMessages\Requests\PasswordChangeRequest.cs" />
@@ -136,6 +134,24 @@
     <Compile Include="Clients\AdministratorClient\Credentials.cs" />
     <Compile Include="Clients\AdministratorClient\AdminRequestMaker.cs" />
     <Compile Include="Clients\RequestTracker.cs" />
+    <Compile Include="Messages\GeneralMessages\Requests\RequestWithUserID.cs" />
+    <Compile Include="Messages\GeneralMessages\Requests\RequestWithQuestionID.cs" />
+    <Compile Include="Messages\GeneralMessages\Broadcast\BroadcastWIthEventID.cs" />
+    <Compile Include="Messages\GeneralMessages\Broadcast\BroadcastWithQuestionID.cs" />
+    <Compile Include="AdministratorRequests\RequestImplementations\Utils\RequestWithEventIDUtil.cs" />
+    <Compile Include="AdministratorRequests\RequestImplementations\Utils\RequestWIthQuestionIDUtil.cs" />
+    <Compile Include="AdministratorRequests\RequestImplementations\Utils\RequestWithUserIDUtil.cs" />
+    <Compile Include="Messages\GeneralMessages\Requests\RequestWithEventID.cs" />
+    <Compile Include="AdministratorRequests\RequestImplementations\EventChangeOwnershipRequestMaker.cs" />
+    <Compile Include="AdministratorRequests\RequestImplementations\EventOpenCloseRequestMaker.cs" />
+    <Compile Include="AdministratorRequests\RequestImplementations\EventReOpenRequestMaker.cs" />
+    <Compile Include="AdministratorRequests\RequestImplementations\EventCloseRequestMaker.cs" />
+    <Compile Include="AdministratorRequests\RequestImplementations\EventEditCreateRequestMaker.cs" />
+    <Compile Include="AdministratorRequests\RequestMaker.cs" />
+    <Compile Include="AdministratorRequests\RequestImplementations\EventEditRequestMaker.cs" />
+    <Compile Include="AdministratorRequests\RequestImplementations\EventCreateRequestMaker.cs" />
+    <Compile Include="AdministratorRequests\RequestMakerFactory.cs" />
+    <Compile Include="AdministratorRequests\RequestMakerFactoryImpl.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -145,5 +161,7 @@
     <Folder Include="Clients\" />
     <Folder Include="Clients\AdministratorClient\" />
     <Folder Include="Clients\SubscriberClient\" />
+    <Folder Include="AdministratorRequests\RequestImplementations\" />
+    <Folder Include="AdministratorRequests\RequestImplementations\Utils\" />
   </ItemGroup>
 </Project>
