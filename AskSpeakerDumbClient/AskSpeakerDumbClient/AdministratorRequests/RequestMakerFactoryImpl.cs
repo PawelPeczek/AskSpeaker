@@ -22,6 +22,33 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests  {
 				case AdminRequestTypes.EventEdit:
 					result = new EventEditRequestMaker ();
 					break;
+				case AdminRequestTypes.EventsInfoRenew:
+					result = new EventsInfoRenevRequestMaker ();
+					break;
+				case AdminRequestTypes.PasswordChange:
+					result = new PasswordChangeRequestMaker ();
+					break;
+				case AdminRequestTypes.PasswordChangeWithSu:
+					result = new PasswordChangeWithSuRequestMaker ();
+					break;
+				case AdminRequestTypes.QuestionCancell:
+					result = new QuestionCancelRequestMaker ();
+					break;
+				case AdminRequestTypes.QuestionEdit:
+					result = new QuestionEditRequestMaker ();
+					break;
+				case AdminRequestTypes.QuestionMerge:
+					result = new QuestionMergeRequestMaker ();
+					break;
+				case AdminRequestTypes.SuPermissionsCheck:
+					result = new SuPermissionsCheckRequestMaker ();
+					break;
+				case AdminRequestTypes.UserCreate:
+					result = new UserCreateRequestMaker ();
+					break;
+				case AdminRequestTypes.UserDelete:
+					result = new UserDeleteRequestMaker ();
+					break;
 				default:
 					throw new NotImplementedException ("Not jet implemented");
 			}

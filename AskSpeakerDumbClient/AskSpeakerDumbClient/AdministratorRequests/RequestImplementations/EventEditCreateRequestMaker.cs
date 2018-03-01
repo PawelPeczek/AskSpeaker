@@ -6,12 +6,12 @@ using AskSpeakerServer.EntityFramework.Entities;
 namespace AskSpeakerServer.BackEnd.AdministratorRequests.RequestImplementations  {
 	public abstract class EventEditCreateRequestMaker : RequestMaker {
 
-		protected abstract void ProvideRequestNameToRequestObject(EventEditCreateRequest request);
+		protected abstract void ProvideRequestNameToRequest(EventEditCreateRequest request);
 
 		protected override BaseRequest MakeRequest () {
 			EventEditCreateRequest result = new EventEditCreateRequest ();
 			FulfillEventObject (result.Event);
-			ProvideRequestNameToRequestObject (result);
+			ProvideRequestNameToRequest (result);
 			return result;
 		}
 

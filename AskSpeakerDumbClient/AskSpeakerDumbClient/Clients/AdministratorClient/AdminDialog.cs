@@ -1,5 +1,7 @@
 ﻿using System;
 using AskSpeakerServer.BackEnd.AdministratorRequests;
+using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Requests;
+using Newtonsoft.Json;
 
 namespace AskSpeakerDumbClient.Clients.AdministratorClient {
 	public class AdminDialog : GeneralDialog {
@@ -43,12 +45,20 @@ namespace AskSpeakerDumbClient.Clients.AdministratorClient {
 				if (int.TryParse (option, out choosenNumber) && choosenNumber >= 0 && choosenNumber < reqTypes.Length) {
 					AdminRequestTypes choosenType = (AdminRequestTypes)reqTypes.GetValue(choosenNumber);
 					Console.WriteLine ($"Choosen type: {choosenType.ToString()}");
+					ExecuteUserCommand (choosenType);
 				} else {
 					ColorPrintMessage ("Invalid request number!\n", ConsoleColor.Red);
 				}
 				Console.WriteLine ("\nPress [Any key] to continue.\n");
 				Console.ReadKey ();
 			}
+		}
+
+		private void ExecuteUserCommand(AdminRequestTypes choosenType){
+			AdminRequestMaker requestMaker = new AdminRequestMaker (choosenType, this);
+			BaseRequest request = requestMaker.PrepareRequest ();
+			Console.WriteLine ("Request:");
+			Console.WriteLine (JsonConvert.SerializeObject(request));
 		}
 	}
 }

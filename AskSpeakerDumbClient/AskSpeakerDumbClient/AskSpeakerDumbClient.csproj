@@ -138,9 +138,6 @@
     <Compile Include="Messages\GeneralMessages\Requests\RequestWithQuestionID.cs" />
     <Compile Include="Messages\GeneralMessages\Broadcast\BroadcastWIthEventID.cs" />
     <Compile Include="Messages\GeneralMessages\Broadcast\BroadcastWithQuestionID.cs" />
-    <Compile Include="AdministratorRequests\RequestImplementations\Utils\RequestWithEventIDUtil.cs" />
-    <Compile Include="AdministratorRequests\RequestImplementations\Utils\RequestWIthQuestionIDUtil.cs" />
-    <Compile Include="AdministratorRequests\RequestImplementations\Utils\RequestWithUserIDUtil.cs" />
     <Compile Include="Messages\GeneralMessages\Requests\RequestWithEventID.cs" />
     <Compile Include="AdministratorRequests\RequestImplementations\EventChangeOwnershipRequestMaker.cs" />
     <Compile Include="AdministratorRequests\RequestImplementations\EventOpenCloseRequestMaker.cs" />
@@ -152,6 +149,16 @@
     <Compile Include="AdministratorRequests\RequestImplementations\EventCreateRequestMaker.cs" />
     <Compile Include="AdministratorRequests\RequestMakerFactory.cs" />
     <Compile Include="AdministratorRequests\RequestMakerFactoryImpl.cs" />
+    <Compile Include="AdministratorRequests\RequestImplementations\EventsInfoRenevRequestMaker.cs" />
+    <Compile Include="AdministratorRequests\RequestImplementations\PasswordChangeRequestMaker.cs" />
+    <Compile Include="AdministratorRequests\RequestImplementations\PasswordChangeWithSuRequestMaker.cs" />
+    <Compile Include="AdministratorRequests\RequestImplementations\QuestionEditRequestMaker.cs" />
+    <Compile Include="AdministratorRequests\RequestImplementations\QuestionCancelRequestMaker.cs" />
+    <Compile Include="AdministratorRequests\RequestImplementations\QuestionMergeRequestMaker.cs" />
+    <Compile Include="AdministratorRequests\RequestImplementations\Utils\RequestWithIDFieldsMaker.cs" />
+    <Compile Include="AdministratorRequests\RequestImplementations\SuPermissionsCheckRequestMaker.cs" />
+    <Compile Include="AdministratorRequests\RequestImplementations\UserCreateRequestMaker.cs" />
+    <Compile Include="AdministratorRequests\RequestImplementations\UserDeleteRequestMaker.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

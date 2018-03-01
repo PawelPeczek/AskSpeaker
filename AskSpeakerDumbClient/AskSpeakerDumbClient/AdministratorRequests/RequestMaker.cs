@@ -10,6 +10,10 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 		}
 
 		protected abstract BaseRequest MakeRequest ();
+	
+		protected virtual void PrintMethodDialogHeader(){
+			Console.WriteLine ($"{GetType().Name} editor:");
+		}
 
 		protected string ProceedStringValueGettingDialog(string valueName){
 			Console.Write ($"Enter {valueName}: ");
@@ -28,16 +32,6 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 			return result;
 		}
 
-		protected int TryParseID(string value, string IDName){
-			int result;
-			if (!int.TryParse (value, out result) || result < 0)
-				throw new ArgumentException ($"Value is not a valid {IDName}");
-			return result;
-		}
-
-		protected void PrintMethodDialogHeader(){
-			Console.WriteLine ($"{GetType().Name} editor:");
-		}
 	}
 }
 

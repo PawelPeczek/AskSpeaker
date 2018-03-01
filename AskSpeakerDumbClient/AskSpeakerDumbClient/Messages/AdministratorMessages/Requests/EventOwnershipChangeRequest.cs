@@ -9,7 +9,7 @@ namespace AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Requests {
 			Request = AdminRequestTypes.EventChangeOwnership.GetRequestString(); 
 		}
 
-		public int newOwnerID {
+		public int NewOwnerID {
 			get;
 			set;
 		}

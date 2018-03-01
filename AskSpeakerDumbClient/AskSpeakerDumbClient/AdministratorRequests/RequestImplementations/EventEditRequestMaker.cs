@@ -9,7 +9,7 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests.RequestImplementations 
 			eventObject.EventHash = ProceedStringValueGettingDialog ("EventHash");
 		}
 
-		protected override void ProvideRequestNameToRequestObject (EventEditCreateRequest request) {
+		protected override void ProvideRequestNameToRequest (EventEditCreateRequest request) {
 			request.Request = AdminRequestTypes.EventEdit.GetRequestString ();
 		}
 

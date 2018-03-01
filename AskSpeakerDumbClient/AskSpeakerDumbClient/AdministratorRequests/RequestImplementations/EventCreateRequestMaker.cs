@@ -4,7 +4,7 @@ using AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Requests;
 
 namespace AskSpeakerServer.BackEnd.AdministratorRequests.RequestImplementations {
 	public class EventCreateRequestMaker : EventEditCreateRequestMaker {
-		protected override void ProvideRequestNameToRequestObject (EventEditCreateRequest request) {
+		protected override void ProvideRequestNameToRequest (EventEditCreateRequest request) {
 			request.Request = AdminRequestTypes.EventCreate.GetRequestString ();
 		}
 	}
