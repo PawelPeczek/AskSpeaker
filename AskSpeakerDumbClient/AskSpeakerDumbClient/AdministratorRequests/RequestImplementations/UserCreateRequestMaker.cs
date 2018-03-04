@@ -1,9 +1,10 @@
 ﻿using System;
 using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Requests;
 using AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Requests;
+using AskSpeakerDumbClient.Clients;
 
 namespace AskSpeakerServer.BackEnd.AdministratorRequests.RequestImplementations {
-	public class UserCreateRequestMaker : RequestMaker {
+	public class UserCreateRequestMaker : RequestMaker<AdminRequestTypes> {
 
 		protected override BaseRequest MakeRequest () {
 			UserCreateRequest request = new UserCreateRequest ();

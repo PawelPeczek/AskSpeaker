@@ -1,8 +1,8 @@
 ﻿using System;
 using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Requests;
 
-namespace AskSpeakerServer.BackEnd.AdministratorRequests {
-	public abstract class RequestMaker {
+namespace AskSpeakerDumbClient.Clients {
+	public abstract class RequestMaker<T> {
 
 		public BaseRequest PrepareRequest (){
 			PrintMethodDialogHeader ();
@@ -10,7 +10,7 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 		}
 
 		protected abstract BaseRequest MakeRequest ();
-	
+
 		protected virtual void PrintMethodDialogHeader(){
 			Console.WriteLine ($"{GetType().Name} editor:");
 		}
@@ -18,7 +18,6 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 		protected string ProceedStringValueGettingDialog(string valueName){
 			Console.Write ($"Enter {valueName}: ");
 			string result = Console.ReadLine ();
-			Console.WriteLine ();
 			return result;
 		}
 

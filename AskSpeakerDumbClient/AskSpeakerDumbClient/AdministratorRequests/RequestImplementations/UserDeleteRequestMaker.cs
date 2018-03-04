@@ -1,11 +1,12 @@
 ﻿using System;
 using AskSpeakerServer.BackEnd.AdministratorRequests.RequestImplementations.Utils;
 using AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Requests;
+using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Requests;
 
 namespace AskSpeakerServer.BackEnd.AdministratorRequests.RequestImplementations  {
 	public class UserDeleteRequestMaker : RequestWithIDFieldsMaker {
 
-		protected override AskSpeakerServer.BackEnd.Messages.GeneralMessages.Requests.BaseRequest MakeRequest () {
+		protected override BaseRequest MakeRequest () {
 			UserDeleteRequest request = new UserDeleteRequest ();
 			FulfillRequest (request);
 			return request;

@@ -1,9 +1,10 @@
 ﻿using System;
 using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Requests;
 using AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Requests;
+using AskSpeakerDumbClient.Clients;
 
 namespace AskSpeakerServer.BackEnd.AdministratorRequests.RequestImplementations {
-	public class SuPermissionsCheckRequestMaker : RequestMaker {
+	public class SuPermissionsCheckRequestMaker : RequestMaker<AdminRequestTypes> {
 		
 		protected override BaseRequest MakeRequest () {
 			return new SuPermissionsCheckRequest ();

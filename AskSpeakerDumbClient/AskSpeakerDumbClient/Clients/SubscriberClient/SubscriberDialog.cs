@@ -1,16 +1,19 @@
 ﻿using System;
-using AskSpeakerServer.BackEnd.AdministratorRequests;
+using AskSpeakerServer.BackEnd.SubscriberRequests;
+using System.Threading;
 using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Requests;
 using Newtonsoft.Json;
-using System.Threading;
 
-namespace AskSpeakerDumbClient.Clients.AdministratorClient {
-	public class AdminDialog : GeneralDialog<AdminRequestTypes> {
+namespace AskSpeakerDumbClient.Clients.SubscriberClient {
+	public class SubscriberDialog : GeneralDialog<SubscriberRequestTypes> {
+		
+		public SubscriberDialog () {
+			RequestTypes = Enum.GetValues(typeof(SubscriberRequestTypes));
+		}
 
 		public override void StartDialog(){
-			Credentials credentials = ProceedCredentialsDialog ();
 			ManualResetEvent syncro = new ManualResetEvent (false);
-			SimpleAdmin adminClient = new SimpleAdmin (credentials, syncro);
+			SimpleSubscriber adminClient = new SimpleSubscriber (syncro);
 			adminClient.Open ();
 			syncro.WaitOne ();
 			if(!adminClient.IsClientConnected())
@@ -19,17 +22,8 @@ namespace AskSpeakerDumbClient.Clients.AdministratorClient {
 			adminClient.Close ();
 		}
 
-		private Credentials ProceedCredentialsDialog(){
-			Credentials result = new Credentials ();
-			Console.Write ("[Login] ");
-			result.Login = Console.ReadLine ();
-			Console.Write ("[Password] ");
-			result.Password = ReadMaskedPassword ();
-			Console.WriteLine ();
-			return result;
-		}
-			
-		protected override string ExecuteUserCommand (AdminRequestTypes choosenType) {
+
+		protected override string ExecuteUserCommand (SubscriberRequestTypes choosenType) {
 			SubscriberRequestHandler requestHandler = new SubscriberRequestHandler (choosenType, this);
 			BaseRequest request = requestHandler.PrepareRequest ();
 			Console.WriteLine ("Request:");

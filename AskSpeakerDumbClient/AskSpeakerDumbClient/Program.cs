@@ -16,7 +16,12 @@ namespace AskSpeakerDumbClient {
 
 			Console.WriteLine ("Client start");
 			AdminDialog dialog = new AdminDialog ();
-			dialog.StartDialog ();
+			try {
+				dialog.StartDialog ();
+			} catch (ApplicationException ex){
+				Console.WriteLine ($"Program stopped because of some issue. Details:\n{ex.Message}");
+			}
+
 
 //			Console.WriteLine ("Hello World!");
 //			List<KeyValuePair<String, String>> l = new List<KeyValuePair<String, String>> ();

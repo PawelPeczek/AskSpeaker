@@ -2,9 +2,10 @@
 using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Requests;
 using AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Requests;
 using AskSpeakerServer.EntityFramework.Entities;
+using AskSpeakerDumbClient.Clients;
 
 namespace AskSpeakerServer.BackEnd.AdministratorRequests.RequestImplementations  {
-	public abstract class EventEditCreateRequestMaker : RequestMaker {
+	public abstract class EventEditCreateRequestMaker : RequestMaker<AdminRequestTypes> {
 
 		protected abstract void ProvideRequestNameToRequest(EventEditCreateRequest request);
 

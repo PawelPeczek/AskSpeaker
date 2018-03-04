@@ -1,11 +1,12 @@
 ﻿using System;
 using AskSpeakerServer.BackEnd.AdministratorRequests.RequestImplementations;
+using AskSpeakerDumbClient.Clients;
 
 namespace AskSpeakerServer.BackEnd.AdministratorRequests  {
-	public class RequestMakerFactoryImpl : RequestMakerFactory {
+	public class AdminRequestMakerFactoryImpl : RequestMakerFactory<AdminRequestTypes> {
 
-		public RequestMaker MakeRequest (AdminRequestTypes requestType) {
-			RequestMaker result;
+		public RequestMaker<AdminRequestTypes> MakeRequest (AdminRequestTypes requestType) {
+			RequestMaker<AdminRequestTypes> result;
 			switch (requestType) {
 				case AdminRequestTypes.EventChangeOwnership:
 					result = new EventChangeOwnershipRequestMaker ();

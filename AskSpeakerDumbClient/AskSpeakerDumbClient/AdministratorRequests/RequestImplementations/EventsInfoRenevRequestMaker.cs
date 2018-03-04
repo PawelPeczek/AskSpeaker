@@ -2,9 +2,10 @@
 using AskSpeakerServer.BackEnd.AdministratorRequests;
 using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Requests;
 using AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Requests;
+using AskSpeakerDumbClient.Clients;
 
 namespace AskSpeakerServer.BackEnd.AdministratorRequests.RequestImplementations {
-	public class EventsInfoRenevRequestMaker : RequestMaker {
+	public class EventsInfoRenevRequestMaker : RequestMaker<AdminRequestTypes> {
 		
 		protected override BaseRequest MakeRequest () {
 			return new EventsListRequest ();

@@ -132,7 +132,6 @@
     <Compile Include="EntityFramework\Entities\Questions.cs" />
     <Compile Include="Clients\GeneralDialog.cs" />
     <Compile Include="Clients\AdministratorClient\Credentials.cs" />
-    <Compile Include="Clients\AdministratorClient\AdminRequestMaker.cs" />
     <Compile Include="Clients\RequestTracker.cs" />
     <Compile Include="Messages\GeneralMessages\Requests\RequestWithUserID.cs" />
     <Compile Include="Messages\GeneralMessages\Requests\RequestWithQuestionID.cs" />
@@ -144,11 +143,8 @@
     <Compile Include="AdministratorRequests\RequestImplementations\EventReOpenRequestMaker.cs" />
     <Compile Include="AdministratorRequests\RequestImplementations\EventCloseRequestMaker.cs" />
     <Compile Include="AdministratorRequests\RequestImplementations\EventEditCreateRequestMaker.cs" />
-    <Compile Include="AdministratorRequests\RequestMaker.cs" />
     <Compile Include="AdministratorRequests\RequestImplementations\EventEditRequestMaker.cs" />
     <Compile Include="AdministratorRequests\RequestImplementations\EventCreateRequestMaker.cs" />
-    <Compile Include="AdministratorRequests\RequestMakerFactory.cs" />
-    <Compile Include="AdministratorRequests\RequestMakerFactoryImpl.cs" />
     <Compile Include="AdministratorRequests\RequestImplementations\EventsInfoRenevRequestMaker.cs" />
     <Compile Include="AdministratorRequests\RequestImplementations\PasswordChangeRequestMaker.cs" />
     <Compile Include="AdministratorRequests\RequestImplementations\PasswordChangeWithSuRequestMaker.cs" />
@@ -159,6 +155,14 @@
     <Compile Include="AdministratorRequests\RequestImplementations\SuPermissionsCheckRequestMaker.cs" />
     <Compile Include="AdministratorRequests\RequestImplementations\UserCreateRequestMaker.cs" />
     <Compile Include="AdministratorRequests\RequestImplementations\UserDeleteRequestMaker.cs" />
+    <Compile Include="Clients\SubscriberClient\SubscriberDialog.cs" />
+    <Compile Include="Clients\RequestHandler.cs" />
+    <Compile Include="Clients\AdministratorClient\SubscriberRequestHandler.cs" />
+    <Compile Include="Clients\SubscriberClient\SubscriberRequestHandler.cs" />
+    <Compile Include="AdministratorRequests\AdminRequestMakerFactoryImpl.cs" />
+    <Compile Include="Clients\RequestMaker.cs" />
+    <Compile Include="Clients\RequestMakerFactory.cs" />
+    <Compile Include="SubscriberRequests\SubscriberRequestMakeFactoryImpl.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
