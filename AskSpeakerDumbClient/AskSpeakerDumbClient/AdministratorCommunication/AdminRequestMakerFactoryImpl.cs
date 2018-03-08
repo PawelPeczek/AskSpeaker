@@ -1,6 +1,7 @@
 ﻿using System;
-using AskSpeakerServer.BackEnd.AdministratorRequests.RequestImplementations;
+using AskSpeakerServer.BackEnd.AdministratorRequests.RequestMakers;
 using AskSpeakerDumbClient.Clients;
+using AskSpeakerServer.BackEnd.AdministratorRequests.RequestImplementations;
 
 namespace AskSpeakerServer.BackEnd.AdministratorRequests  {
 	public class AdminRequestMakerFactoryImpl : RequestMakerFactory<AdminRequestTypes> {

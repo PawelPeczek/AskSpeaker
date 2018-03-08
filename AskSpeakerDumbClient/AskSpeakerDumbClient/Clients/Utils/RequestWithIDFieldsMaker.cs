@@ -1,8 +1,8 @@
 ﻿using System;
 using AskSpeakerDumbClient.Clients;
 
-namespace AskSpeakerServer.BackEnd.AdministratorRequests.RequestImplementations.Utils {
-	public abstract class RequestWithIDFieldsMaker : RequestMaker<AdminRequestTypes> {
+namespace AskSpeakerDumbClient.Clients.Utils {
+	public abstract class RequestWithIDFieldsMaker <T> : RequestMaker<T> {
 		
 		protected int ProvideValueForIDField(string fieldName){
 			string eventID = ProceedStringValueGettingDialog(fieldName);

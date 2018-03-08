@@ -2,7 +2,7 @@
 using AskSpeakerServer.EntityFramework.Entities;
 using AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Requests;
 
-namespace AskSpeakerServer.BackEnd.AdministratorRequests.RequestImplementations {
+namespace AskSpeakerServer.BackEnd.AdministratorRequests.RequestMakers {
 	public class EventEditRequestMaker : EventEditCreateRequestMaker {
 		protected new void FulfillEventObject(Events eventObject){
 			base.FulfillEventObject (eventObject);

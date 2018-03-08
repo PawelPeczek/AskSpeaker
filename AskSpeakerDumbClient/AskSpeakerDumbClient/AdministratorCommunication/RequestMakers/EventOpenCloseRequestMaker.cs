@@ -1,11 +1,11 @@
 ﻿using System;
 using AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Requests;
 using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Requests;
-using AskSpeakerServer.BackEnd.AdministratorRequests.RequestImplementations.Utils;
+using AskSpeakerDumbClient.Clients.Utils;
 
-namespace AskSpeakerServer.BackEnd.AdministratorRequests.RequestImplementations {
+namespace AskSpeakerServer.BackEnd.AdministratorRequests.RequestMakers {
 
-	public abstract class EventOpenCloseRequestMaker : RequestWithIDFieldsMaker {
+	public abstract class EventOpenCloseRequestMaker : RequestWithIDFieldsMaker<AdminRequestTypes> {
 		
 		protected abstract void ProvideRequestNameToRequest(RequestWithEventID request);
 

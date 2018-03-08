@@ -9,91 +9,90 @@ using AskSpeakerServer.BackEnd.AdministratorRequests;
 using AskSpeakerServer.EntityFramework.Entities;
 using System.IO;
 using AskSpeakerDumbClient.Clients.AdministratorClient;
+using AskSpeakerDumbClient.Clients;
+using AskSpeakerDumbClient.Clients.SubscriberClient;
+using AskSpeakerServer.BackEnd.SubscriberRequests;
 
 namespace AskSpeakerDumbClient {
 	class MainClass {
 		public static void Main (string[] args) {
 
 			Console.WriteLine ("Client start");
-			AdminDialog dialog = new AdminDialog ();
 			try {
-				dialog.StartDialog ();
+				RunningMode mode = ProceedSelectionModeDialog();
+				DispatchRunningMode(mode);
 			} catch (ApplicationException ex){
 				Console.WriteLine ($"Program stopped because of some issue. Details:\n{ex.Message}");
 			}
-
-
-//			Console.WriteLine ("Hello World!");
-//			List<KeyValuePair<String, String>> l = new List<KeyValuePair<String, String>> ();
-//			l.Add (new KeyValuePair<String, String> ("user", "DumbUser"));
-//			l.Add (new KeyValuePair<String, String> ("pw", "zaq1@WSX"));
-//			WebSocket ws = new WebSocket ("ws://localhost:10000/ryr(po", "", l);
-//			// Just for now with self-generated certificate
-//			//ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => {return true;};
-//			ws.Opened += async (sender, e) => {
-//				Console.WriteLine ("Connected, waiting for init response!");
-////				UserCreateRequest request = new UserCreateRequest();
-////				request.UserName = "MyUser1";
-////				request.Password = "zaq1@WSX";
-////				UserDeleteRequest request = new UserDeleteRequest();
-////				request.UserID = 2;
-////				PasswordChangeRequest request = new PasswordChangeRequest();
-////				request.OldPassword = "zaq1@WSX";
-////				request.NewPassword = "zse4%RDX";
-////				EventEditCreateMessage request = new EventEditCreateMessage();
-////				request.Message = AdminRequestTypes.EventEdit.GetRequestString();
-////				request.Event = new Events();
-////				request.Event.EventID = 1;
-////				request.Event.EventDesc = "My new modified event";
-////				request.Event.EventHash = "h6k9(0";
-////				request.Event.EventName = "SuperEvent 2.0";
-////				request.Event.SpeakerName = "Jan";
-////				request.Event.SpeakerSurname = "Kowalski";
-////				EventOpenCloseMessage request = new EventOpenCloseMessage();
-////				request.Message = AdminRequestTypes.EventReOpen.GetRequestString();
-////				request.EventID = 1;
-////				QuestionCancelMessage request = new QuestionCancelMessage();
-////				PasswordChangeSuRequest request = new PasswordChangeSuRequest();
-////				request.NewPassword = "zaq1@WSX";
-////				request.UserID = 2;
-////				UserCreateRequest request = new UserCreateRequest();
-////				request.Password = "zaq1@WSX";
-////				request.UserName = "kowalski";
-////				UserDeleteRequest request = new UserDeleteRequest();
-////				request.NewEventOwnerID = 1;
-////				request.UserID = 7;
-////				EventOwnershipChangeRequest request = new EventOwnershipChangeRequest();
-////				request.newOwnerID = 1;
-////				request.EventID = 51; 
-////				await Task.Run(() => ((WebSocket) sender).Send(JsonConvert.SerializeObject(request)));
-//			};
-////			ws.Error += (object sender, SuperSocket.ClientEngine.ErrorEventArgs e) => {
-////				Console.WriteLine (e.Exception.Message);
-////				Console.WriteLine ("[ERROR]");
-////			};
-//
-//			ws.Error += (object sender, SuperSocket.ClientEngine.ErrorEventArgs e) => {
-//				Console.WriteLine ("ERROR");
-//				Console.WriteLine (e.Exception.Message);
-//			};
-//
-//
-//			ws.Closed += (object sender, EventArgs e) => {
-//				if(e.GetType() == typeof(ClosedEventArgs)){
-//					Console.WriteLine (((ClosedEventArgs)e).Code);
-//					Console.WriteLine (((ClosedEventArgs)e).Reason);
-//				} else {
-//					Console.WriteLine ("Could not connect!");
-//				}
-//			};
-//			ws.MessageReceived += (object sender, MessageReceivedEventArgs e) => {
-//				Console.WriteLine (e.Message);
-//			};
-//		
-//			ws.Open ();
-//			Console.ReadKey ();
-//			if(ws.State != WebSocketState.Closed)
-//				ws.Close ();
 		}
+
+		private static RunningMode ProceedSelectionModeDialog(){
+			while (true) {
+				PrintHeader ();
+				PrintOptions ();
+				int userChoice;
+				try {
+					userChoice = TakeUserInput();
+					Console.WriteLine ("User choice: " + userChoice);
+					return ConvertUserChioceIntoMode(userChoice);
+				} catch (ArgumentException ex){
+					Console.WriteLine (ex.Message);
+				}
+			}
+		}
+
+		private static void PrintHeader(){
+			Console.WriteLine ("**********\tAskSpeakerDumbClient\t**********");
+			Console.WriteLine ("**********\t      TEST APP      \t**********");
+		}
+
+		private static void PrintOptions(){
+			Console.WriteLine ("Choose number of option:");
+			Console.WriteLine ("1 - AdminMode");
+			Console.WriteLine ("2 - UserMode");
+			Console.WriteLine ("3 - Quit");
+		} 
+
+		private static int TakeUserInput(){
+			string userChioce = Console.ReadLine ();
+			int value;
+			if (!int.TryParse (userChioce, out value))
+				throw new ArgumentException ("Non-number option given.");
+			if (value < 1 || value > 3)
+				throw new ArgumentException ("Invalid number of option.");
+			return value;
+		}
+
+		private static RunningMode ConvertUserChioceIntoMode(int userChoice){
+			RunningMode mode = RunningMode.Quit;
+			switch (userChoice) {
+				case 1:
+					mode = RunningMode.AdminMode;
+					break;
+				case 2:
+					mode = RunningMode.SubscriberMode;
+					break;
+			}
+			return mode;
+		}
+
+		private static void DispatchRunningMode(RunningMode mode){
+			switch (mode) {
+				case RunningMode.AdminMode:
+					StartDialog<AdminDialog, AdminRequestTypes> ();
+					break;
+				case RunningMode.SubscriberMode:
+					StartDialog<SubscriberDialog, SubscriberRequestTypes> ();
+					break;
+				default:
+					break;
+			}
+		}
+
+		private static void StartDialog<T, K>() where T : GeneralDialog<K>, new() {
+			T dialog = new T ();
+			dialog.StartDialog ();
+		}
+
 	}
 }

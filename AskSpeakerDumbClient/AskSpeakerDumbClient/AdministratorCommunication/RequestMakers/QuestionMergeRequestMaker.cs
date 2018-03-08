@@ -1,11 +1,11 @@
 ﻿using System;
-using AskSpeakerServer.BackEnd.AdministratorRequests.RequestImplementations.Utils;
 using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Requests;
 using AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Requests;
+using AskSpeakerDumbClient.Clients.Utils;
 
-namespace AskSpeakerServer.BackEnd.AdministratorRequests.RequestImplementations {
+namespace AskSpeakerServer.BackEnd.AdministratorRequests.RequestMakers {
 	
-	public class QuestionMergeRequestMaker: RequestWithIDFieldsMaker {
+	public class QuestionMergeRequestMaker: RequestWithIDFieldsMaker<AdminRequestTypes> {
 		
 		protected override BaseRequest MakeRequest () {
 			QuestionMergeRequest request = new QuestionMergeRequest ();

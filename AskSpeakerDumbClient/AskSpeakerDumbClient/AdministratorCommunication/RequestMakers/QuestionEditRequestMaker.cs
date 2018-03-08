@@ -1,10 +1,10 @@
 ﻿using System;
-using AskSpeakerServer.BackEnd.AdministratorRequests.RequestImplementations.Utils;
 using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Requests;
 using AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Requests;
+using AskSpeakerDumbClient.Clients.Utils;
 
 namespace AskSpeakerServer.BackEnd.AdministratorRequests.RequestImplementations {
-	public class QuestionEditRequestMaker : RequestWithIDFieldsMaker {
+	public class QuestionEditRequestMaker : RequestWithIDFieldsMaker<AdminRequestTypes> {
 
 		protected override BaseRequest MakeRequest () {
 			QuestionEditRequest request = new QuestionEditRequest ();

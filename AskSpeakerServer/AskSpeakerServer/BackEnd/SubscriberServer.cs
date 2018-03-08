@@ -23,6 +23,7 @@ namespace AskSpeakerServer.BackEnd {
 			serverConfig.TextEncoding = "utf-8";
 			Setup (serverConfig);
 			NewSessionConnected += async (session) => {
+				Console.WriteLine ("New clien session :)");
 				await Task.Run(() => HandleInitialRequest(session));
 			};
 			NewDataReceived += async (session, value) => {
@@ -61,6 +62,8 @@ namespace AskSpeakerServer.BackEnd {
 				session.Send (response);
 			} catch (ApplicationException ex){
 				session.CloseWithHandshake (400, ex.Message);
+			} catch(KeyNotFoundException ex){
+				//session.CloseWithHandshake (404, ex.Message);
 			}
 		}
 

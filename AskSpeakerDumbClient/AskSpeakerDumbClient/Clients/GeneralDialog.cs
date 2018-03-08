@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 namespace AskSpeakerDumbClient.Clients {
 	public abstract class GeneralDialog<T> {
 		
-		public ConsoleColor orignalForegroundColor = Console.ForegroundColor;
+		protected ConsoleColor orignalForegroundColor = Console.ForegroundColor;
 		protected const string EXIT_STRING = "quit";
 		protected Array RequestTypes;
 		protected RequestTracker RequestTracker;

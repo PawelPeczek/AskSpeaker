@@ -38,6 +38,7 @@ namespace AskSpeakerServer.BackEnd {
 			};
 			Setup (serverConfig);
 			NewSessionConnected += async (session) => {
+				Console.WriteLine ("New admin session :)");
 				await Task.Run(() => HandleNewSession(session));
 			};
 			NewMessageReceived += async (session, value) => {

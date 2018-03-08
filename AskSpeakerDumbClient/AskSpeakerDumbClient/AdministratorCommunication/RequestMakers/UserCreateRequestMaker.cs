@@ -3,7 +3,7 @@ using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Requests;
 using AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Requests;
 using AskSpeakerDumbClient.Clients;
 
-namespace AskSpeakerServer.BackEnd.AdministratorRequests.RequestImplementations {
+namespace AskSpeakerServer.BackEnd.AdministratorRequests.RequestMakers {
 	public class UserCreateRequestMaker : RequestMaker<AdminRequestTypes> {
 
 		protected override BaseRequest MakeRequest () {

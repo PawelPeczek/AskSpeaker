@@ -12,14 +12,16 @@ namespace AskSpeakerDumbClient.Clients.SubscriberClient {
 		}
 
 		public override void StartDialog(){
+			Console.WriteLine ("Starting a dialog");
+			string hash = GetHashFromUser ();
 			ManualResetEvent syncro = new ManualResetEvent (false);
-			SimpleSubscriber adminClient = new SimpleSubscriber (syncro);
-			adminClient.Open ();
+			SimpleSubscriber subscriberClient = new SimpleSubscriber (hash, syncro);
+			subscriberClient.Open ();
 			syncro.WaitOne ();
-			if(!adminClient.IsClientConnected())
+			if(!subscriberClient.IsClientConnected())
 				throw new ApplicationException("Could not connect.");
 			StartUserDialogLoop ();
-			adminClient.Close ();
+			subscriberClient.Close ();
 		}
 
 
@@ -30,6 +32,17 @@ namespace AskSpeakerDumbClient.Clients.SubscriberClient {
 			string result = JsonConvert.SerializeObject (request);
 			Console.WriteLine (result);
 			return result;
+		}
+
+		private string GetHashFromUser () {
+			string hash;
+			do {
+				Console.WriteLine ("Insert event hash:");
+				hash = Console.ReadLine ();
+				if (hash.Length != 6)
+					Console.WriteLine ("Valid hash length: 6 chars.");
+			} while(hash.Length != 6);
+			return hash;
 		}
 	}
 }

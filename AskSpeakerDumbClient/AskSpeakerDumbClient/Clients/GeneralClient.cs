@@ -18,6 +18,7 @@ namespace AskSpeakerDumbClient.Clients {
 		}
 
 		public void Open(){
+			Console.WriteLine ("Openning connection :)");
 			Client.Open ();
 		}	
 
