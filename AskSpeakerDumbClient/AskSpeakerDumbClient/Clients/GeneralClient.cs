@@ -41,8 +41,8 @@ namespace AskSpeakerDumbClient.Clients {
 		}
 
 		protected void SimpleCloseHandler(object sender, EventArgs e) {
+			Console.WriteLine ("SimpleCloseHandler fired!");
 			if(e.GetType() == typeof(ClosedEventArgs)){
-				Console.WriteLine (((ClosedEventArgs)e).Code);
 				Console.WriteLine (((ClosedEventArgs)e).Reason);
 			}
 		}

@@ -17,15 +17,24 @@ namespace AskSpeakerServer.BackEnd.SubscriberRequests {
 
 		public static string GetQuestionsJSON(string hash, int requestID = -1, bool extendedList = false){
 			string result;
+			Console.WriteLine ("GetQuestionsJSON()");
 			using (AskSpeakerContext ctx = new AskSpeakerContext ()) {
 				Events chosenEvent = FetchEventWithGivenHash (ctx, hash);
 				ICollection<Questions> allQuestions = chosenEvent.Questions;
 				Dictionary<Questions, List<Questions>> mergedTo = new Dictionary<Questions, List<Questions>> ();
 				HashSet<Questions> primaryQuestions = new HashSet<Questions> ();
+				Console.WriteLine ("Before foreach");
 				foreach (Questions question in allQuestions) {
-					question.VotesSum = (from v in ctx.Votes 
-										 where v.QuestionID == question.QuestionID 
-										 select v).Sum(o => o.Value);
+					Console.WriteLine ($"processed questionID: {question.QuestionID}");
+					IQueryable<Votes> votesForQuestion = 
+										(from v in ctx.Votes
+										 where v.QuestionID == question.QuestionID
+										 select v);
+					if (votesForQuestion.Any())
+						question.VotesSum = votesForQuestion.Sum (o => o.Value);
+					else
+						question.VotesSum = 0;
+					Console.WriteLine ($"q.voteSum: {question.VotesSum}");
 					if (question.Merged == null) {
 						primaryQuestions.Add (question);
 					} else {
@@ -34,7 +43,9 @@ namespace AskSpeakerServer.BackEnd.SubscriberRequests {
 						mergedTo [question.Merged].Add (question);
 					}
 				}
+				Console.WriteLine ("After foreach");
 				CountVotesForPrimaryQuestions (allQuestions, mergedTo);
+				Console.WriteLine ("Preparing response");
 				QuestionsListResponse response = new QuestionsListResponse ();
 				response.PrepareToSend (requestID);
 				response.Path = hash;
@@ -98,6 +109,7 @@ namespace AskSpeakerServer.BackEnd.SubscriberRequests {
 					// Replacing error message that is not approptiate to client eyes.
 					throw new DataException ("Error while updating data.");
 				}
+				result.QuestionID = request.QuestionID;
 				result.PrepareToSend (Hash);
 			}
 			return result;

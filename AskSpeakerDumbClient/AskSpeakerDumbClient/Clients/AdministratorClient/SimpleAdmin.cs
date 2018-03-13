@@ -3,6 +3,7 @@ using WebSocket4Net;
 using System.Collections.Generic;
 using System.Threading;
 using System.Net;
+using AskSpeakerServer.BackEnd.AdministratorRequests;
 
 namespace AskSpeakerDumbClient.Clients.AdministratorClient {
 	public class SimpleAdmin : GeneralClient {

@@ -1,8 +1,8 @@
 ﻿using System;
 
 namespace AskSpeakerServer.BackEnd.Messages.GeneralMessages.Requests  {
-	public class RequestWithEventID : BaseRequest {
-		public int EventID {
+	public class RequestWithEventHash : BaseRequest {
+		public string EventHash {
 			get;
 			set;
 		}

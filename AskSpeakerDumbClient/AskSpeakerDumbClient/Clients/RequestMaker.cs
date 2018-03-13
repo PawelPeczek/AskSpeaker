@@ -23,7 +23,7 @@ namespace AskSpeakerDumbClient.Clients {
 
 		protected bool ProceedBoolValueGettingDialog(string valueName){
 			bool result = false;
-			Console.WriteLine ("Enter [y] if {valueName} property should be set true or anythhing otherwise: ");
+			Console.WriteLine ($"Enter [y] if {valueName} property should be set true or anythhing otherwise: ");
 			char readChar = Console.ReadKey().KeyChar;
 			Console.WriteLine ();
 			if (readChar == 'y')

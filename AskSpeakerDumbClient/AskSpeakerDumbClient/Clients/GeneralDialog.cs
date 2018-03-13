@@ -10,6 +10,7 @@ namespace AskSpeakerDumbClient.Clients {
 		protected const string EXIT_STRING = "quit";
 		protected Array RequestTypes;
 		protected RequestTracker RequestTracker;
+		protected GeneralClient Client;
 
 		public GeneralDialog(){
 			RequestTracker = new RequestTracker ();
@@ -21,6 +22,7 @@ namespace AskSpeakerDumbClient.Clients {
 		public int AddRequestToTracker(BaseRequest request){
 			return RequestTracker.AddRequest (request);
 		}
+			
 
 		protected void StartUserDialogLoop(){
 			string option;
@@ -49,7 +51,8 @@ namespace AskSpeakerDumbClient.Clients {
 			int choosenNumber;
 			if (IsValidOptionNumber(option, out choosenNumber)) {
 				T choosenType = (T)RequestTypes.GetValue(choosenNumber);
-				ExecuteUserCommand (choosenType);
+				string message = ExecuteUserCommand (choosenType);
+				Client.Send (message);
 			} else {
 				ColorPrintMessage ("Invalid request number!\n", ConsoleColor.Red);
 			}

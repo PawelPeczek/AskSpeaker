@@ -26,8 +26,17 @@ namespace AskSpeakerServer.BackEnd {
 			if (!DeserializedMsg.ContainsKey ("Request") && !DeserializedMsg.ContainsKey ("RequestID"))
 				throw new ApplicationException ("Invalid message format.");
 			RawMessage = message;
+			Console.WriteLine ("Before SetRequestType");
 			SetRequestType ((string)DeserializedMsg ["Request"]);
-			RequestID = (int)DeserializedMsg ["RequestID"];
+			Console.WriteLine ("After SetRequestType");
+			Console.WriteLine (DeserializedMsg ["RequestID"].GetType());
+			try {
+				RequestID = Convert.ToInt32((Int64)DeserializedMsg ["RequestID"]);
+			} catch(OverflowException ex){
+				throw new ApplicationException (ex.Message);
+			}
+
+			Console.WriteLine ("After casting RequestID");
 		}
 
 		protected abstract void SetRequestType (string requestString);

@@ -5,7 +5,7 @@ using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Requests;
 namespace AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Requests {
 	public class EventOpenCloseRequest : BaseRequest {
 
-		public int EventID {
+		public string EventHash {
 			get;
 			set;
 		}

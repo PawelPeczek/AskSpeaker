@@ -4,9 +4,9 @@ using AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Requests;
 
 namespace AskSpeakerServer.BackEnd.AdministratorRequests.RequestMakers {
 	public class EventEditRequestMaker : EventEditCreateRequestMaker {
-		protected new void FulfillEventObject(Events eventObject){
-			base.FulfillEventObject (eventObject);
+		protected override void FulfillEventObject(Events eventObject){
 			eventObject.EventHash = ProceedStringValueGettingDialog ("EventHash");
+			base.FulfillEventObject (eventObject);
 		}
 
 		protected override void ProvideRequestNameToRequest (EventEditCreateRequest request) {

@@ -2,9 +2,10 @@
 using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Requests;
 using AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Requests;
 using AskSpeakerDumbClient.Clients.Utils;
+using AskSpeakerDumbClient.Clients;
 
 namespace AskSpeakerServer.BackEnd.AdministratorRequests.RequestImplementations {
-	public class EventChangeOwnershipRequestMaker : RequestWithIDFieldsMaker<AdminRequestTypes> {
+	public class EventChangeOwnershipRequestMaker : RequestMaker<AdminRequestTypes> {
 
 		protected override BaseRequest MakeRequest () {
 			EventOwnershipChangeRequest requestObject =  new EventOwnershipChangeRequest ();
@@ -13,8 +14,8 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests.RequestImplementations 
 		}
 			
 		private void FulfillRequest(EventOwnershipChangeRequest requestObject){
-			requestObject.EventID = ProvideValueForIDField ("EventID");
-			requestObject.NewOwnerID = ProvideValueForIDField ("NewOwnerID");
+			requestObject.EventHash = ProceedStringValueGettingDialog ("EentHash");
+			requestObject.NewOwnerUsername = ProceedStringValueGettingDialog ("NewOwnerUsername");
 		}
 
 	}

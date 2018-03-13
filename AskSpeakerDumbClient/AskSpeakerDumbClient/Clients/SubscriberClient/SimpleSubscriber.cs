@@ -2,6 +2,7 @@
 using WebSocket4Net;
 using System.Collections.Generic;
 using System.Threading;
+using AskSpeakerServer.BackEnd.SubscriberRequests;
 
 namespace AskSpeakerDumbClient.Clients.SubscriberClient {
 	public class SimpleSubscriber : GeneralClient {

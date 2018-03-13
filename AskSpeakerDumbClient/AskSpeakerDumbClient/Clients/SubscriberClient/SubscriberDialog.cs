@@ -15,13 +15,13 @@ namespace AskSpeakerDumbClient.Clients.SubscriberClient {
 			Console.WriteLine ("Starting a dialog");
 			string hash = GetHashFromUser ();
 			ManualResetEvent syncro = new ManualResetEvent (false);
-			SimpleSubscriber subscriberClient = new SimpleSubscriber (hash, syncro);
-			subscriberClient.Open ();
+			Client = new SimpleSubscriber (hash, syncro);
+			Client.Open ();
 			syncro.WaitOne ();
-			if(!subscriberClient.IsClientConnected())
+			if(!Client.IsClientConnected())
 				throw new ApplicationException("Could not connect.");
 			StartUserDialogLoop ();
-			subscriberClient.Close ();
+			Client.Close ();
 		}
 
 

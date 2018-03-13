@@ -19,6 +19,7 @@ using AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Broadcast;
 using AskSpeakerServer.BackEnd.Messages.Prototypes;
 using AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Responses;
 using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Broadcast;
+using AskSpeakerServer.EntityFramework.Entities;
 
 namespace AskSpeakerServer.BackEnd {
 	public class AdministratorServer : SyngnalizedServer {
@@ -36,6 +37,7 @@ namespace AskSpeakerServer.BackEnd {
 				Password = "zse4%RDX",
 				ClientCertificateRequired = false
 			};
+					
 			Setup (serverConfig);
 			NewSessionConnected += async (session) => {
 				Console.WriteLine ("New admin session :)");
@@ -94,6 +96,7 @@ namespace AskSpeakerServer.BackEnd {
 			try {
 				Console.WriteLine (message);
 				GenerateResponse(session, message);
+				Console.WriteLine ("After generatojiong response");
 			} catch(ApplicationException ex) {
 				session.CloseWithHandshake (400, $"JSON contract violation: {ex.Message}");
 			} catch(UnauthorizedAccessException ex) {
@@ -104,12 +107,18 @@ namespace AskSpeakerServer.BackEnd {
 		}
 
 		private void GenerateResponse(WebSocketSession session, string message){
+			Console.WriteLine ("Before ManualResetEvent cast");
 			((ManualResetEvent)session.Items["SyncObject"]).WaitOne();
+			Console.WriteLine ("After cast");
 			Console.WriteLine ("New message!");
 			PreProcessedAdminMessage prepMessage = new PreProcessedAdminMessage (message);
+			Console.WriteLine ("After prep message");
 			AdminRequestDispather dispather = new AdminRequestDispather (prepMessage, session.Items);
+			Console.WriteLine ("After dispatch ctr");
 			CommunicationChunk response = dispather.Dispath ();
+			Console.WriteLine ("After dispatch");
 			DispathResponse(session, prepMessage.RequestType , response);
+			Console.WriteLine ("Message should be sent");
 		}
 
 		private void CheckSingleSessionPerUser(WebSocketSession session){
@@ -166,13 +175,17 @@ namespace AskSpeakerServer.BackEnd {
 		}
 
 		private void InformNewEventOwnerIfConnected(WebSocketSession session, EventOwnershipChangeBroadcast message){
+			if (message == null)
+				return;
 			WebSocketSession targetSession =
-				GetSessions ((s) => s.Items.ContainsKey ("UserID") && (int)s.Items ["UserID"] == message.newOwnerID).FirstOrDefault ();
+				GetSessions ((s) => s.Items.ContainsKey ("UserID") && (int)s.Items ["UserID"] == message.NewOwnerId).FirstOrDefault ();
 			if (targetSession != null && targetSession != session)
 				targetSession.Send (JsonSerialize (message));
 		}
 
 		private void InformSuperAdminIfConnected(BroadcastPrototype broadcast){
+			if (broadcast == null)
+				return;
 			IEnumerable<WebSocketSession> suSessions = 
 				GetSessions ((s) => s.Items.ContainsKey ("Privilages") && (string)s.Items["Privilages"] == "SuperAdmin");
 			foreach (WebSocketSession session in suSessions) {

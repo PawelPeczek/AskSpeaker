@@ -10,13 +10,13 @@ namespace AskSpeakerDumbClient.Clients.AdministratorClient {
 		public override void StartDialog(){
 			Credentials credentials = ProceedCredentialsDialog ();
 			ManualResetEvent syncro = new ManualResetEvent (false);
-			SimpleAdmin adminClient = new SimpleAdmin (credentials, syncro);
-			adminClient.Open ();
+			Client = new SimpleAdmin (credentials, syncro);
+			Client.Open ();
 			syncro.WaitOne ();
-			if(!adminClient.IsClientConnected())
+			if(!Client.IsClientConnected())
 				throw new ApplicationException("Could not connect.");
 			StartUserDialogLoop ();
-			adminClient.Close ();
+			Client.Close ();
 		}
 
 		private Credentials ProceedCredentialsDialog(){

@@ -23,7 +23,7 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 			using(AskSpeakerContext ctx = new AskSpeakerContext ()){
 				int userID = (int)credentials ["UserID"];
 				EventsListResponse response = new EventsListResponse ();
-				if ((string)credentials ["Privilages"] == "SuperAdmin") {
+				if ((string)credentials ["Privilages"] != "SuperAdmin") {
 					response.Events = 
 						from e in ctx.Events
 						where e.UserID == userID
@@ -67,7 +67,7 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 		public EventOpenCloseBroadcast CloseEvent(EventOpenCloseRequest request){
 			EventOpenCloseBroadcast result = new EventOpenCloseBroadcast();
 			using (AskSpeakerContext ctx = new AskSpeakerContext ()) {
-				Events selectedEvent = FetchEventWithGivenID(ctx, request.EventID);
+				Events selectedEvent = FetchEventWithGivenHash(ctx, request.EventHash);
 				if (selectedEvent.Closed == false) {
 					selectedEvent.Closed = true;
 					ctx.SaveChanges ();
@@ -82,11 +82,11 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 		public EventOpenCloseBroadcast ReOpenEvent(EventOpenCloseRequest request){
 			EventOpenCloseBroadcast result = new EventOpenCloseBroadcast();
 			using (AskSpeakerContext ctx = new AskSpeakerContext ()) {
-				Events selectedEvent = FetchEventWithGivenID(ctx, request.EventID);
+				Events selectedEvent = FetchEventWithGivenHash(ctx, request.EventHash);
 				if (selectedEvent.Closed == true) {
 					selectedEvent.Closed = false;
 					ctx.SaveChanges ();
-					result.EventID = request.EventID;
+					result.EventID = selectedEvent.EventID;
 				} else 
 					throw new ApplicationException ("Event already opened.");
 				result.PrepareToSend (AdminRequestTypes.EventReOpen.GetRequestString());
@@ -97,7 +97,7 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 		public EventEditCreateBroadcast EditEvent(EventEditCreateRequest request){
 			EventEditCreateBroadcast result = new EventEditCreateBroadcast();
 			using (AskSpeakerContext ctx = new AskSpeakerContext ()) {
-				Events selectedEvent = FetchEventWithGivenID(ctx, request.Event.EventID);
+				Events selectedEvent = FetchEventWithGivenHash(ctx, request.Event.EventHash);
 				// Hash, EventID, UserID and Closed are never copied!!!
 				selectedEvent.PropertiesCopy (request.Event);
 				try {
@@ -140,6 +140,7 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 					ctx.SaveChanges ();
 				} else
 					throw new ApplicationException ("Question already cancelled.");
+				result.QuestionID = request.QuestionID;
 				result.PrepareToSend (question.Event.EventHash);
 			}
 			return result;
@@ -156,6 +157,8 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 					throw new InvalidOperationException ("Cannot merge question with itself.");
 				slave.Merged = master;
 				ctx.SaveChanges ();
+				result.MasterID = request.MasterID;
+				result.SlaveID = request.SlaveID;
 				result.PrepareToSend (master.Event.EventHash);
 			}
 			return result;
@@ -171,6 +174,8 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 				} catch(DataException ex){
 					throw new DataException ($"Broken JSON Question-serialize contract. Details: {ex.Message}");
 				}
+				result.NewQuestionContent = request.NewQuestionContent;
+				result.QuestionID = request.QuestionID;
 				result.PrepareToSend (origin.Event.EventHash);
 			}
 			return result;
@@ -278,17 +283,26 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 			if (!AdminAuthenticationModule.IsUserSuperAdmin (Credentials))
 				throw new UnauthorizedAccessException ("SuperUser access required.");
 			EventOwnershipChangeBroadcast result = new EventOwnershipChangeBroadcast ();
+			Console.WriteLine ("ChangeEventOwnership fired");
 			using (AskSpeakerContext ctx = new AskSpeakerContext ()) {
-				Events chosenEvent = FetchEventWithGivenID (ctx, request.EventID);
-				Users user = FetchUserWithGivenID (ctx, request.newOwnerID);
+				Console.WriteLine ("Hash to seek: " + request.EventHash);
+				Events chosenEvent = FetchEventWithGivenHash (ctx, request.EventHash);
+				Console.WriteLine ("Event fetched!");
+				Users user = FetchUserWithGivenUsername (ctx, request.NewOwnerUsername);
+				Console.WriteLine ("User fetched!");
 				chosenEvent.User = user;
 				try {
 					ctx.SaveChanges ();
+					result.EventHash = request.EventHash;
+					result.NewOwnerUsername = request.NewOwnerUsername;
+					result.NewOwnerId = user.UserID;
+					Console.WriteLine ("Data saved");
 				} catch(DataException ex){
 					throw new DataException ($"Error while changing event ownership. Details:\n {ex.Message}");
 				}
 				result.PrepareToSend ();
 			}
+			Console.WriteLine ("ChangeEventOwnership done");
 			return result;
 		}
 
@@ -305,6 +319,18 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 				throw new UnauthorizedAccessException("Only SuperAdmin can cancell a quetsion assigned to event " +
 					"hosted by another user.");
 			return question;
+		}
+
+		private Events FetchEventWithGivenHash(AskSpeakerContext ctx, string hash){
+			Events result = 
+				(from e in ctx.Events
+					where e.EventHash == hash
+					select e).FirstOrDefault ();
+			if (result == null)
+				throw new KeyNotFoundException ("There is no event with such hash.");
+			if (!AdminAuthenticationModule.IsPermissionToEventModifGranted(result.UserID, Credentials))
+				throw new UnauthorizedAccessException("Only SuperAdmin can modify event hosted by another user.");
+			return result;
 		}
 
 		private Events FetchEventWithGivenID(AskSpeakerContext ctx, int EventID){
@@ -324,6 +350,18 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 			user = 
 				(from u in ctx.Users
 					where u.UserID == UserID &&
+					u.Active == true
+					select u).FirstOrDefault();
+			if (user == null)
+				throw new KeyNotFoundException ("No user found.");
+			return user;
+		} 
+
+		private Users FetchUserWithGivenUsername(AskSpeakerContext ctx, string userName){
+			Users user;
+			user = 
+				(from u in ctx.Users
+					where u.UserName == userName &&
 					u.Active == true
 					select u).FirstOrDefault();
 			if (user == null)

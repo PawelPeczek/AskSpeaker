@@ -1,6 +1,7 @@
 ﻿using System;
 using AskSpeakerServer.BackEnd.Messages.Prototypes;
 using AskSpeakerServer.BackEnd.AdministratorRequests;
+using Newtonsoft.Json;
 
 namespace AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Broadcast {
 	public class EventOwnershipChangeBroadcast : BroadcastPrototype {
@@ -9,12 +10,18 @@ namespace AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Broadcast {
 			Broadcast = AdminRequestTypes.EventChangeOwnership.GetRequestString(); 
 		}
 
-		public int EventID {
+		public string EventHash {
 			get;
 			set;
 		}
 
-		public int newOwnerID {
+		[JsonIgnore]
+		public int NewOwnerId {
+			get;
+			set;
+		}
+
+		public string NewOwnerUsername {
 			get;
 			set;
 		}

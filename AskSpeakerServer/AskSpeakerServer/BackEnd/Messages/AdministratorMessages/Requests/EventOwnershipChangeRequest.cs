@@ -9,12 +9,12 @@ namespace AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Requests {
 			Request = AdminRequestTypes.EventChangeOwnership.GetRequestString(); 
 		}
 
-		public int EventID {
+		public string EventHash {
 			get;
 			set;
 		}
 
-		public int newOwnerID {
+		public string NewOwnerUsername {
 			get;
 			set;
 		}

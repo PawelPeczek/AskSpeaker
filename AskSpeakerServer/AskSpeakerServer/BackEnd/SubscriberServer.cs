@@ -58,12 +58,14 @@ namespace AskSpeakerServer.BackEnd {
 			try{
 				Console.WriteLine ("Path: " + session.Path);
 				string hash = GetHashFromPath(session.Path);
+				Console.WriteLine ($"Hash: {hash}");
 				string response = SubscriberRequestLogic.GetQuestionsJSON (hash);
+				Console.WriteLine ("Response generated");
 				session.Send (response);
 			} catch (ApplicationException ex){
 				session.CloseWithHandshake (400, ex.Message);
 			} catch(KeyNotFoundException ex){
-				//session.CloseWithHandshake (404, ex.Message);
+				session.CloseWithHandshake (404, ex.Message);
 			}
 		}
 

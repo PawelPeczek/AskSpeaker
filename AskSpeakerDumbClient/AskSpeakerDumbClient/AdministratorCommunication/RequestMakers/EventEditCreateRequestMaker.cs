@@ -16,7 +16,7 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests.RequestMakers  {
 			return result;
 		}
 
-		protected void FulfillEventObject(Events eventObject){
+		protected virtual void FulfillEventObject(Events eventObject){
 			eventObject.EventName = ProceedStringValueGettingDialog ("EventName");
 			eventObject.EventDesc = ProceedStringValueGettingDialog ("EventDesc");
 			eventObject.SpeakerName = ProceedStringValueGettingDialog("SpeakerName");
