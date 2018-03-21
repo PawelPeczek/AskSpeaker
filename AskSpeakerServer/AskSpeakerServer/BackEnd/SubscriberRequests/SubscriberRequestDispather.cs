@@ -27,7 +27,7 @@ namespace AskSpeakerServer.BackEnd.SubscriberRequests {
 				switch (((PreProcessedSubscriberMessage)Message).RequestType) {
 					case SubscriberRequestTypes.QuestionsRequest:
 						result.PlainResponse = logic.ObtainQuestionsList 
-							(JsonConvert.DeserializeObject<RenewQuestionsRequest>(Message.RawMessage));
+							(JsonConvert.DeserializeObject<QuestionsRequest>(Message.RawMessage));
 						break;
 					case SubscriberRequestTypes.VoteRequest:
 						broadcast = 

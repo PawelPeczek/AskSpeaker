@@ -20,7 +20,6 @@ namespace AskSpeakerServer.BackEnd.Messages {
 			set;
 		} = null;
 
-
 		public static OperationResponse PrepareResponse(int requestID, BroadcastPrototype message) {
 			OperationResponse result = new OperationResponse ();
 			result.RequestID = requestID;

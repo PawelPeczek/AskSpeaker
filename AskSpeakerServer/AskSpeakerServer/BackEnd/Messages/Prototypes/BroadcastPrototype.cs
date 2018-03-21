@@ -1,7 +1,6 @@
 ﻿using System;
 using Newtonsoft.Json;
 using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Responses;
-using AskSpeakerServer.Extensions;
 using AskSpeakerServer.BackEnd.Messages.GeneralMessages;
 
 namespace AskSpeakerServer.BackEnd.Messages.Prototypes {

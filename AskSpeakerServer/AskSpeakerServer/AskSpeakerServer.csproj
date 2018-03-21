@@ -8,6 +8,8 @@
     <RootNamespace>AskSpeakerServer</RootNamespace>
     <AssemblyName>AskSpeakerServer</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -125,52 +127,55 @@
     <Compile Include="BackEnd\SubscriberRequests\SubscriberRequestLogic.cs" />
     <Compile Include="BackEnd\SubscriberRequests\SubscriberRequestTypes.cs" />
     <Compile Include="BackEnd\SubscriberRequests\SubscriberRequestDispather.cs" />
-    <Compile Include="BackEnd\Messages\AdministratorMessages\Requests\EventOwnershipChangeRequest.cs" />
-    <Compile Include="BackEnd\Messages\AdministratorMessages\Requests\PasswordChangeRequest.cs" />
-    <Compile Include="BackEnd\Messages\AdministratorMessages\Requests\PasswordChangeSuRequest.cs" />
-    <Compile Include="BackEnd\Messages\AdministratorMessages\Requests\UserCreateRequest.cs" />
-    <Compile Include="BackEnd\Messages\AdministratorMessages\Requests\UserDeleteRequest.cs" />
-    <Compile Include="BackEnd\Messages\AdministratorMessages\Responses\SuPermissionsCheckResponse.cs" />
-    <Compile Include="BackEnd\Messages\SubscriberMessages\Requests\QuestionAddRequest.cs" />
-    <Compile Include="BackEnd\Messages\SubscriberMessages\Requests\ReportQuestionRequest.cs" />
-    <Compile Include="BackEnd\Messages\SubscriberMessages\Requests\VoteQuestionRequest.cs" />
-    <Compile Include="BackEnd\Messages\SubscriberMessages\Responses\QuestionsListResponse.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
-    <Compile Include="BackEnd\Messages\Prototypes\RequestPrototype.cs" />
-    <Compile Include="BackEnd\Messages\Prototypes\ResponsePrototype.cs" />
-    <Compile Include="BackEnd\Messages\SubscriberMessages\Requests\RenewQuestionsRequest.cs" />
     <Compile Include="Extensions\BooleanExtensions.cs" />
-    <Compile Include="BackEnd\Messages\GeneralMessages\ResponseCodes.cs" />
     <Compile Include="Extensions\ResponseCodesExtensions.cs" />
-    <Compile Include="BackEnd\Messages\AdministratorMessages\Requests\EventEditCreateRequest.cs" />
-    <Compile Include="BackEnd\Messages\AdministratorMessages\Requests\EventOpenCloseRequest.cs" />
-    <Compile Include="BackEnd\Messages\AdministratorMessages\Requests\QuestionCancelRequest.cs" />
-    <Compile Include="BackEnd\Messages\AdministratorMessages\Requests\QuestionEditRequest.cs" />
-    <Compile Include="BackEnd\Messages\AdministratorMessages\Requests\QuestionMergeRequest.cs" />
-    <Compile Include="BackEnd\Messages\Prototypes\TimeRegisteredCommunicationChunkPrototype.cs" />
-    <Compile Include="BackEnd\Messages\Prototypes\BroadcastPrototype.cs" />
-    <Compile Include="BackEnd\Messages\GeneralMessages\Requests\BaseRequest.cs" />
-    <Compile Include="BackEnd\Messages\GeneralMessages\Responses\OperationResponse.cs" />
-    <Compile Include="BackEnd\Messages\AdministratorMessages\Broadcast\EventEditCreateBroadcast.cs" />
-    <Compile Include="BackEnd\Messages\AdministratorMessages\Broadcast\EventOpenCloseBroadcast.cs" />
-    <Compile Include="BackEnd\Messages\AdministratorMessages\Broadcast\EventOwnershipChangeBroadcast.cs" />
-    <Compile Include="BackEnd\Messages\AdministratorMessages\Broadcast\QuestionCancelBroadcast.cs" />
-    <Compile Include="BackEnd\Messages\AdministratorMessages\Broadcast\QuestionEditBroadcast.cs" />
-    <Compile Include="BackEnd\Messages\AdministratorMessages\Broadcast\QuestionMergeBroadcast.cs" />
-    <Compile Include="BackEnd\Messages\CommunicationChunk.cs" />
-    <Compile Include="BackEnd\Messages\SubscriberMessages\Broadcast\QuestionAddBroadcast.cs" />
-    <Compile Include="BackEnd\Messages\SubscriberMessages\Broadcast\QuestionVoteBroadcast.cs" />
-    <Compile Include="BackEnd\Messages\AdministratorMessages\Requests\SuPermissionsCheckRequest.cs" />
     <Compile Include="BackEnd\Dispather.cs" />
     <Compile Include="BackEnd\PreProcessedAdminMessage.cs" />
     <Compile Include="BackEnd\PreProcessedSubscriberMessage.cs" />
     <Compile Include="BackEnd\PreProcessedMessage.cs" />
-    <Compile Include="BackEnd\Messages\AdministratorMessages\Responses\EventsListResponse.cs" />
-    <Compile Include="BackEnd\Messages\AdministratorMessages\Requests\EventsListRequest.cs" />
-    <Compile Include="BackEnd\Messages\AdministratorMessages\Responses\SuPasswdChangeResponse.cs" />
-    <Compile Include="BackEnd\Messages\GeneralMessages\Broadcast\QuestionBroadcast.cs" />
     <Compile Include="BackEnd\Server.cs" />
     <Compile Include="BackEnd\SyngnalizedServer.cs" />
+    <Compile Include="BackEnd\Messages\CommunicationChunk.cs" />
+    <Compile Include="BackEnd\Messages\AdministratorMessages\Broadcast\EventEditCreateBroadcast.cs" />
+    <Compile Include="BackEnd\Messages\AdministratorMessages\Broadcast\EventOwnershipChangeBroadcast.cs" />
+    <Compile Include="BackEnd\Messages\AdministratorMessages\Broadcast\QuestionCancelBroadcast.cs" />
+    <Compile Include="BackEnd\Messages\AdministratorMessages\Broadcast\QuestionEditBroadcast.cs" />
+    <Compile Include="BackEnd\Messages\AdministratorMessages\Broadcast\QuestionMergeBroadcast.cs" />
+    <Compile Include="BackEnd\Messages\AdministratorMessages\Requests\EventEditCreateRequest.cs" />
+    <Compile Include="BackEnd\Messages\AdministratorMessages\Requests\EventOwnershipChangeRequest.cs" />
+    <Compile Include="BackEnd\Messages\AdministratorMessages\Requests\EventsListRequest.cs" />
+    <Compile Include="BackEnd\Messages\AdministratorMessages\Requests\PasswordChangeRequest.cs" />
+    <Compile Include="BackEnd\Messages\AdministratorMessages\Requests\PasswordChangeSuRequest.cs" />
+    <Compile Include="BackEnd\Messages\AdministratorMessages\Requests\QuestionCancelRequest.cs" />
+    <Compile Include="BackEnd\Messages\AdministratorMessages\Requests\QuestionEditRequest.cs" />
+    <Compile Include="BackEnd\Messages\AdministratorMessages\Requests\QuestionMergeRequest.cs" />
+    <Compile Include="BackEnd\Messages\AdministratorMessages\Requests\SuPermissionsCheckRequest.cs" />
+    <Compile Include="BackEnd\Messages\AdministratorMessages\Requests\UserCreateRequest.cs" />
+    <Compile Include="BackEnd\Messages\AdministratorMessages\Requests\UserDeleteRequest.cs" />
+    <Compile Include="BackEnd\Messages\AdministratorMessages\Responses\EventsListResponse.cs" />
+    <Compile Include="BackEnd\Messages\AdministratorMessages\Responses\SuPasswdChangeResponse.cs" />
+    <Compile Include="BackEnd\Messages\AdministratorMessages\Responses\SuPermissionsCheckResponse.cs" />
+    <Compile Include="BackEnd\Messages\GeneralMessages\ResponseCodes.cs" />
+    <Compile Include="BackEnd\Messages\GeneralMessages\Broadcast\BroadcastWIthEventHash.cs" />
+    <Compile Include="BackEnd\Messages\GeneralMessages\Broadcast\BroadcastWithQuestionID.cs" />
+    <Compile Include="BackEnd\Messages\GeneralMessages\Broadcast\QuestionBroadcast.cs" />
+    <Compile Include="BackEnd\Messages\GeneralMessages\Requests\BaseRequest.cs" />
+    <Compile Include="BackEnd\Messages\GeneralMessages\Requests\RequestWithEventHash.cs" />
+    <Compile Include="BackEnd\Messages\GeneralMessages\Requests\RequestWithQuestionID.cs" />
+    <Compile Include="BackEnd\Messages\GeneralMessages\Requests\RequestWithUserID.cs" />
+    <Compile Include="BackEnd\Messages\GeneralMessages\Responses\OperationResponse.cs" />
+    <Compile Include="BackEnd\Messages\Prototypes\BroadcastPrototype.cs" />
+    <Compile Include="BackEnd\Messages\Prototypes\RequestPrototype.cs" />
+    <Compile Include="BackEnd\Messages\Prototypes\ResponsePrototype.cs" />
+    <Compile Include="BackEnd\Messages\Prototypes\TimeRegisteredCommunicationChunkPrototype.cs" />
+    <Compile Include="BackEnd\Messages\SubscriberMessages\Broadcast\QuestionAddBroadcast.cs" />
+    <Compile Include="BackEnd\Messages\SubscriberMessages\Broadcast\QuestionVoteBroadcast.cs" />
+    <Compile Include="BackEnd\Messages\SubscriberMessages\Requests\QuestionAddRequest.cs" />
+    <Compile Include="BackEnd\Messages\SubscriberMessages\Requests\QuestionsRequest.cs" />
+    <Compile Include="BackEnd\Messages\SubscriberMessages\Requests\VoteQuestionRequest.cs" />
+    <Compile Include="BackEnd\Messages\SubscriberMessages\Responses\QuestionsListResponse.cs" />
+    <Compile Include="BackEnd\Initialization\SystemInit.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -184,16 +189,7 @@
     <Folder Include="BackEnd\AdministratorRequests\" />
     <Folder Include="EntityFramework\Entities\" />
     <Folder Include="BackEnd\SubscriberRequests\" />
-    <Folder Include="BackEnd\Messages\" />
-    <Folder Include="BackEnd\Messages\AdministratorMessages\" />
-    <Folder Include="BackEnd\Messages\SubscriberMessages\" />
-    <Folder Include="BackEnd\Messages\Prototypes\" />
     <Folder Include="Extensions\" />
-    <Folder Include="BackEnd\Messages\GeneralMessages\" />
-    <Folder Include="BackEnd\Messages\GeneralMessages\Responses\" />
-    <Folder Include="BackEnd\Messages\GeneralMessages\Requests\" />
-    <Folder Include="BackEnd\Messages\AdministratorMessages\Broadcast\" />
-    <Folder Include="BackEnd\Messages\SubscriberMessages\Broadcast\" />
-    <Folder Include="BackEnd\Messages\GeneralMessages\Broadcast\" />
+    <Folder Include="BackEnd\Initialization\" />
   </ItemGroup>
 </Project>

@@ -3,9 +3,9 @@ using AskSpeakerServer.BackEnd.SubscriberRequests;
 using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Requests;
 
 namespace AskSpeakerServer.BackEnd.Messages.SubscriberMessages.Requests{
-	public class RenewQuestionsRequest : BaseRequest {
+	public class QuestionsRequest : BaseRequest {
 
-		public RenewQuestionsRequest () {
+		public QuestionsRequest () {
 			Request = SubscriberRequestTypes.QuestionsRequest.GetRequestString();
 		}
 

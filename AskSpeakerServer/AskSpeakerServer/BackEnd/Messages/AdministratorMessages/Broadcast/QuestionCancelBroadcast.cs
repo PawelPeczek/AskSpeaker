@@ -5,16 +5,12 @@ using Newtonsoft.Json;
 using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Broadcast;
 
 namespace AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Broadcast {
-	public class QuestionCancelBroadcast : QuestionBroadcast {
+	public class QuestionCancelBroadcast : BroadcastWIthQuestionID {
 
 		public QuestionCancelBroadcast() {
 			Broadcast = AdminRequestTypes.QuestionCancell.GetRequestString();
 		}
-
-		public int QuestionID {
-			get;
-			set;
-		}
+	
 	}
 }
 

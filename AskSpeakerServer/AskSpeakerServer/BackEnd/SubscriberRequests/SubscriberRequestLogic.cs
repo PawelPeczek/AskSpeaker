@@ -91,7 +91,7 @@ namespace AskSpeakerServer.BackEnd.SubscriberRequests {
 			Hash = hash;
 		}
 
-		public string ObtainQuestionsList(RenewQuestionsRequest request){
+        public string ObtainQuestionsList(QuestionsRequest request){
 			return GetQuestionsJSON (Hash, request.RequestID);
 		}
 			

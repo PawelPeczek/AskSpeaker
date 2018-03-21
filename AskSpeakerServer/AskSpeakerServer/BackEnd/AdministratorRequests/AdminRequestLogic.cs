@@ -12,6 +12,8 @@ using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Responses;
 using AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Broadcast;
 using AskSpeakerServer.BackEnd.Messages.GeneralMessages;
 using System.Data;
+using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Requests;
+using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Broadcast;
 
 namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 	public class AdminRequestLogic {
@@ -64,14 +66,14 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 		}
 
 
-		public EventOpenCloseBroadcast CloseEvent(EventOpenCloseRequest request){
-			EventOpenCloseBroadcast result = new EventOpenCloseBroadcast();
+        public BroadcastWIthEventHash CloseEvent(RequestWithEventHash request){
+            BroadcastWIthEventHash result = new BroadcastWIthEventHash();
 			using (AskSpeakerContext ctx = new AskSpeakerContext ()) {
 				Events selectedEvent = FetchEventWithGivenHash(ctx, request.EventHash);
 				if (selectedEvent.Closed == false) {
 					selectedEvent.Closed = true;
 					ctx.SaveChanges ();
-					result.EventID = request.RequestID;
+                    result.EventHash = selectedEvent.EventHash;
 				} else
 					throw new ApplicationException ("Event already closed.");
 				result.PrepareToSend (AdminRequestTypes.EventClose.GetRequestString());
@@ -79,14 +81,14 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 			return result;
 		}
 
-		public EventOpenCloseBroadcast ReOpenEvent(EventOpenCloseRequest request){
-			EventOpenCloseBroadcast result = new EventOpenCloseBroadcast();
+        public BroadcastWIthEventHash ReOpenEvent(RequestWithEventHash request){
+            BroadcastWIthEventHash result = new BroadcastWIthEventHash();
 			using (AskSpeakerContext ctx = new AskSpeakerContext ()) {
 				Events selectedEvent = FetchEventWithGivenHash(ctx, request.EventHash);
 				if (selectedEvent.Closed == true) {
 					selectedEvent.Closed = false;
 					ctx.SaveChanges ();
-					result.EventID = selectedEvent.EventID;
+					result.EventHash = selectedEvent.EventHash;
 				} else 
 					throw new ApplicationException ("Event already opened.");
 				result.PrepareToSend (AdminRequestTypes.EventReOpen.GetRequestString());
@@ -294,8 +296,8 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 				try {
 					ctx.SaveChanges ();
 					result.EventHash = request.EventHash;
-					result.NewOwnerUsername = request.NewOwnerUsername;
-					result.NewOwnerId = user.UserID;
+					result.NewOwnerName = request.NewOwnerUsername;
+                    result.NewOwnerId = user.UserID;
 					Console.WriteLine ("Data saved");
 				} catch(DataException ex){
 					throw new DataException ($"Error while changing event ownership. Details:\n {ex.Message}");

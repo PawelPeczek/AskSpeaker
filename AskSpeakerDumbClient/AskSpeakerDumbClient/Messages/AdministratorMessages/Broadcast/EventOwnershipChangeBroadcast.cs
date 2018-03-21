@@ -4,13 +4,13 @@ using AskSpeakerServer.BackEnd.AdministratorRequests;
 using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Broadcast;
 
 namespace AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Broadcast {
-	public class EventOwnershipChangeBroadcast : BroadcastWIthEventID {
+	public class EventOwnershipChangeBroadcast : BroadcastWIthEventHash {
 
 		public EventOwnershipChangeBroadcast(){
 			Broadcast = AdminRequestTypes.EventChangeOwnership.GetRequestString(); 
 		}
 
-		public int newOwnerID {
+		public string NewOwnerName {
 			get;
 			set;
 		}

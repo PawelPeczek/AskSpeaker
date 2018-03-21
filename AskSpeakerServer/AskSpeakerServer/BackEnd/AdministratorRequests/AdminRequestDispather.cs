@@ -6,6 +6,7 @@ using AskSpeakerServer.BackEnd.Messages;
 using System.Data;
 using AskSpeakerServer.BackEnd.Messages.GeneralMessages;
 using AskSpeakerServer.BackEnd.Messages.Prototypes;
+using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Requests;
 
 namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 	public class AdminRequestDispather : Dispather {
@@ -29,11 +30,11 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 					result.ResponseToSender = logic.CheckSuPermistions (JsonConvert.DeserializeObject<SuPermissionsCheckRequest>(Message.RawMessage));
 					break;
 				case AdminRequestTypes.EventClose:
-					broadcast = logic.CloseEvent (JsonConvert.DeserializeObject<EventOpenCloseRequest>(Message.RawMessage));
+                        broadcast = logic.CloseEvent (JsonConvert.DeserializeObject<RequestWithEventHash>(Message.RawMessage));
 					PrepareOperationResponseFromBroadcast(result, broadcast);
 					break;
 				case AdminRequestTypes.EventReOpen:
-					broadcast = logic.ReOpenEvent (JsonConvert.DeserializeObject<EventOpenCloseRequest>(Message.RawMessage));
+                        broadcast = logic.ReOpenEvent (JsonConvert.DeserializeObject<RequestWithEventHash>(Message.RawMessage));
 					PrepareOperationResponseFromBroadcast(result, broadcast);
 					break;
 				case AdminRequestTypes.EventEdit:

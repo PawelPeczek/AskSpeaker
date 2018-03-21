@@ -131,7 +131,7 @@
     <Compile Include="Clients\RequestTracker.cs" />
     <Compile Include="Messages\GeneralMessages\Requests\RequestWithUserID.cs" />
     <Compile Include="Messages\GeneralMessages\Requests\RequestWithQuestionID.cs" />
-    <Compile Include="Messages\GeneralMessages\Broadcast\BroadcastWIthEventID.cs" />
+    <Compile Include="Messages\GeneralMessages\Broadcast\BroadcastWIthEventHash.cs" />
     <Compile Include="Messages\GeneralMessages\Broadcast\BroadcastWithQuestionID.cs" />
     <Compile Include="Clients\SubscriberClient\SubscriberDialog.cs" />
     <Compile Include="Clients\RequestHandler.cs" />
