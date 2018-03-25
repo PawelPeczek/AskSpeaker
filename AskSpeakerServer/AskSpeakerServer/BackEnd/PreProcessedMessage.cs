@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace AskSpeakerServer.BackEnd {
-  public abstract class PreProcessedMessage<T> where T : enum,  {
+	public abstract class PreProcessedMessage<T> {
 
 		public string RawMessage {
 			get;
@@ -44,14 +44,6 @@ namespace AskSpeakerServer.BackEnd {
 			Console.WriteLine ("After casting RequestID");
 		}
 
-    protected T GetRequestType(string requestString) {
-      foreach(T reqType in Enum.GetValues(typeof(T))) {
-        if(requestString.ToLower() == reqType.GetRequestString()) {
-          return reqType;
-        }
-      }
-      throw new ApplicationException($"Request {requestString} is not supported.");
-    }
 
 		protected abstract void SetRequestType (string requestString);
 	}

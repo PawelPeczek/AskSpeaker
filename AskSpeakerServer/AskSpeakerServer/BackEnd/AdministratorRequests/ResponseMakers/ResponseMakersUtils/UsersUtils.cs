@@ -7,6 +7,8 @@ using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Responses;
 using AskSpeakerServer.EntityFramework;
 using AskSpeakerServer.EntityFramework.Entities;
 using System.Linq;
+using System.Data;
+using AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Responses;
 
 namespace AskSpeakerServer.BackEnd.AdministratorRequests.ResponseMakers.ResponseMakersUtils {
   public class UsersUtils : BasicDatabaseUtils {
@@ -75,7 +77,7 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests.ResponseMakers.Response
       using(AskSpeakerContext ctx = new AskSpeakerContext()) {
         Users user = FetchUserWithGivenID(ctx, (int)Credentials["UserID"]);
         Console.WriteLine("User that was fetched: " + user.UserName);
-        SHA256 SHAEncryptor = SHA256Managed.Create();
+        SHA256 SHAEncryptor = SHA256.Create();
         byte[] encryptedOldPasswd = SHAEncryptor.ComputeHash(Encoding.Unicode.GetBytes(request.OldPassword));
         if(user.Password.SequenceEqual(encryptedOldPasswd)) {
           byte[] encryptedNewPasswd = SHAEncryptor.ComputeHash(Encoding.Unicode.GetBytes(request.NewPassword));
