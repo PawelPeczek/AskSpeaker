@@ -2,14 +2,9 @@
 using AskSpeakerServer.BackEnd.SubscriberRequests;
 
 namespace AskSpeakerServer.BackEnd {
-	public class PreProcessedSubscriberMessage : PreProcessedMessage {
+  public class PreProcessedSubscriberMessage : PreProcessedMessage <SubscriberRequestTypes> {
 
-		public SubscriberRequestTypes RequestType {
-			get;
-			private set;
-		}
-
-		public PreProcessedSubscriberMessage (string message) : base (message) {}
+    public PreProcessedSubscriberMessage (string message) : base (message) {}
 
 		protected override void SetRequestType (string requestString) {
 			RequestType = GetRequestType (requestString);

@@ -66,7 +66,7 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 		}
 
 
-        public BroadcastWIthEventHash CloseEvent(RequestWithEventHash request){
+    public BroadcastWIthEventHash CloseEvent(RequestWithEventHash request){
             BroadcastWIthEventHash result = new BroadcastWIthEventHash();
 			using (AskSpeakerContext ctx = new AskSpeakerContext ()) {
 				Events selectedEvent = FetchEventWithGivenHash(ctx, request.EventHash);

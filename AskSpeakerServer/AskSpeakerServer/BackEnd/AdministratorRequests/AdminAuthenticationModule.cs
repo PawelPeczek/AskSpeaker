@@ -26,7 +26,6 @@ namespace AskSpeakerServer.BackEnd.AdministratorRequests {
 						select u).FirstOrDefault();
 				if (user == null)
 					throw new UnauthorizedAccessException ("Credentials don't match.");
-				
 				result.Add (new KeyValuePair<object, object>("UserID", user.UserID));
 				result.Add (new KeyValuePair<object, object>("Privilages", user.UserRole.RoleName));
 				result.Add (new KeyValuePair<object, object>("PasswordChanged", false));

@@ -176,6 +176,27 @@
     <Compile Include="BackEnd\Messages\SubscriberMessages\Requests\VoteQuestionRequest.cs" />
     <Compile Include="BackEnd\Messages\SubscriberMessages\Responses\QuestionsListResponse.cs" />
     <Compile Include="BackEnd\Initialization\SystemInit.cs" />
+    <Compile Include="BackEnd\AdministratorRequests\ResponsesMakerFactory.cs" />
+    <Compile Include="BackEnd\AdministratorRequests\ResponseMaker.cs" />
+    <Compile Include="BackEnd\AdministratorRequests\AdminResponseMakerFactory.cs" />
+    <Compile Include="BackEnd\AdministratorRequests\ResponseMakers\EventsInfoResponseMaker.cs" />
+    <Compile Include="BackEnd\AdministratorRequests\ResponseMakers\ResponseMakersUtils\BasicDatabaseUtils.cs" />
+    <Compile Include="BackEnd\AdministratorRequests\ResponseMakers\ResponseMakersUtils\QuestionsUtils.cs" />
+    <Compile Include="BackEnd\AdministratorRequests\ResponseMakers\ResponseMakersUtils\UsersUtils.cs" />
+    <Compile Include="BackEnd\AdministratorRequests\ResponseMakers\SuPermissionsCheckResponseMaker.cs" />
+    <Compile Include="BackEnd\AdministratorRequests\ResponseMakers\EventCloseResponseMaker.cs" />
+    <Compile Include="BackEnd\AdministratorRequests\ResponseMakers\ResponseMakersUtils\EventsUtils.cs" />
+    <Compile Include="BackEnd\AdministratorRequests\ResponseMakers\EventReOpenResponseMaker.cs" />
+    <Compile Include="BackEnd\AdministratorRequests\ResponseMakers\EventEditResponseMaker.cs" />
+    <Compile Include="BackEnd\AdministratorRequests\ResponseMakers\EventCreateResponseMaker.cs" />
+    <Compile Include="BackEnd\AdministratorRequests\ResponseMakers\QuestionCancellResponseMaker.cs" />
+    <Compile Include="BackEnd\AdministratorRequests\ResponseMakers\QuestionMergeResponseMaker.cs" />
+    <Compile Include="BackEnd\AdministratorRequests\ResponseMakers\QuestionEditResponseMaker.cs" />
+    <Compile Include="BackEnd\AdministratorRequests\ResponseMakers\UserCreateResponseMaker.cs" />
+    <Compile Include="BackEnd\AdministratorRequests\ResponseMakers\UserDeleteResponseMaker.cs" />
+    <Compile Include="BackEnd\AdministratorRequests\ResponseMakers\PasswordChangeResponseMaker.cs" />
+    <Compile Include="BackEnd\AdministratorRequests\ResponseMakers\PasswordChangeWithSuResponseMaker.cs" />
+    <Compile Include="BackEnd\AdministratorRequests\ResponseMakers\EventChangeOwnershipResponseMaker.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -191,5 +212,7 @@
     <Folder Include="BackEnd\SubscriberRequests\" />
     <Folder Include="Extensions\" />
     <Folder Include="BackEnd\Initialization\" />
+    <Folder Include="BackEnd\AdministratorRequests\ResponseMakers\" />
+    <Folder Include="BackEnd\AdministratorRequests\ResponseMakers\ResponseMakersUtils\" />
   </ItemGroup>
 </Project>

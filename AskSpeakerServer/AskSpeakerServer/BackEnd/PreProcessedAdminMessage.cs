@@ -6,12 +6,7 @@ using AskSpeakerServer.BackEnd.AdministratorRequests;
 
 namespace AskSpeakerServer.BackEnd {
 
-	public class PreProcessedAdminMessage : PreProcessedMessage {
-		
-		public AdminRequestTypes RequestType {
-			get;
-			private set;
-		}
+	public class PreProcessedAdminMessage : PreProcessedMessage<AdminRequestTypes> {
 
 		public PreProcessedAdminMessage (string message) : base (message) {}
 		
