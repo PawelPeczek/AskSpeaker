@@ -1,5 +1,5 @@
 ﻿using System;
-using AskSpeakerServer.BackEnd.SubscriberRequests;
+using AskSpeakerServer.BackEnd.RequestHandlers.SubscriberRequests;
 
 namespace AskSpeakerServer.BackEnd {
   public class PreProcessedSubscriberMessage : PreProcessedMessage <SubscriberRequestTypes> {

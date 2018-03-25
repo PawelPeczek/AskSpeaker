@@ -1,6 +1,5 @@
-﻿using System;
-using AskSpeakerServer.BackEnd.AdministratorRequests;
-using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Responses;
+﻿using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Responses;
+using AskSpeakerServer.BackEnd.RequestHandlers.AdministratorRequests;
 
 namespace AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Responses {
 	public class SuPermissionsCheckResponse : OperationResponse {

@@ -1,5 +1,5 @@
 ﻿using System;
-using AskSpeakerServer.BackEnd.SubscriberRequests;
+using AskSpeakerServer.BackEnd.RequestHandlers.SubscriberRequests;
 using System.Collections.Generic;
 using AskSpeakerServer.EntityFramework.Entities;
 using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Responses;

@@ -1,7 +1,6 @@
-﻿using System;
-using AskSpeakerServer.BackEnd.Messages.Prototypes;
-using AskSpeakerServer.BackEnd.AdministratorRequests;
+﻿using AskSpeakerServer.BackEnd.Messages.Prototypes;
 using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Broadcast;
+using AskSpeakerServer.BackEnd.RequestHandlers.AdministratorRequests;
 
 namespace AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Broadcast {
 	public class QuestionEditBroadcast : BroadcastWIthQuestionID {

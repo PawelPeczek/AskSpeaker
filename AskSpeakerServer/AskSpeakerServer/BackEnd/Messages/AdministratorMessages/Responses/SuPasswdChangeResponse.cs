@@ -1,6 +1,5 @@
-﻿using System;
-using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Responses;
-using AskSpeakerServer.BackEnd.AdministratorRequests;
+﻿using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Responses;
+using AskSpeakerServer.BackEnd.RequestHandlers.AdministratorRequests;
 using Newtonsoft.Json;
 
 namespace AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Responses {

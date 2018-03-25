@@ -1,6 +1,6 @@
 ﻿using System;
 using AskSpeakerServer.BackEnd.Messages.Prototypes;
-using AskSpeakerServer.BackEnd.SubscriberRequests;
+using AskSpeakerServer.BackEnd.RequestHandlers.SubscriberRequests;
 using AskSpeakerServer.EntityFramework.Entities;
 using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Broadcast;
 

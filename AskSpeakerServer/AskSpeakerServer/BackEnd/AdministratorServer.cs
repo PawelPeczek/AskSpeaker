@@ -1,17 +1,8 @@
 ﻿using System;
 using SuperSocket.WebSocket;
-using System.IO;
 using System.Threading.Tasks;
-using System.Configuration;
-using System.Data;
-using MySql.Data.MySqlClient;
-using System.Collections.Specialized;
 using System.Collections.Generic;
-using AskSpeakerServer.EntityFramework;
-using System.Security.Cryptography;
 using System.Linq;
-using System.Text;
-using AskSpeakerServer.BackEnd.AdministratorRequests;
 using System.Threading;
 using SuperSocket.SocketBase.Config;
 using AskSpeakerServer.BackEnd.Messages;
@@ -19,7 +10,9 @@ using AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Broadcast;
 using AskSpeakerServer.BackEnd.Messages.Prototypes;
 using AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Responses;
 using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Broadcast;
-using AskSpeakerServer.EntityFramework.Entities;
+using AskSpeakerServer.BackEnd.RequestHandlers.AdministratorRequests;
+using AskSpeakerServer.BackEnd.RequestHandlers.AdministratorRequests.ResponseMakers.ResponseMakersUtils;
+using AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Requests;
 
 namespace AskSpeakerServer.BackEnd {
 	public class AdministratorServer : SyngnalizedServer {
@@ -81,16 +74,18 @@ namespace AskSpeakerServer.BackEnd {
 
 		private void ResolveCredentials(WebSocketSession session){
 			List<KeyValuePair<object, object>> credentials =
-				AdminAuthenticationModule.ResolveCredentials (session.Cookies);
-			
+				AdminAuthenticationModule.ResolveCredentials (session.Cookies);	
 			foreach (KeyValuePair<object, object> item in credentials) {
 				session.Items.Add (item);
 			}
 		}
 
 		private void SendEventsInformation(WebSocketSession session){
-			session.Send (AdminRequestLogic.GetEventsInfoJSON (session.Items));
+      AdminRequestWrapper adminRequestWrapper = new AdminRequestWrapper(session.Items);
+      session.Send(adminRequestWrapper.HandleInitRequest());
 		}
+
+   
 
 		private void HandleNewMessage(WebSocketSession session, string message) {
 			try {
@@ -113,9 +108,9 @@ namespace AskSpeakerServer.BackEnd {
 			Console.WriteLine ("New message!");
 			PreProcessedAdminMessage prepMessage = new PreProcessedAdminMessage (message);
 			Console.WriteLine ("After prep message");
-			AdminRequestDispather dispather = new AdminRequestDispather (prepMessage, session.Items);
+      AdminRequestWrapper adminRequestWrapper = new AdminRequestWrapper(prepMessage, session.Items);
 			Console.WriteLine ("After dispatch ctr");
-			CommunicationChunk response = dispather.Dispath ();
+      CommunicationChunk response = adminRequestWrapper.HandleStandardRequest();
 			Console.WriteLine ("After dispatch");
 			DispathResponse(session, prepMessage.RequestType , response);
 			Console.WriteLine ("Message should be sent");

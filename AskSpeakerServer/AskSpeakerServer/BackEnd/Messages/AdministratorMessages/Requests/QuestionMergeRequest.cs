@@ -1,6 +1,5 @@
-﻿using System;
-using AskSpeakerServer.BackEnd.AdministratorRequests;
-using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Requests;
+﻿using AskSpeakerServer.BackEnd.Messages.GeneralMessages.Requests;
+using AskSpeakerServer.BackEnd.RequestHandlers.AdministratorRequests;
 
 namespace AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Requests {
 	public class QuestionMergeRequest : BaseRequest {

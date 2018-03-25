@@ -3,7 +3,7 @@ using SuperSocket.WebSocket;
 using SuperSocket.SocketBase.Config;
 using System.Threading.Tasks;
 using AskSpeakerServer.EntityFramework;
-using AskSpeakerServer.BackEnd.SubscriberRequests;
+using AskSpeakerServer.BackEnd.RequestHandlers.SubscriberRequests;
 using AskSpeakerServer.BackEnd.Messages.Prototypes;
 using AskSpeakerServer.BackEnd.Messages.AdministratorMessages.Broadcast;
 using System.Collections.Generic;
@@ -46,7 +46,7 @@ namespace AskSpeakerServer.BackEnd {
 
 		public void PropagateMessage(QuestionBroadcast broadcast){
 			string broadcastJSON = JsonSerialize (broadcast);
-			string path = "/" + broadcast.EventHash;
+			string path = $"/{broadcast.EventHash}";
 			IEnumerable<WebSocketSession> selectedSessions = 
 				GetSessions ((s) => s.Path == path);
 			foreach (WebSocketSession session in selectedSessions) {
@@ -59,9 +59,8 @@ namespace AskSpeakerServer.BackEnd {
 				Console.WriteLine ("Path: " + session.Path);
 				string hash = GetHashFromPath(session.Path);
 				Console.WriteLine ($"Hash: {hash}");
-				string response = SubscriberRequestLogic.GetQuestionsJSON (hash);
-				Console.WriteLine ("Response generated");
-				session.Send (response);
+        SubscriberRequestWrapper requestWrapper = new SubscriberRequestWrapper(hash);
+        session.Send (requestWrapper.HandleInitRequest());
 			} catch (ApplicationException ex){
 				session.CloseWithHandshake (400, ex.Message);
 			} catch(KeyNotFoundException ex){
@@ -72,9 +71,9 @@ namespace AskSpeakerServer.BackEnd {
 		private void HandleRequest(WebSocketSession session, string message){
 			try {
 				PreProcessedSubscriberMessage prepMessage = new PreProcessedSubscriberMessage (message);
-				SubscriberRequestDispather dispather = 
-					new SubscriberRequestDispather (prepMessage, GetHashFromPath (session.Path));
-				CommunicationChunk response = dispather.Dispath ();
+        string hash = GetHashFromPath(session.Path);
+        SubscriberRequestWrapper requestWrapper = new SubscriberRequestWrapper(prepMessage, hash);
+        CommunicationChunk response = requestWrapper.HandleStandardRequest();
 				DispathResponse (session, prepMessage.RequestType, response);
 			} catch(ApplicationException ex){
 				session.CloseWithHandshake (400, $"JSON contract violation: {ex.Message}");
@@ -82,7 +81,7 @@ namespace AskSpeakerServer.BackEnd {
 		}
 
 		private string GetHashFromPath(string path){
-			return path.Substring(path.IndexOf("/") + 1, path.Length - 1);
+			return path.Substring(path.IndexOf("/", StringComparison.Ordinal) + 1, path.Length - 1);
 		}
 
 		private void DispathResponse
